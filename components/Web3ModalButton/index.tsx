@@ -4,6 +4,7 @@ import { useEthers, shortenAddress, useLookupAddress, useEtherBalance  } from '@
 import styled from 'styled-components'
 import Web3Modal from 'web3modal'
 import { AccountModal } from '../AccountModal'
+import { MenuDropdown } from '../MenuDropdown'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { parseEther, formatEther } from '@ethersproject/units'
 
@@ -12,7 +13,6 @@ const Web3ModalButton = () => {
   const etherBalance = useEtherBalance(account);
 
   const ens = useLookupAddress();
-  const [showModal, setShowModal] = useState(false);
   const [activateError, setActivateError] = useState('');
   const { error } = useEthers();
   useEffect(() => {
@@ -57,7 +57,6 @@ const Web3ModalButton = () => {
 
   return (
     <div className="container has-text-right mr-5 mt-3">
-      {showModal && <AccountModal setShowModal={setShowModal} />}
     {activateError && false && (
         <div 
             className="message is-warning is-inline-block mt-2 has-text-warning-dark has-background-warning pb-0 pt-1 pr-3 pl-3 is-small mb-0" 
@@ -67,24 +66,28 @@ const Web3ModalButton = () => {
     )}
       {account ? (
         <>
-        <div className='is-inline-block mt-2 is-size-7' style={{position:"relative"}} onClick={() => setShowModal(!showModal)}>
-          {ens ?? shortenAddress(account)}
-          <div style={{position:"absolute",right:"0px",width:"50vw",top:"1.1em"}}>
-          {!!etherBalance ? Number(formatEther(etherBalance)).toFixed(4) : "..."} BNB
-          </div>
-          </div>
         {chainId && chainId == 56 ? (<div 
-            className="message is-inline-block mt-2 is-success has-text-success pb-0 pt-1 pr-3 pl-3 is-small mb-0 ml-2" 
-        >BSC</div>) : (
+            className="message is-inline-block has-text-tertiary ml-2" 
+        >BSC<span className="icon has-text-success"><i className="fa-solid fa-check"></i></span></div>) : (
             <div 
-                className="message is-inline-block mt-2 is-warning has-text-warning-dark has-background-warning pb-0 pt-1 pr-3 pl-3 is-small mb-0 ml-2" 
-            >BSC Not Connected</div>
+                className="message is-inline-block has-text-danger ml-2" 
+            >BSC Not Connected<span className="icon"><i className="fa-solid fa-xmark"></i></span></div>
         )}
-        <button className="button is-inline-block ml-2 is-small is-dark is-rounded" style={{marginTop:"3px",paddingTop:"6px"}} onClick={() => deactivate()}>Disconnect</button>
+        <button className="button is-inline-block ml-2 is-dark is-rounded" onClick={() => deactivate()}>Disconnect</button>
+        <div className="is-inline-block ml-2 is-pulled-right">
+          <MenuDropdown />
+        </div>
+        <div className='is-size-7' style={{position:"relative",marginRight:"5em"}}>
+          {ens ?? shortenAddress(account)}<br/>
+          {!!etherBalance ? Number(formatEther(etherBalance)).toFixed(4) : "..."} BNB
+        </div>
         </>
-      ) : (
-        <button className="button is-inline-block ml-2 is-small is-dark is-rounded" style={{marginTop:"3px",paddingTop:"6px"}}  onClick={activateProvider}>Connect</button>
-      )}
+      ) : (<>
+        <button className="button is-inline-block ml-2 is-dark is-rounded" onClick={activateProvider}>Connect</button>
+        <div className="is-inline-block ml-2 is-pulled-right">
+          <MenuDropdown />
+        </div>
+      </>)}
     </div>
   )
 }

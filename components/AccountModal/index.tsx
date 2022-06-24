@@ -25,12 +25,12 @@ export const AccountModal = ({ setShowModal }: AccountModalProps) => {
         <Modal
           onClick={(e) => e.stopPropagation()}
         >
-          <TitleRow>
+          <TitleRow className='has-text-dark'>
             Your Connected Wallet
             <ClosingButton onClick={() => setShowModal(false)}>+</ClosingButton>
           </TitleRow>
           <AccountInfo>
-            <AccountAddress>Address: {account}</AccountAddress>
+            <AccountAddress className='has-text-dark'>Address: {account}</AccountAddress>
             <LinkWrapper>
               <a href={getExplorerAddressLink(account, chainId)} target="_blank" rel="noopener noreferrer">
                 Show on BSCScan

@@ -29,15 +29,36 @@ body{
   justify-content: center;
 }
 
-.is-secondary, .hero.is-dark a.is-secondary {
-  color:$secondary !important;
+.has-text-secondary {
+  color:$secondary;
 }
-a.is-secondary{
-  background-color:rgba(51, 4, 4, 0);
-  &:hover{
-    background-color:rgba(51, 4, 4, 0.02);
 
+.has-text-tertiary {
+  color:$tertiary;
+}
+
+.button.is-rounded{
+  padding-top:0.4em;
+}
+
+.message {
+  padding: 0.2em 0.2em 1em 1em;
+  margin:0.3em 0em 0em 0em;
+  &:not(:last-child) {
+    margin:0.3em 0em 0em 0em;
   }
+}
+
+div.dropdown-item {
+  padding-top:1em;
+  padding-bottom:0.2em;
+
+}
+
+a.dropdown-item, button.dropdown-item {
+  padding-right:1em;
+  padding-top:0.2em;
+  padding-bottom:0.2em;
 }
 
 .footer {
