@@ -56,7 +56,7 @@ export default function MenuDropdown () {
           Discord Chat<span className="icon"><i className="fa-brands fa-discord"></i></span>
         </a>
         <a className="dropdown-item has-text-light" href={LINK_TWITTER} target="_blank">
-          Telegram Chat<span className="icon"><i className="fa-brands fa-twitter"></i></span>
+          Twitter Microblog<span className="icon"><i className="fa-brands fa-twitter"></i></span>
         </a>
         <a className="dropdown-item has-text-light" href={LINK_GITHUB} target="_blank">
           Github Code<span className="icon"><i className="fa-brands fa-github"></i></span>
