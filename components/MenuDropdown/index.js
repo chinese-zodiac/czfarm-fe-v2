@@ -12,7 +12,7 @@ import styled from 'styled-components'
 export default function MenuDropdown () {
   const [isActive,setIsActive] = useState(false);
   return (<>
-  <div className={"dropdown m-1 is-inline-block "+styles.MenuDropdown+" "+(!!isActive?"is-active":"")}>
+  <div className={"dropdown is-right m-1 is-inline-block "+styles.MenuDropdown+" "+(!!isActive?"is-active":"")}>
     <div className="dropdown-trigger">
       <button className="button is-dark is-rounded is-pulled-right" aria-haspopup="true" aria-controls="dropdown-menu"
         onClick={()=>setIsActive(!isActive)}>
