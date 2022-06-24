@@ -44,17 +44,17 @@ class MyApp extends App {
               
             <meta property="og:title" content="CZ.Farm | Stablecoin Yield And High Yield Farms And Pools" />
             <meta property="og:site_name" content="CZ.Farm" />
-            <meta property="og:url" content="https://cz.farm" />
+            <meta property="og:url" content="https://v2.cz.farm" />
             <meta property="og:description" content="Earn the best BSC tokens with stablecoin yield and defi high yield farms and pools." />
             <meta property="og:type" content="article" />
-            <meta property="og:image" content={"https://cz.farm"+OpenGraphImg} />
+            <meta property="og:image" content={"https://v2.cz.farm"+OpenGraphImg} />
             <meta property="og:image:width" content="1200" /> 
             <meta property="og:image:height" content="630" />
 
             <meta name="twitter:card" content="summary_large_image"/>
-            <meta name="twitter:site" content="https://cz.farm" />
+            <meta name="twitter:site" content="https://v2.cz.farm" />
             <meta name="twitter:title" content="CZ.Farm | Stablecoin Yield And High Yield Farms And Pools"/>
-            <meta name="twitter:image" content={"https://cz.farm"+OpenGraphImg} />
+            <meta name="twitter:image" content={"https://v2.cz.farm"+OpenGraphImg} />
             <meta name="twitter:image:width" content="1200"/>
             <meta name="twitter:image:height" content="630"/>
             <meta name="twitter:description" content="Earn the best BSC tokens with stablecoin yield and defi high yield farms and pools."/>
