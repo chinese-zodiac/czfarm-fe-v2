@@ -5,7 +5,6 @@ html{
 }
 body{
   background-color: $background;
-  padding:10px;
   color:white;
 }
 
@@ -83,6 +82,13 @@ a.dropdown-item, button.dropdown-item {
   font-weight:lighter;
 }
 
+.has-background-transparent{
+  background:transparent;
+}
+
+.has-background-special{
+  background:$background-special;
+}
 .has-background-gradient{
   background: rgb(238,238,233);
   background: linear-gradient(190deg, rgba(238,238,233,1) 0%, rgba(228,226,222,1) 100%); ;

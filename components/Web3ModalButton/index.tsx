@@ -56,7 +56,7 @@ const Web3ModalButton = () => {
   }
 
   return (
-    <div className="container has-text-right mr-5 mt-3">
+    <div className="container has-text-right">
     {activateError && false && (
         <div 
             className="message is-warning is-inline-block mt-2 has-text-warning-dark has-background-warning pb-0 pt-1 pr-3 pl-3 is-small mb-0" 
@@ -67,10 +67,10 @@ const Web3ModalButton = () => {
       {account ? (
         <>
         {chainId && chainId == 56 ? (<div 
-            className="message is-inline-block has-text-tertiary ml-2" 
+            className="message is-inline-block has-text-tertiary ml-2 has-background-transparent" 
         >BSC<span className="icon has-text-success"><i className="fa-solid fa-check"></i></span></div>) : (
             <div 
-                className="message is-inline-block has-text-danger ml-2" 
+                className="message is-inline-block has-text-danger ml-2  has-background-transparent" 
             >BSC Not Connected<span className="icon"><i className="fa-solid fa-xmark"></i></span></div>
         )}
         <button className="button is-inline-block ml-2 is-dark is-rounded" onClick={() => deactivate()}>Disconnect</button>
@@ -83,7 +83,7 @@ const Web3ModalButton = () => {
         </div>
         </>
       ) : (<>
-        <button className="button is-inline-block ml-2 is-dark is-rounded" onClick={activateProvider}>Connect</button>
+        <button className="button is-inline-block ml-2 is-dark is-rounded has-background-primary" onClick={activateProvider}>Connect</button>
         <div className="is-inline-block ml-2 is-pulled-right">
           <MenuDropdown />
         </div>
