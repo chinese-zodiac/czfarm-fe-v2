@@ -9,10 +9,10 @@ import styles from "./index.module.scss";
 
 import styled from 'styled-components'
 
-export const MenuDropdown = () => {
+export default function MenuDropdown () {
   const [isActive,setIsActive] = useState(false);
-  return (
-  <div className={"dropdown is-right "+styles.MenuDropdown+" "+(!!isActive?"is-active":"")}>
+  return (<>
+  <div className={"dropdown m-1 is-inline-block "+styles.MenuDropdown+" "+(!!isActive?"is-active":"")}>
     <div className="dropdown-trigger">
       <button className="button is-dark is-rounded is-pulled-right" aria-haspopup="true" aria-controls="dropdown-menu"
         onClick={()=>setIsActive(!isActive)}>
@@ -70,5 +70,5 @@ export const MenuDropdown = () => {
       </div>
     </div>
   </div>
-  );
+  </>);
 }

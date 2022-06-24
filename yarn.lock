@@ -1018,6 +1018,26 @@
   resolved "https://registry.yarnpkg.com/@uniswap/token-lists/-/token-lists-1.0.0-beta.30.tgz#2103ca23b8007c59ec71718d34cdc97861c409e5"
   integrity sha512-HwY2VvkQ8lNR6ks5NqQfAtg+4IZqz3KV1T8d2DlI8emIn9uMmaoFbIOg0nzjqAVKKnZSbMTRRtUoAh6mmjRvog==
 
+"@usedapp/coingecko@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@usedapp/coingecko/-/coingecko-1.0.12.tgz#0cc9c64edd22e49194828293776dff47c660a270"
+  integrity sha512-QLmsmFzlIJHHM1fPoa0YbP6rNGxrwbol8/RwX4zlh3kEtlX+yLNEno6nqQdzMVWY6LAv6HlhObW8OW/aFxY9lQ==
+  dependencies:
+    "@usedapp/core" "1.0.12"
+    isomorphic-fetch "^3.0.0"
+
+"@usedapp/core@1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-1.0.12.tgz#8aca87c56460e02038e366168fc4d10929b003ef"
+  integrity sha512-cyuXNHs67h4jBAd0zUmpWCMXiVa4Di0iZE7Jsy8byzObIOpK6sGVEauvHLx80YJ+S1tMEYaBRR+UvA/mdAB+gQ==
+  dependencies:
+    "@metamask/detect-provider" "^1.2.0"
+    "@uniswap/token-lists" "^1.0.0-beta.27"
+    fetch-mock "^9.11.0"
+    lodash.merge "^4.6.2"
+    lodash.pickby "^4.6.0"
+    nanoid "3.1.22"
+
 "@usedapp/core@^0.12.1":
   version "0.12.9"
   resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.12.9.tgz#d14220b8edf4a48f76be1a509b594621f2ca20b5"
@@ -3041,6 +3061,14 @@ iso-url@^1.1.3:
   resolved "https://registry.yarnpkg.com/iso-url/-/iso-url-1.2.1.tgz#db96a49d8d9a64a1c889fc07cc525d093afb1811"
   integrity sha512-9JPDgCN4B7QPkLtYAAOrEuAWvP9rWvR5offAr0/SeF046wIkglqH3VXgYYP6NcsKslH80UIVgmPqNe3j7tG2ng==
 
+isomorphic-fetch@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz#0267b005049046d2421207215d45d6a262b8b8b4"
+  integrity sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==
+  dependencies:
+    node-fetch "^2.6.1"
+    whatwg-fetch "^3.4.1"
+
 isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
@@ -4952,6 +4980,11 @@ whatwg-fetch@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
   integrity sha512-dcQ1GWpOD/eEQ97k66aiEVpNnapVj90/+R+SXTPYGHpYBBypfKJEQjLrvMZ7YXbKm21gXd4NcuxUTjiv1YtLng==
+
+whatwg-fetch@^3.4.1:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.2.tgz#dced24f37f2624ed0281725d51d0e2e3fe677f8c"
+  integrity sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==
 
 whatwg-url@^5.0.0:
   version "5.0.0"
