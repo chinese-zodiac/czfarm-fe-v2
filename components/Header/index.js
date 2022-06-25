@@ -12,33 +12,33 @@ import styles from "./index.module.scss";
 
 export default function Header({czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}) {
   return(<>
-    <header id="top" className={"hero has-text-centered has-background-black-bis p-3 "+styles.Header}>
-      <div className="hero-head has-text-right level">
-          <a className='m-0 mb-3 level-left  is-inline-block has-text-centered' href={LINK_CZFARM} >
+    <header id="top" className={"hero has-text-centered has-background-black-bis p-4 "+styles.Header}>
+      <div className="hero-head level has-text-right">
+          <a className='m-0 level-left  is-inline-block has-text-centered' href={LINK_CZFARM} >
             <figure className="image is-96x96" style={{marginLeft:"auto",marginRight:"auto"}}>
                 <img src={CZFLogo} />
             </figure>
             <span className="has-text-white">CZ.FARM</span>
           </a>
-          <a className='m-0 mb-2 level-left  is-inline-block has-text-centered ml-2' href={LINK_CZCASH} target="_blank" >
+          <a className='m-0 level-left  is-inline-block has-text-centered ml-2' href={LINK_CZCASH} target="_blank" >
             <figure className="image is-48x48" style={{marginLeft:"auto",marginRight:"auto"}}>
                 <img src={CzcashLogo} />
             </figure>
             <span className="has-text-white is-size-7">CZ.CASH</span>
           </a>
-          <a className='m-0 mb-2 level-left  is-inline-block has-text-centered ml-2' href={LINK_NUMIS} target="_blank" >
+          <a className='m-0 level-left  is-inline-block has-text-centered ml-2' href={LINK_NUMIS} target="_blank" >
             <figure className="image is-48x48" style={{marginLeft:"auto",marginRight:"auto"}}>
                 <img src={NumisLogo} />
             </figure>
             <span className="has-text-white is-size-7">NUMIS</span>
           </a>
-          <a className='m-0 mb-2 level-left  is-inline-block has-text-centered ml-2' href={LINK_CZODIAC} target="_blank" >
+          <a className='m-0 level-left  is-inline-block has-text-centered ml-2' href={LINK_CZODIAC} target="_blank" >
             <figure className="image is-48x48" style={{marginLeft:"auto",marginRight:"auto"}}>
                 <img src={CzodiacLogo} />
             </figure>
             <span className="has-text-white is-size-7">CZODIAC</span>
           </a>
-          <div className="level-item has-text-right is-block" >
+          <div className="level-item level-right has-text-right is-block" >
             <a 
               href="https://dexscreener.com/bsc/0x98b5f5e7ec32cda1f3e89936c9972f92296afe47"
               target="_blank"
