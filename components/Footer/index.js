@@ -52,7 +52,7 @@ function Footer() {
     <p>
       <b>DISCLAIMER: Use at your own risk.</b><br/>
       <small>
-      All information provided by CZ.FARM and other CZodiac products, tokens, and dapps has no guarantee of completeness, accuracy, timeliness or of the results obtained from the use of information and/or CZodiac products, and without warranty of any kind, express or implied, including but not limited to warranties of performance, merchantability and fitness for a particular purpose.<br/><br/>
+      All information provided by CZ.FARM and other CZodiac products, tokens, and dapps has no guarantee of completeness, accuracy, timeliness or of the results obtained from the use of information and/or CZodiac products, and without warranty of any kind, express or implied, including but not limited to warranties of performance, merchantability and fitness for a particular purpose.<br/>
       CZodiac and its members, team, developers, affiliates, associates, token holders, or other individuals or organizations involved in CZodiac products, dapps, or other services will not be liable to you or anyone else for any decision made or action taken in reliance on the information given by CZ.FARM or other CZodiac dapps or services for any consequential, special or similar damages, even if advised of the possibility of such damages.
       </small>
     </p>
