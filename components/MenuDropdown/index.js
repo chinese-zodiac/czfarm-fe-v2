@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
 import { LINK_TWITTER, LINK_TELEGRAM, LINK_GITHUB, LINK_DISCORD, LINK_MEDIUM, LINK_WHITEPAPER, LINK_TELEGRAM_ANN,
-LINK_CZFARM, LINK_CZCASH} from '../../constants/links';
+LINK_CZFARM, LINK_CZCASH, LINK_NUMIS} from '../../constants/links';
 import {ADDRESS_CZF, ADDRESS_CZUSD} from '../../constants/addresses';
 import LOGO_CZF from "../../public/static/assets/images/tokens/CZF.png";
 import LOGO_CZUSD from "../../public/static/assets/images/tokens/CZUSD.png";
+import CzcashLogo from "../../public/static/assets/logo-czcash.png"
+import NumisLogo from "../../public/static/assets/logo-numis.png"
 import {tokenHref} from '../../utils/tokenHref';
 import styles from "./index.module.scss";
 
@@ -25,10 +27,19 @@ export default function MenuDropdown () {
           Dapps
         </div>
         <a className="dropdown-item has-text-light" href={LINK_CZFARM} target="_blank">
-          Farming: CZ.FARM
+          Farming: CZ.FARM<span className="icon"><figure className="image is-16x16" >
+            <img src={LOGO_CZF} />
+          </figure></span>
         </a>
         <a className="dropdown-item has-text-light" href={LINK_CZCASH} target="_blank">
-          Trading: CZ.CASH
+          Trading: CZ.CASH<span className="icon"><figure className="image is-16x16" >
+            <img src={CzcashLogo} />
+          </figure></span>
+        </a>
+        <a className="dropdown-item has-text-light" href={LINK_NUMIS} target="_blank">
+          Rare Coins: NUMIS<span className="icon"><figure className="image is-16x16" >
+            <img src={NumisLogo} />
+          </figure></span>
         </a>
         <div className="dropdown-item has-text-grey has-text-left" href={LINK_TELEGRAM} target="_blank">
           Tokens
