@@ -76,7 +76,7 @@ export default function MenuDropdown () {
           Medium Blog<span className="icon"><i className="fa-brands fa-medium"></i></span>
         </a>
         <a className="dropdown-item has-text-light" href={LINK_WHITEPAPER} target="_blank">
-          CZ Litepaper<span className="icon"><i className="fa-solid fa-file-lines"></i></span>
+          Gitbook Litepaper<span className="icon"><i className="fa-solid fa-file-lines"></i></span>
         </a>
       </div>
     </div>
