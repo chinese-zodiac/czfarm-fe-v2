@@ -8,3 +8,5 @@ export const LINK_MEDIUM       = "https://czodiac.medium.com";
 
 export const LINK_CZFARM       = "https://cz.farm";
 export const LINK_CZCASH       = "https://cz.cash";
+export const LINK_CZODIAC      = "https://czodiac.com";
+export const LINK_NUMIS        = "https://numis.cz.cash";

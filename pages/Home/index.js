@@ -19,9 +19,9 @@ function Home() {
   return (<>
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
-      CZUSD: {czusdPrice}<br/>
-      CZF: {czfPrice}<br/>
-      BNB: {bnbPrice}<br/>
+      <div id="statsBar">
+        
+      </div>
     </main>
     <Footer />
     
