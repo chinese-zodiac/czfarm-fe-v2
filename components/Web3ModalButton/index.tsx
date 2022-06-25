@@ -56,7 +56,7 @@ const Web3ModalButton = () => {
         >BSC<span className="icon has-text-success"><i className="fa-solid fa-check"></i></span></div>) : (
             <div 
                 className="message is-inline-block has-text-danger m-1  has-background-transparent" 
-            >BSC Not Connected<span className="icon"><i className="fa-solid fa-xmark"></i></span></div>
+            >Not BSC<span className="icon"><i className="fa-solid fa-xmark"></i></span></div>
         )}
         <button className="button is-inline-block m-1 is-dark is-rounded" onClick={() => deactivate()}>Disconnect</button>
         </>
