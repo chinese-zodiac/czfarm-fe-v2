@@ -28,7 +28,7 @@ function Footer() {
         </a>
       </div>
     </div>
-    <div style={{maxWidth:"960px",marginLeft:"auto",marginRight:"auto"}}>
+    <div className='pt-6 pb-6' style={{maxWidth:"960px",marginLeft:"auto",marginRight:"auto"}}>
       <p>
         <b>IMPORTANT: Do not expect profits from other's efforts.</b><br/>
         <small>
