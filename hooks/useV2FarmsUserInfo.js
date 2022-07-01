@@ -5,12 +5,12 @@ import { Contract } from 'ethers';
 import czFarmMaster from "../abi/CZFarmMaster.json";
 
 
-function useV2FarmsPoolInfo(provider) {
+function useV2FarmsUserInfo(provider,account) {
   const czFarmMasterContract = new Contract(ADDRESS_FARMMASTERV2,czFarmMaster,provider);
   const calls = FARM_V2.map(farm=>({
     contract:czFarmMasterContract,
-    method:'poolInfo',
-    args: [farm.pid]
+    method:'userInfo',
+    args: [farm.pid,account]
   })) ?? [];
   const results = useCalls(calls) ?? [];
   results.forEach((result,idx)=>{
@@ -21,13 +21,12 @@ function useV2FarmsPoolInfo(provider) {
   return results.map((result,index) => {
     return {
       pid:index,
-      lpToken:result?.value?.lpToken,
-      allocPoint:result?.value?.allocPoint,
-      lastRewardBlock:result?.value?.lastRewardBlock,
-      accCzfPerShare:result?.value?.accCzfPerShare,
+      amount:result?.value?.amount,
+      rewardDebt:result?.value?.rewardDebt,
+      pendingRewards:result?.value?.pendingRewards
     }
   });
 }
 
 
-export default useV2FarmsPoolInfo;
+export default useV2FarmsUserInfo;

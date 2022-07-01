@@ -7,6 +7,10 @@ import { useEthers, useContractFunction, useCall, useEtherBalance  } from '@used
 import {useCoingeckoPrice } from '@usedapp/coingecko';
 import { utils, Contract } from 'ethers'
 import useV2FarmsPoolInfo from '../../hooks/useV2FarmsPoolInfo';
+import useV2FarmsPendingCzf from '../../hooks/useV2FarmsPendingCzf';
+import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
+import useFarmLpBalances from '../../hooks/useFarmLpBalances';
+import {FARM_V2} from "../../constants/famsv2";
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
@@ -17,14 +21,21 @@ function Home() {
   const accountEtherBalance = useEtherBalance(account);
 
   const v2FarmsPoolInfo = useV2FarmsPoolInfo(library);
+  const v2FarmsPendingCzf = useV2FarmsPendingCzf(library,account);
+  const v2FarmsUserInfo = useV2FarmsUserInfo(library,account);
+  const farmLpBalances = useFarmLpBalances(library,FARM_V2);
 
 
   return (<>
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <div id="statsBar">
-        {v2FarmsPoolInfo?.[1]?.pid?.toString()}<br/>
-        {v2FarmsPoolInfo?.[1]?.lpToken?.toString()}
+        {v2FarmsPoolInfo?.[2]?.pid?.toString()}<br/>
+        {v2FarmsPoolInfo?.[2]?.lpToken?.toString()}<br/>
+        {v2FarmsPendingCzf?.[2]?.pendingCzf?.toString()}<br/>
+        {v2FarmsUserInfo?.[2]?.amount?.toString()}<br/>
+        {farmLpBalances?.[2]?.token0Bal?.toString()}<br/>
+        {farmLpBalances?.[2]?.token1Bal?.toString()}
       </div>
     </main>
     <Footer />
