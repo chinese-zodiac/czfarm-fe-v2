@@ -20,7 +20,7 @@ function useV2FarmsPoolInfo(provider) {
   });
   return results.map((result,index) => {
     return {
-      pid:index,
+      pid:FARM_V2[index].pid,
       lpToken:result?.value?.lpToken,
       allocPoint:result?.value?.allocPoint,
       lastRewardBlock:result?.value?.lastRewardBlock,

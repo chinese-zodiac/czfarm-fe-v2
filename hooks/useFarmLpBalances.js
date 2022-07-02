@@ -26,7 +26,7 @@ function useFarmLpBalances(provider,farms) {
     const resultIndexToken0 = index * 2;
     const resultIndexToken1 = resultIndexToken0 + 1;
     return {
-      pid:index,
+      pid:farm.pid,
       token0Bal:results?.[resultIndexToken0]?.value?.[0],
       token1Bal:results?.[resultIndexToken1]?.value?.[0]
     }

@@ -20,7 +20,7 @@ function useV2FarmsPendingCzf(provider,account) {
   });
   return results.map((result,index) => {
     return {
-      pid:index,
+      pid:FARM_V2[index].pid,
       pendingCzf:result?.value?.[0]
     }
   });

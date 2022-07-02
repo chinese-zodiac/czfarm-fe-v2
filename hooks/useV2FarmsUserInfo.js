@@ -20,7 +20,7 @@ function useV2FarmsUserInfo(provider,account) {
   });
   return results.map((result,index) => {
     return {
-      pid:index,
+      pid:FARM_V2[index].pid,
       amount:result?.value?.amount,
       rewardDebt:result?.value?.rewardDebt,
       pendingRewards:result?.value?.pendingRewards
