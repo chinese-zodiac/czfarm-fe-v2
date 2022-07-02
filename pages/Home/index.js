@@ -12,6 +12,8 @@ import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
 import useFarmLpBalances from '../../hooks/useFarmLpBalances';
 import useChronoPoolInfo from '../../hooks/useChronoPoolInfo';
 import useChronoPoolAccountInfo from '../../hooks/useChronoPoolAccountInfo';
+import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
+import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import {FARM_V2} from "../../constants/famsv2";
 const { formatEther, parseEther, Interface } = utils;
 
@@ -28,6 +30,8 @@ function Home() {
   const farmLpBalances = useFarmLpBalances(library,FARM_V2);
   const chronoPoolInfo = useChronoPoolInfo(library);
   const chronoPoolAccountInfo = useChronoPoolAccountInfo(library,account);
+  const exoticFarmInfo = useExoticFarmInfo(library);
+  const exoticFarmAccountInfo = useExoticFarmAccountInfo(library,account);
 
 
   return (<>
@@ -45,16 +49,24 @@ function Home() {
         <br/>
         <hr/>
         Chrono Pools <br/>
-        {chronoPoolInfo?.[2]?.vestPeriod?.toString()}<br/>
-        {chronoPoolInfo?.[2]?.adjustedRateBasis?.toString()}<br/>
-        {chronoPoolInfo?.[2]?.ffBasis?.toString()}<br/>
-        {chronoPoolInfo?.[2]?.poolEmissionRate?.toString()}<br/>
-        {chronoPoolAccountInfo?.[2]?.totalVesting?.toString()}<br/>
-        {chronoPoolAccountInfo?.[2]?.emissionRate?.toString()}<br/>
-        {chronoPoolAccountInfo?.[2]?.updateEpoch?.toString()}<br/>
+        {chronoPoolInfo?.[3]?.vestPeriod?.toString()}<br/>
+        {chronoPoolInfo?.[3]?.adjustedRateBasis?.toString()}<br/>
+        {chronoPoolInfo?.[3]?.ffBasis?.toString()}<br/>
+        {chronoPoolInfo?.[3]?.poolEmissionRate?.toString()}<br/>
+        {chronoPoolAccountInfo?.[3]?.totalVesting?.toString()}<br/>
+        {chronoPoolAccountInfo?.[3]?.emissionRate?.toString()}<br/>
+        {chronoPoolAccountInfo?.[3]?.updateEpoch?.toString()}<br/>
         <br/>
         <hr/>
         Exotic Farms <br/>
+        {exoticFarmInfo?.[3]?.vestPeriod?.toString()}<br/>
+        {exoticFarmInfo?.[3]?.adjustedRateBasis?.toString()}<br/>
+        {exoticFarmInfo?.[3]?.ffBasis?.toString()}<br/>
+        {exoticFarmInfo?.[3]?.poolEmissionRate?.toString()}<br/>
+        {exoticFarmInfo?.[3]?.czfPerLpWad?.toString()}<br/>
+        {exoticFarmAccountInfo?.[3]?.totalVesting?.toString()}<br/>
+        {exoticFarmAccountInfo?.[3]?.emissionRate?.toString()}<br/>
+        {exoticFarmAccountInfo?.[3]?.updateEpoch?.toString()}<br/>
       </div>
     </main>
     <Footer />
