@@ -14,6 +14,8 @@ import useChronoPoolInfo from '../../hooks/useChronoPoolInfo';
 import useChronoPoolAccountInfo from '../../hooks/useChronoPoolAccountInfo';
 import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
 import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
+import usePoolsV1Info from '../../hooks/usePoolsV1Info';
+import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
 import {FARM_V2} from "../../constants/famsv2";
 const { formatEther, parseEther, Interface } = utils;
 
@@ -32,6 +34,8 @@ function Home() {
   const chronoPoolAccountInfo = useChronoPoolAccountInfo(library,account);
   const exoticFarmInfo = useExoticFarmInfo(library);
   const exoticFarmAccountInfo = useExoticFarmAccountInfo(library,account);
+  const poolsV1Info = usePoolsV1Info(library);
+  const poolsV1AccountInfo = usePoolsV1AccountInfo(library,account);
 
 
   return (<>
@@ -39,7 +43,7 @@ function Home() {
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <div id="statsBar">
         <hr/>
-        Farm.V2 <br/>
+        Farms V2 <br/>
         {v2FarmsPoolInfo?.[2]?.pid?.toString()}<br/>
         {v2FarmsPoolInfo?.[2]?.lpToken?.toString()}<br/>
         {v2FarmsPendingCzf?.[2]?.pendingCzf?.toString()}<br/>
@@ -67,6 +71,15 @@ function Home() {
         {exoticFarmAccountInfo?.[3]?.totalVesting?.toString()}<br/>
         {exoticFarmAccountInfo?.[3]?.emissionRate?.toString()}<br/>
         {exoticFarmAccountInfo?.[3]?.updateEpoch?.toString()}<br/>
+        <br/>
+        <hr/>
+        Pools V1 <br/>
+        {poolsV1Info?.[3]?.timestampStart?.toString()}<br/>
+        {poolsV1Info?.[3]?.timestampEnd?.toString()}<br/>
+        {poolsV1Info?.[3]?.rewardPerSecond?.toString()}<br/>
+        {poolsV1AccountInfo?.[3]?.amount?.toString()}<br/>
+        {poolsV1AccountInfo?.[3]?.rewardDebt?.toString()}<br/>
+        {poolsV1AccountInfo?.[3]?.pendingReward?.toString()}<br/>
       </div>
     </main>
     <Footer />
