@@ -26,6 +26,12 @@ export function weiToShortStringSmall(bn,tokenDecimals,decimals) {
     return (Number(bn.div(BigNumber.from("10").pow((tokenDecimals - powerPrecision)))).toFixed(decimals) / Math.pow(10,powerPrecision)).toFixed(decimals);
 }
 
+export function weiToUsdWeiVal(bn,usdPerTokens) {
+    if(!bn) return BigNumber.from("0");
+    if(!usdPerTokens) return BigNumber.from("0");
+    return bn.mul((Number(usdPerTokens)*1e+18).toFixed()).div(BigNumber.from("10").pow("18"))
+}
+
 export function toShortString(bn,decimals) {
     if(!bn) return (0).toFixed(decimals);
     if(bn.gte(10**12)) {
