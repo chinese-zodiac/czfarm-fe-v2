@@ -1,6 +1,6 @@
 import { useCalls } from "@usedapp/core";
 import { Contract } from 'ethers';
-import {POOLS_V1} from "../constants/pooslv1";
+import {POOLS_V1} from "../constants/poolsv1";
 import CZFarmPool from "../abi/CZFarmPool.json";
 
 

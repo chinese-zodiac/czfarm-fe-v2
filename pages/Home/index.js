@@ -20,20 +20,35 @@ import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
 import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import usePoolsV1Info from '../../hooks/usePoolsV1Info';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
+import usePoolsV1TokenBalance from '../../hooks/usePoolsV1TokenBalance';
 import {FARM_V2} from "../../constants/famsv2";
+import {POOLS_V1} from "../../constants/poolsv1";
 import { ADDRESS_CZF, ADDRESS_CZUSD } from '../../constants/addresses';
 const { formatEther, parseEther, Interface } = utils;
 
-const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo) => {
-  try{
-    //Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
-   const v2CzfPerSecondPerAllocPoint = v2FarmsSettings?.czfPerBlock?.div(3).div(v2FarmsSettings?.totalAllocPoint) ?? BigNumber.from(0); //3 seconds per block
-   const v2FarmsRps = v2FarmsUserInfo.reduce(
-    (acc,curr,index)=>v2CzfPerSecondPerAllocPoint?.mul(v2FarmsPoolInfo?.[index]?.allocPoint).mul(curr?.amount).div(v2FarmsLpBal?.[index]?.lpBal).add(acc)
-    ,BigNumber.from(0)) ?? BigNumber.from(0);
-   const chronoRps = chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
-   const exoticRps = exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
-   return chronoRps.add(exoticRps).add(v2FarmsRps).mul(BigNumber.from(86400)); //86400 seconds per day
+const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
+  try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
+   
+    const v2CzfPerSecondPerAllocPoint = v2FarmsSettings?.czfPerBlock?.div(3).div(v2FarmsSettings?.totalAllocPoint) ?? BigNumber.from(0); //3 seconds per block
+    const v2FarmsRps = v2FarmsUserInfo.reduce(
+      (acc,curr,index)=>v2CzfPerSecondPerAllocPoint?.mul(v2FarmsPoolInfo?.[index]?.allocPoint).mul(curr?.amount).div(v2FarmsLpBal?.[index]?.lpBal).add(acc)
+      ,BigNumber.from(0)) ?? BigNumber.from(0);
+
+    const currentEpoch = Math.floor(Date.now()/1000);
+    const poolsV1Rps = poolsV1AccountInfo.reduce(
+      (acc,curr,index)=>{
+        let poolInfo = poolsV1Info?.[index];
+        if(POOLS_V1?.[index].rewardAssetName != "CZF") return acc; //Only acc CZF rewards
+        let totalStaked = poolsV1TokenBalance?.[index]?.tokenBal ?? BigNumber.from(0);
+        if(poolInfo?.timestampStart > currentEpoch || poolInfo?.timestampEnd < currentEpoch || totalStaked.eq(0)) return acc; //Do not acc inactive pools
+        return curr?.amount?.mul(poolInfo.rewardPerSecond).div(totalStaked).add(acc);
+      }
+      ,BigNumber.from(0)) ?? BigNumber.from(0);
+
+    const chronoRps = chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
+    const exoticRps = exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
+    
+    return chronoRps.add(exoticRps).add(v2FarmsRps).add(poolsV1Rps).mul(BigNumber.from(86400)); //86400 seconds per day
   } catch(e) {
     return BigNumber.from(0)
   }
@@ -61,6 +76,7 @@ function Home() {
   const exoticFarmInfo = useExoticFarmInfo(library);
   const exoticFarmAccountInfo = useExoticFarmAccountInfo(library,account);
   const poolsV1Info = usePoolsV1Info(library);
+  const poolsV1TokenBalance = usePoolsV1TokenBalance(library);
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library,account);
 
   const [dailyCzfWei,setDailyCzfWei] = useState(BigNumber.from("0"));
@@ -70,8 +86,8 @@ function Home() {
       setDailyCzfWei(BigNumber.from("0"));
       return
     }
-    setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo))
-  },[account, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo])
+    setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo))
+  },[account, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo])
 
 
   return (<>
