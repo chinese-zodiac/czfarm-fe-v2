@@ -57,18 +57,15 @@ const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsU
 const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
   let dailyTokensList = []
   const currentEpoch = Math.floor(Date.now()/1000);
-  console.log(poolsV1AccountInfo)
   try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
     poolsV1AccountInfo.forEach((pool,index)=>{
       if(POOLS_V1?.[index].rewardAssetName == "CZF") return; //dont need CZF
-      console.log({index})
       const poolInfo = poolsV1Info?.[index];
       const tokenIndex = dailyTokensList.findIndex((elem)=>elem.name == POOLS_V1?.[index].rewardAssetName);
       const totalStaked = poolsV1TokenBalance?.[index]?.tokenBal ?? BigNumber.from(0);
-      console.log("inactive test...");
       if(poolInfo?.timestampStart > currentEpoch || poolInfo?.timestampEnd < currentEpoch || totalStaked.eq(0)) return; //inactive
-      console.log("passed inactive test");
       const rewardPerSecond = pool?.amount?.mul(poolInfo.rewardPerSecond).div(totalStaked);
+      if(rewardPerSecond.eq(0)) return; //No earnings
       const rewardPerDay = rewardPerSecond.mul(86400);
       if(tokenIndex == -1) {
         //Token not in array yet
@@ -86,7 +83,6 @@ const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, poolsV1Accou
       }
     });
   } catch(e) {}
-  console.log(dailyTokensList)
   return dailyTokensList;
 }
 
@@ -121,6 +117,7 @@ function Home() {
   useDeepCompareEffect(()=>{
     if(!account) {
       setDailyCzfWei(BigNumber.from("0"));
+      setDailyAccountTokensWei([]);
       return
     }
     setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));

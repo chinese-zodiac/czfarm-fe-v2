@@ -16,7 +16,7 @@ export const POOLS_V1 = [
     },
     {
       subtitle: "Hold 5 LRT to withdraw, claim, or stake. 5% CZF burn on withdraw",
-      address: "0x8B299092691240d3420c7f2c87aF5fd84812546d",
+      address: "0xde9fcb5b05B1BDB16Af10bd4051712A0F1e0fA25",
       rewardAssetName: "CZUSD",
       rewardAddress: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
       baseAssetName: "CZF",
@@ -38,8 +38,8 @@ export const POOLS_V1 = [
       feeBasis:1500
     },
     {
-      subtitle: "15% CZF burn on withdraw",
-      address: "0xf1D3aFE3E064CD5A42Fb601695D5b93e9De0BAd9",
+      subtitle: "Hold 50 LRT to withdraw, claim, or stake. 5% CZF burn on withdraw",
+      address: "0x3829723cE582aE372571A8CE5AdcB1107422BbF1",
       rewardAssetName: "DEP",
       rewardAddress: "0xcaF5191fc480F43e4DF80106c7695ECA56E48B18",
       baseAssetName: "CZF",
@@ -71,7 +71,7 @@ export const POOLS_V1 = [
     },
     {
       subtitle: "Hold 50 LRT to withdraw, claim, or stake. No fees.",
-      address: "0x380A01792C2227AC4357D30822631dE8f85B922D",
+      address: "0xD5112ffd4cEf35d8F73c58a48a50051AC2C96121",
       rewardAssetName: "CZF",
       rewardAddress: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
       baseAssetName: "CZUSD",
