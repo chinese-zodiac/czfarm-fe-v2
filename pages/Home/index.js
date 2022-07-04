@@ -140,7 +140,7 @@ function Home() {
                 <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(czusdBal,2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czusdBal,czusdPrice),2)})</span></p>
               </div>
             </div>
-            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Balances</h2>
+            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>In Your Wallet</h2>
         </div>
         <div className={"column p-5 m-3 "+styles.UserTotalItem}>
             <div className="columns is-mobile m-0">
@@ -157,7 +157,7 @@ function Home() {
                 ))}
               </div>
             </div>
-            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Daily Earnings</h2>
+            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Harvestable Tokens/Day</h2>
         </div>
       </div>
       <div>
