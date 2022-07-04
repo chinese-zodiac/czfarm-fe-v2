@@ -26,6 +26,18 @@ import {POOLS_V1} from "../../constants/poolsv1";
 import { ADDRESS_CZF, ADDRESS_CZUSD } from '../../constants/addresses';
 const { formatEther, parseEther, Interface } = utils;
 
+const getCzfHarvestable = (v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo) => {
+  try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
+    const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
+    const czfFromV2Farms = v2FarmsPendingCzf.reduce((acc,curr)=>acc.add(curr?.pendingCzf),BigNumber.from(0));
+    const czfFromChrono = chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch)).add(acc),BigNumber.from(0));
+    const czfFromExotic = exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch)).add(acc),BigNumber.from(0));
+    //TODO: add czf from pools
+    return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic);
+  } catch(e) { console.log(e);return BigNumber.from(0)}
+  
+}
+
 const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
   try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
    
@@ -113,16 +125,19 @@ function Home() {
 
   const [dailyCzfWei,setDailyCzfWei] = useState(BigNumber.from(0));
   const [dailyAccountTokensWei,setDailyAccountTokensWei] = useState([]);
+  const [czfHarvestable,setCzfHarvestable] = useState(BigNumber.from(0));
 
   useDeepCompareEffect(()=>{
     if(!account) {
       setDailyCzfWei(BigNumber.from("0"));
       setDailyAccountTokensWei([]);
+      setCzfHarvestable(BigNumber.from("0"));
       return
     }
     setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
     setDailyAccountTokensWei(getDailyAccountTokensWei(poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
-  },[account, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo])
+    setCzfHarvestable(getCzfHarvestable(v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo));
+  },[account, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo])
 
 
   return (<>
@@ -157,7 +172,18 @@ function Home() {
                 ))}
               </div>
             </div>
-            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Harvestable Tokens/Day</h2>
+            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Daily Harvest</h2>
+        </div>
+        <div className={"column p-5 m-3 "+styles.UserTotalItem}>
+            <div className="columns is-mobile m-0">
+              <div className="column has-text-right m-0 p-1">
+                <p className='is-size-5 m-0'>CZF:</p>
+              </div>
+              <div className="column has-text-left m-0 p-1">
+                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(czfHarvestable,2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(dailyCzfWei,czfPrice),2)})</span></p>
+              </div>
+            </div>
+            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Estimated Harvestable</h2>
         </div>
       </div>
       <div>
