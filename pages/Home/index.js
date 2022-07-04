@@ -8,6 +8,8 @@ import {useCoingeckoPrice } from '@usedapp/coingecko';
 import { utils, Contract, BigNumber } from 'ethers'
 import {weiToShortString, weiToFixed, weiToUsdWeiVal} from '../../utils/bnDisplay';
 import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
+import useV2FarmsSettings from '../../hooks/useV2FarmsSettings';
+import useV2FarmsLpBal from '../../hooks/useV2FarmsLpBal';
 import useV2FarmsPoolInfo from '../../hooks/useV2FarmsPoolInfo';
 import useV2FarmsPendingCzf from '../../hooks/useV2FarmsPendingCzf';
 import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
@@ -22,13 +24,19 @@ import {FARM_V2} from "../../constants/famsv2";
 import { ADDRESS_CZF, ADDRESS_CZUSD } from '../../constants/addresses';
 const { formatEther, parseEther, Interface } = utils;
 
-const getDailyCzfWei = (v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo) => {
-  if(!v2FarmsPoolInfo || !v2FarmsUserInfo || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !poolsV1AccountInfo) return BigNumber.from("0");
-   //TODO: Get current reward per second for v2 farms to properly calculate rewards per second for account
-   let chronoRps = chronoPoolAccountInfo.reduce((total,curr)=>total = curr?.emissionRate?.add(total),BigNumber.from("0")) ?? BigNumber.from("0");
-   let exoticRps = exoticFarmAccountInfo.reduce((total,curr)=>total = curr?.emissionRate?.add(total),BigNumber.from("0")) ?? BigNumber.from("0");
-   //TODO: Get current rps for v1 pools - only czf
-   return chronoRps.add(exoticRps).mul(BigNumber.from("86400")); //86400 seconds per day
+const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo) => {
+  try{
+    //Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
+   const v2CzfPerSecondPerAllocPoint = v2FarmsSettings?.czfPerBlock?.div(3).div(v2FarmsSettings?.totalAllocPoint) ?? BigNumber.from(0); //3 seconds per block
+   const v2FarmsRps = v2FarmsUserInfo.reduce(
+    (acc,curr,index)=>v2CzfPerSecondPerAllocPoint?.mul(v2FarmsPoolInfo?.[index]?.allocPoint).mul(curr?.amount).div(v2FarmsLpBal?.[index]?.lpBal).add(acc)
+    ,BigNumber.from(0)) ?? BigNumber.from(0);
+   const chronoRps = chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
+   const exoticRps = exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
+   return chronoRps.add(exoticRps).add(v2FarmsRps).mul(BigNumber.from(86400)); //86400 seconds per day
+  } catch(e) {
+    return BigNumber.from(0)
+  }
 }
 
 function Home() {
@@ -42,6 +50,8 @@ function Home() {
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
   const czusdBal = useTokenBalance(ADDRESS_CZUSD, account);
 
+  const v2FarmsSettings = useV2FarmsSettings(library);
+  const v2FarmsLpBal = useV2FarmsLpBal(library);
   const v2FarmsPoolInfo = useV2FarmsPoolInfo(library);
   const v2FarmsPendingCzf = useV2FarmsPendingCzf(library,account);
   const v2FarmsUserInfo = useV2FarmsUserInfo(library,account);
@@ -60,8 +70,8 @@ function Home() {
       setDailyCzfWei(BigNumber.from("0"));
       return
     }
-    setDailyCzfWei(getDailyCzfWei(v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo))
-  },[account,v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo])
+    setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo))
+  },[account, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo])
 
 
   return (<>
@@ -92,7 +102,7 @@ function Home() {
                 <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{"0.00"} <span className="is-size-7">(${"0.00"})</span></p>
               </div>
             </div>
-            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Earning Rate</h2>
+            <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Daily Earnings</h2>
         </div>
       </div>
       <div>
@@ -101,8 +111,11 @@ function Home() {
 
         <hr/>
         Farms V2 <br/>
+        {v2FarmsSettings?.czfPerBlock?.toString()}<br/>
+        {v2FarmsSettings?.totalAllocPoint?.toString()}<br/>
         {v2FarmsPoolInfo?.[2]?.pid?.toString()}<br/>
         {v2FarmsPoolInfo?.[2]?.lpToken?.toString()}<br/>
+        {v2FarmsLpBal?.[2]?.lpBal?.toString()}<br/>
         {v2FarmsPendingCzf?.[2]?.pendingCzf?.toString()}<br/>
         {v2FarmsUserInfo?.[2]?.amount?.toString()}<br/>
         {farmLpBalances?.[2]?.token0Bal?.toString()}<br/>
