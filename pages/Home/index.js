@@ -47,11 +47,47 @@ const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsU
 
     const chronoRps = chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
     const exoticRps = exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
-    
-    return chronoRps.add(exoticRps).add(v2FarmsRps).add(poolsV1Rps).mul(BigNumber.from(86400)); //86400 seconds per day
+
+    return chronoRps.add(exoticRps).add(v2FarmsRps).add(poolsV1Rps).mul(86400); //86400 seconds per day
   } catch(e) {
     return BigNumber.from(0)
   }
+}
+
+const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
+  let dailyTokensList = []
+  const currentEpoch = Math.floor(Date.now()/1000);
+  console.log(poolsV1AccountInfo)
+  try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
+    poolsV1AccountInfo.forEach((pool,index)=>{
+      if(POOLS_V1?.[index].rewardAssetName == "CZF") return; //dont need CZF
+      console.log({index})
+      const poolInfo = poolsV1Info?.[index];
+      const tokenIndex = dailyTokensList.findIndex((elem)=>elem.name == POOLS_V1?.[index].rewardAssetName);
+      const totalStaked = poolsV1TokenBalance?.[index]?.tokenBal ?? BigNumber.from(0);
+      console.log("inactive test...");
+      if(poolInfo?.timestampStart > currentEpoch || poolInfo?.timestampEnd < currentEpoch || totalStaked.eq(0)) return; //inactive
+      console.log("passed inactive test");
+      const rewardPerSecond = pool?.amount?.mul(poolInfo.rewardPerSecond).div(totalStaked);
+      const rewardPerDay = rewardPerSecond.mul(86400);
+      if(tokenIndex == -1) {
+        //Token not in array yet
+        let tokenWei = {
+          name:POOLS_V1?.[index].rewardAssetName,
+          rewardPerDay: rewardPerDay
+        }
+        if(POOLS_V1?.[index].rewardAssetName == "CZUSD") { //CZUSD must be first
+          dailyTokensList.unshift(tokenWei);
+        } else {
+          dailyTokensList.push(tokenWei);
+        }
+      } else {
+        dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
+      }
+    });
+  } catch(e) {}
+  console.log(dailyTokensList)
+  return dailyTokensList;
 }
 
 function Home() {
@@ -79,14 +115,16 @@ function Home() {
   const poolsV1TokenBalance = usePoolsV1TokenBalance(library);
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library,account);
 
-  const [dailyCzfWei,setDailyCzfWei] = useState(BigNumber.from("0"));
+  const [dailyCzfWei,setDailyCzfWei] = useState(BigNumber.from(0));
+  const [dailyAccountTokensWei,setDailyAccountTokensWei] = useState([]);
 
   useDeepCompareEffect(()=>{
     if(!account) {
       setDailyCzfWei(BigNumber.from("0"));
       return
     }
-    setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo))
+    setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
+    setDailyAccountTokensWei(getDailyAccountTokensWei(poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
   },[account, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo])
 
 
@@ -94,7 +132,7 @@ function Home() {
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <div className='columns is-3 is-variable'>
-        <div className={"column pt-5 pb-5 m-3 "+styles.UserTotalItem}>
+        <div className={"column p-5 pb-5 m-3 "+styles.UserTotalItem}>
             <div className="columns is-mobile m-0">
               <div className="column has-text-right m-0 p-1">
                 <p className='is-size-5 m-0'>CZF:</p>
@@ -107,15 +145,19 @@ function Home() {
             </div>
             <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Balances</h2>
         </div>
-        <div className={"column pt-5 pb-5 m-3 "+styles.UserTotalItem}>
+        <div className={"column p-5 m-3 "+styles.UserTotalItem}>
             <div className="columns is-mobile m-0">
               <div className="column has-text-right m-0 p-1">
                 <p className='is-size-5 m-0'>CZF/day:</p>
-                <p className='is-size-5 m-0'>CZUSD/day:</p>
+                {dailyAccountTokensWei.map(tokenWei=>(
+                  <p key={tokenWei.name} className='is-size-5 m-0'>{tokenWei.name}/day:</p>
+                ))}
               </div>
               <div className="column has-text-left m-0 p-1">
                 <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(dailyCzfWei,2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(dailyCzfWei,czfPrice),2)})</span></p>
-                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{"0.00"} <span className="is-size-7">(${"0.00"})</span></p>
+                {dailyAccountTokensWei.map(tokenWei=>(
+                  <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.rewardPerDay,2)}</p>
+                ))}
               </div>
             </div>
             <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Daily Earnings</h2>
