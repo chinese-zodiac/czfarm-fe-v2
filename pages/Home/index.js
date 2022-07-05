@@ -219,7 +219,7 @@ function Home() {
                 ))}
               </div>
               <div className="column has-text-left m-0 p-1">
-                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(czfHarvestable,2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(dailyCzfWei,czfPrice),2)})</span></p>
+                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(czfHarvestable,2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czfHarvestable,czfPrice),2)})</span></p>
                 {tokensHarvestable.map(tokenWei=>(
                   <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.tokenHarvestable,2)}</p>
                 ))}
