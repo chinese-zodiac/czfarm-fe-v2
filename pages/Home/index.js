@@ -33,7 +33,13 @@ const getCzfHarvestable = (v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmA
     const czfFromChrono = chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch)).add(acc),BigNumber.from(0));
     const czfFromExotic = exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch)).add(acc),BigNumber.from(0));
     //TODO: add czf from pools
-    return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic);
+    const czfFromPoolsV1 = poolsV1AccountInfo.reduce(
+      (acc,curr,index)=>{
+        if(POOLS_V1?.[index].rewardAssetName != "CZF") return acc; //Only acc CZF harvest
+        return curr?.pendingReward?.add(acc);
+      }
+      ,BigNumber.from(0)) ?? BigNumber.from(0);
+    return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic).add(czfFromPoolsV1);
   } catch(e) { console.log(e);return BigNumber.from(0)}
   
 }
