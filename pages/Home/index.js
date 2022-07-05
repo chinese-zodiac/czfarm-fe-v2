@@ -41,7 +41,6 @@ const getCzfHarvestable = (v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmA
       ,BigNumber.from(0)) ?? BigNumber.from(0);
     return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic).add(czfFromPoolsV1);
   } catch(e) { console.log(e);return BigNumber.from(0)}
-  
 }
 
 const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
@@ -70,6 +69,34 @@ const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsU
   } catch(e) {
     return BigNumber.from(0)
   }
+}
+
+const getTokensHarvestable = (poolsV1AccountInfo) => {
+  let tokensHarvestableList = [];
+  try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
+    poolsV1AccountInfo.forEach((pool,index)=>{
+      if(POOLS_V1?.[index].rewardAssetName == "CZF") return; //dont need CZF
+      const tokenIndex = tokensHarvestableList.findIndex((elem)=>elem.name == POOLS_V1?.[index].rewardAssetName);
+      const tokenHarvestable = pool?.pendingReward ?? BigNumber.from(0);
+      if(tokenHarvestable.eq(0)) return; //No harvest
+      if(tokenIndex == -1) {
+        //Token not in array yet
+        let tokenWei = {
+          name:POOLS_V1?.[index].rewardAssetName,
+          tokenHarvestable: tokenHarvestable
+        }
+        if(POOLS_V1?.[index].rewardAssetName == "CZUSD") { //CZUSD must be first
+          tokensHarvestableList.unshift(tokenWei);
+        } else {
+          tokensHarvestableList.push(tokenWei);
+        }
+      } else {
+        tokensHarvestableList[tokenIndex].tokenHarvestable = tokensHarvestableList[tokenIndex].tokenHarvestable.add(tokenHarvestable);
+      }
+
+    });
+  } catch(e) {}
+  return tokensHarvestableList;
 }
 
 const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
@@ -132,17 +159,20 @@ function Home() {
   const [dailyCzfWei,setDailyCzfWei] = useState(BigNumber.from(0));
   const [dailyAccountTokensWei,setDailyAccountTokensWei] = useState([]);
   const [czfHarvestable,setCzfHarvestable] = useState(BigNumber.from(0));
+  const [tokensHarvestable,setTokensHarvestable] = useState([]);
 
   useDeepCompareEffect(()=>{
     if(!account) {
       setDailyCzfWei(BigNumber.from("0"));
       setDailyAccountTokensWei([]);
       setCzfHarvestable(BigNumber.from("0"));
+      setTokensHarvestable([]);
       return
     }
     setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
     setDailyAccountTokensWei(getDailyAccountTokensWei(poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
     setCzfHarvestable(getCzfHarvestable(v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo));
+    setTokensHarvestable(getTokensHarvestable(poolsV1AccountInfo));
   },[account, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo])
 
 
@@ -184,9 +214,15 @@ function Home() {
             <div className="columns is-mobile m-0">
               <div className="column has-text-right m-0 p-1">
                 <p className='is-size-5 m-0'>CZF:</p>
+                {tokensHarvestable.map(tokenWei=>(
+                  <p key={tokenWei.name} className='is-size-5 m-0'>{tokenWei.name}:</p>
+                ))}
               </div>
               <div className="column has-text-left m-0 p-1">
                 <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(czfHarvestable,2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(dailyCzfWei,czfPrice),2)})</span></p>
+                {tokensHarvestable.map(tokenWei=>(
+                  <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.tokenHarvestable,2)}</p>
+                ))}
               </div>
             </div>
             <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Estimated Harvestable</h2>
