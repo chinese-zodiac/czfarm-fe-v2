@@ -56,50 +56,6 @@ function Home() {
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
       
-      
-      <div>
-        <hr/>
-        Farms V2 <br/>
-        {v2FarmsSettings?.czfPerBlock?.toString()}<br/>
-        {v2FarmsSettings?.totalAllocPoint?.toString()}<br/>
-        {v2FarmsPoolInfo?.[2]?.pid?.toString()}<br/>
-        {v2FarmsPoolInfo?.[2]?.lpToken?.toString()}<br/>
-        {v2FarmsLpBal?.[2]?.lpBal?.toString()}<br/>
-        {v2FarmsPendingCzf?.[2]?.pendingCzf?.toString()}<br/>
-        {v2FarmsUserInfo?.[2]?.amount?.toString()}<br/>
-        {farmLpBalances?.[2]?.token0Bal?.toString()}<br/>
-        {farmLpBalances?.[2]?.token1Bal?.toString()}<br/>
-        <br/>
-        <hr/>
-        Chrono Pools <br/>
-        {chronoPoolInfo?.[3]?.vestPeriod?.toString()}<br/>
-        {chronoPoolInfo?.[3]?.adjustedRateBasis?.toString()}<br/>
-        {chronoPoolInfo?.[3]?.ffBasis?.toString()}<br/>
-        {chronoPoolInfo?.[3]?.poolEmissionRate?.toString()}<br/>
-        {chronoPoolAccountInfo?.[3]?.totalVesting?.toString()}<br/>
-        {chronoPoolAccountInfo?.[3]?.emissionRate?.toString()}<br/>
-        {chronoPoolAccountInfo?.[3]?.updateEpoch?.toString()}<br/>
-        <br/>
-        <hr/>
-        Exotic Farms <br/>
-        {exoticFarmInfo?.[3]?.vestPeriod?.toString()}<br/>
-        {exoticFarmInfo?.[3]?.adjustedRateBasis?.toString()}<br/>
-        {exoticFarmInfo?.[3]?.ffBasis?.toString()}<br/>
-        {exoticFarmInfo?.[3]?.poolEmissionRate?.toString()}<br/>
-        {exoticFarmInfo?.[3]?.czfPerLpWad?.toString()}<br/>
-        {exoticFarmAccountInfo?.[3]?.totalVesting?.toString()}<br/>
-        {exoticFarmAccountInfo?.[3]?.emissionRate?.toString()}<br/>
-        {exoticFarmAccountInfo?.[3]?.updateEpoch?.toString()}<br/>
-        <br/>
-        <hr/>
-        Pools V1 <br/>
-        {poolsV1Info?.[3]?.timestampStart?.toString()}<br/>
-        {poolsV1Info?.[3]?.timestampEnd?.toString()}<br/>
-        {poolsV1Info?.[3]?.rewardPerSecond?.toString()}<br/>
-        {poolsV1AccountInfo?.[3]?.amount?.toString()}<br/>
-        {poolsV1AccountInfo?.[3]?.rewardDebt?.toString()}<br/>
-        {poolsV1AccountInfo?.[3]?.pendingReward?.toString()}<br/>
-      </div>
     </main>
     <Footer />
     
