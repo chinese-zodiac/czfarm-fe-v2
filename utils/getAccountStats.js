@@ -2,21 +2,32 @@ import { BigNumber } from 'ethers';
 import {FARM_V2} from "../constants/famsv2";
 import {POOLS_V1} from "../constants/poolsv1";
 
-export const getCzfHarvestable = (v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo) => {
-  try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
-    const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
-    const czfFromV2Farms = v2FarmsPendingCzf.reduce((acc,curr)=>acc.add(curr?.pendingCzf),BigNumber.from(0));
-    const czfFromChrono = chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch)).add(acc),BigNumber.from(0));
-    const czfFromExotic = exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch)).add(acc),BigNumber.from(0));
-    //TODO: add czf from pools
-    const czfFromPoolsV1 = poolsV1AccountInfo.reduce(
+export const getCzfHarvestableChrono = (chronoPoolAccountInfo) => {
+  const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
+  return chronoPoolAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch ?? currentEpoch)).add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
+}
+export const getCzfHarvestableExotic = (exoticFarmAccountInfo) => {
+  const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
+  return exoticFarmAccountInfo.reduce((acc,curr)=>curr?.emissionRate?.mul(currentEpoch.sub(curr?.updateEpoch ?? currentEpoch)).add(acc),BigNumber.from(0)) ?? BigNumber.from(0);
+}
+export const getCzfHarvestableFarmsV2 = (v2FarmsPendingCzf) => {
+  return v2FarmsPendingCzf.reduce((acc,curr)=>acc.add(curr?.pendingCzf ?? BigNumber.from(0)),BigNumber.from(0)) ?? BigNumber.from(0);
+}
+export const getCzfHarvestablePoolsV1 = (poolsV1AccountInfo) => {
+    return poolsV1AccountInfo.reduce(
       (acc,curr,index)=>{
         if(POOLS_V1?.[index].rewardAssetName != "CZF") return acc; //Only acc CZF harvest
-        return curr?.pendingReward?.add(acc);
+        return curr?.pendingReward?.add(acc) ?? BigNumber.from(0);
       }
-      ,BigNumber.from(0)) ?? BigNumber.from(0);
-    return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic).add(czfFromPoolsV1);
-  } catch(e) { console.log(e);return BigNumber.from(0)}
+    ,BigNumber.from(0)) ?? BigNumber.from(0);
+}
+
+export const getCzfHarvestable = (v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo) => {
+  const czfFromV2Farms = getCzfHarvestableFarmsV2(v2FarmsPendingCzf);
+  const czfFromChrono = getCzfHarvestableChrono(chronoPoolAccountInfo);
+  const czfFromExotic = getCzfHarvestableExotic(exoticFarmAccountInfo);
+  const czfFromPoolsV1 = getCzfHarvestablePoolsV1(poolsV1AccountInfo);
+  return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic).add(czfFromPoolsV1);
 }
 
 export const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
