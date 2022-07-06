@@ -8,7 +8,7 @@ function CollapsibleCard ({children,title,className}) {
   return (<>
     <div className={"has-text-white card "+styles.CollapsibleCard+" "+className}>
       <a className="has-text-white card-header pl-3 pr-3" onClick={()=>{setIsOpen(!isOpen)}}>
-        <div className="card-header-title pr-0">
+        <div className="card-header-title p-0 pb-1">
           {title}
         </div>
         <div className='card-header-icon pr-2 pl-1'>
