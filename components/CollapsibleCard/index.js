@@ -8,10 +8,10 @@ function CollapsibleCard ({children,title,className}) {
   return (<>
     <div className={"has-text-white card "+styles.CollapsibleCard+" "+className}>
       <a className="has-text-white card-header pl-3 pr-3" onClick={()=>{setIsOpen(!isOpen)}}>
-        <div className="has-text-white card-header-title has-text-weight-normal">
-          <p className="is-size-4 has-text-left">{title}</p>
+        <div className="card-header-title pr-0">
+          {title}
         </div>
-        <div className='card-header-icon'>
+        <div className='card-header-icon pr-2 pl-1'>
           <span className="icon has-text-primary">
             {isOpen ? (
               <i className="fa-solid fa-angle-up" ></i>
@@ -21,7 +21,7 @@ function CollapsibleCard ({children,title,className}) {
           </span>
         </div>
       </a>
-      <div class={"card-content has-text-white "+(isOpen ? "" : "is-hidden")}>          
+      <div class={"card-content p-2 has-text-white "+(isOpen ? "" : "is-hidden")}>          
         {children}
       </div>
     </div>

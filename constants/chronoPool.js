@@ -16,7 +16,7 @@ export const CHRONO_POOL = [
     pid: 2
   },
   {
-    title: "18 MONTHS",
+    title: "1.5 YEARS",
     pid: 3
   },
   {

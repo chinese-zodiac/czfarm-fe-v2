@@ -20,6 +20,9 @@ import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import usePoolsV1Info from '../../hooks/usePoolsV1Info';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
 import usePoolsV1TokenBalance from '../../hooks/usePoolsV1TokenBalance';
+import CZFLogo from "../../public/static/assets/logo192.png"
+import {CHRONO_POOL} from "../../constants/chronoPool";
+import {EXOTIC_FARMS} from "../../constants/exoticFarms";
 import {FARM_V2} from "../../constants/famsv2";
 import {POOLS_V1} from "../../constants/poolsv1";
 import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_MASTERROUTER } from '../../constants/addresses';
@@ -57,9 +60,32 @@ function Home() {
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
-      <CollapsibleCard className={styles.StakingSection} title="Chrono Pools">
-        <CollapsibleCard title={(<i>test</i>)}>
-        </CollapsibleCard>
+      <CollapsibleCard className={"has-text-left "+styles.StakingSection} title={(
+        <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Chrono Pools</p>
+      )}>
+        <p>Burn CZF, Get CZF every second.</p>
+        {CHRONO_POOL.map((pool)=>(
+          <CollapsibleCard className="mb-2" key={pool.pid} title={(<div className='has-text-white level is-mobile'>
+            <div className="column is-narrow is-mobile level-item level m-0 p-0 mr-2">
+              <figure className="image is-32x32 is-inline-block m-0 p-0 level-item">
+                  <img src={CZFLogo} />
+              </figure>
+              <span className='icon m-0 p-0 level-item' style={{width:"0.7em"}}><i className="fa-solid fa-angle-right level-item"></i></span>
+              <figure className="image is-32x32 is-inline-block m-0 p-0 level-item">
+                  <img src={CZFLogo} />
+              </figure>
+            </div>
+            <div className='column has-text-weight-light level-item m-0 p-0' style={{lineHeight:"1.2em",whiteSpace:"nowrap",width:"8.5em"}}>
+              <span className='is-size-7 has-text-grey'>DURATION</span><br/>
+              <span className='is-size-5'>{pool.title}</span>
+            </div>
+            <div className='column has-text-weight-light level-item m-0 p-0' style={{lineHeight:"1.2em"}}>
+              <span className='is-size-7 has-text-grey'>APR</span><br/>
+              <span className='is-size-5'>0.00%</span>
+            </div>
+          </div>)}>
+          </CollapsibleCard>
+        ))}
       </CollapsibleCard>
     </main>
     <Footer />
