@@ -24,6 +24,8 @@ import {FARM_V2} from "../../constants/famsv2";
 import {POOLS_V1} from "../../constants/poolsv1";
 import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_MASTERROUTER } from '../../constants/addresses';
 import WalletStatsBar from '../../components/WalletStatsBar';
+import styles from "./index.module.scss";
+import CollapsibleCard from '../../components/CollapsibleCard';
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
@@ -55,7 +57,10 @@ function Home() {
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
-      
+      <CollapsibleCard className={styles.StakingSection} title="Chrono Pools">
+        <CollapsibleCard title={(<i>test</i>)}>
+        </CollapsibleCard>
+      </CollapsibleCard>
     </main>
     <Footer />
     
