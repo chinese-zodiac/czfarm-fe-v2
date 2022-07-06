@@ -2,9 +2,10 @@
 import React, { Component, useState } from 'react';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
-import { useEthers, useContractFunction, useCall, useEtherBalance, useTokenBalance  } from '@usedapp/core';
+import { useEthers, useCall, useEtherBalance, useTokenBalance  } from '@usedapp/core';
 import {useCoingeckoPrice } from '@usedapp/coingecko';
 import { utils, Contract, BigNumber } from 'ethers'
+import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
 import {weiToShortString, weiToFixed, weiToUsdWeiVal} from '../../utils/bnDisplay';
 import useV2FarmsSettings from '../../hooks/useV2FarmsSettings';
 import useV2FarmsLpBal from '../../hooks/useV2FarmsLpBal';
@@ -21,12 +22,12 @@ import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
 import usePoolsV1TokenBalance from '../../hooks/usePoolsV1TokenBalance';
 import {FARM_V2} from "../../constants/famsv2";
 import {POOLS_V1} from "../../constants/poolsv1";
-import { ADDRESS_CZF, ADDRESS_CZUSD } from '../../constants/addresses';
+import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_MASTERROUTER } from '../../constants/addresses';
 import WalletStatsBar from '../../components/WalletStatsBar';
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
-  const {account,library,chainId,activateBrowserWallet} = useEthers();
+  const {account,library,chainId} = useEthers();
   const czusdPrice = useCoingeckoPrice("czusd");
   const czfPrice = useCoingeckoPrice("czfarm");
   const bnbPrice = useCoingeckoPrice("binancecoin");
@@ -50,11 +51,12 @@ function Home() {
   const poolsV1TokenBalance = usePoolsV1TokenBalance(library);
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library,account);
 
-
   return (<>
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
-      <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
+      <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
+      
+      
       <div>
         <hr/>
         Farms V2 <br/>

@@ -1,18 +1,29 @@
 import React, {useState} from 'react';
 import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
+import {useContractFunction} from '@usedapp/core';
 import {weiToShortString, weiToUsdWeiVal} from '../../utils/bnDisplay';
-import { BigNumber } from 'ethers'
+import {getHarvestablePidsChrono, getHarvestablePidsExotic, getHarvestablePidsV2Farms} from '../../utils/getHarvestablePids';
+import { BigNumber, Contract } from 'ethers'
+import masterRouterAbi from "../../abi/MasterRouter.json";
+import {ADDRESS_EXOTICFARMS, ADDRESS_CHRONOPOOLS, ADDRESS_FARMMASTERV2, ADDRESS_MASTERROUTER} from "../../constants/addresses";
 import styles from "./index.module.scss";
 import {getDailyCzfWei, getDailyAccountTokensWei, getCzfHarvestable, getTokensHarvestable} from "../../utils/getAccountStats"
 
-function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}) {
+function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}) {
 
   const [dailyCzfWei,setDailyCzfWei] = useState(BigNumber.from(0));
   const [dailyAccountTokensWei,setDailyAccountTokensWei] = useState([]);
   const [czfHarvestable,setCzfHarvestable] = useState(BigNumber.from(0));
   const [tokensHarvestable,setTokensHarvestable] = useState([]);
 
-  console.log({czfBal})
+  const [harvestablePidsChrono,setHarvestablePidsChrono] = useState([]);
+  const [harvestablePidsExotic,setHarvestablePidsExotic] = useState([]);
+  const [harvestablePidsV2Farms,setHarvestablePidsV2Farms] = useState([]);
+
+  
+const { state:stateHarvestAll, send:sendHarvestAll } = useContractFunction(
+  new Contract(ADDRESS_MASTERROUTER,masterRouterAbi,library),
+  'claimAll');
 
   useDeepCompareEffect(()=>{
     if(!account) {
@@ -20,12 +31,18 @@ function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, v2Farm
       setDailyAccountTokensWei([]);
       setCzfHarvestable(BigNumber.from("0"));
       setTokensHarvestable([]);
+      setHarvestablePidsChrono([]);
+      setHarvestablePidsExotic([]);
+      setHarvestablePidsV2Farms([]);
       return
     }
     setDailyCzfWei(getDailyCzfWei(v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
     setDailyAccountTokensWei(getDailyAccountTokensWei(poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo));
     setCzfHarvestable(getCzfHarvestable(v2FarmsPendingCzf, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1AccountInfo));
     setTokensHarvestable(getTokensHarvestable(poolsV1AccountInfo));
+    setHarvestablePidsChrono(getHarvestablePidsChrono(chronoPoolAccountInfo));
+    setHarvestablePidsExotic(getHarvestablePidsExotic(exoticFarmAccountInfo));
+    setHarvestablePidsV2Farms(getHarvestablePidsV2Farms(v2FarmsPendingCzf));
   },[account, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo])
 
   return(<>
@@ -78,6 +95,20 @@ function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, v2Farm
             <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Estimated Harvestable</h2>
         </div>
       </div>
+      {!!account && (
+        <button className='button is-medium  is-rounded is-primary' style={{marginLeft:"auto",marginRight:"auto"}} 
+        onClick={()=>{
+          sendHarvestAll(
+            ADDRESS_CHRONOPOOLS,
+            harvestablePidsChrono,
+            ADDRESS_EXOTICFARMS,
+            harvestablePidsExotic,
+            ADDRESS_FARMMASTERV2,
+            harvestablePidsV2Farms
+          );
+        }}
+        >Harvest Chrono, Exotic, FarmsV2 CZF</button>
+      )}
   </>)
 }
 
