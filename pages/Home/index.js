@@ -60,7 +60,7 @@ function Home() {
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
-      <CollapsibleCard className={"has-text-left "+styles.StakingSection} title={(
+      <CollapsibleCard className={"mt-5 mb-5 has-text-left "+styles.StakingSection} title={(
         <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Chrono Pools</p>
       )}>
         <p className="mt-2 mb-2 ml-1" >Burn CZF, Get CZF every second.</p>
@@ -70,7 +70,7 @@ function Home() {
               <figure className="image is-32x32 is-inline-block m-0 p-0 level-item">
                   <img src={CZFLogo} />
               </figure>
-              <span className='icon m-0 p-0 level-item' style={{width:"0.7em"}}><i className="fa-solid fa-angle-right level-item"></i></span>
+              <span className='icon m-0 p-0 level-item' style={{width:"0.6em"}}><i className="fa-solid fa-angle-right level-item"></i></span>
               <figure className="image is-32x32 is-inline-block m-0 p-0 level-item">
                   <img src={CZFLogo} />
               </figure>

@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
 import {useContractFunction} from '@usedapp/core';
 import {weiToShortString, weiToUsdWeiVal} from '../../utils/bnDisplay';
+import { czCashBuyLink } from '../../utils/dexBuyLink';
 import {getHarvestablePidsChrono, getHarvestablePidsExotic, getHarvestablePidsV2Farms} from '../../utils/getHarvestablePids';
 import { BigNumber, Contract } from 'ethers'
 import masterRouterAbi from "../../abi/MasterRouter.json";
-import {ADDRESS_EXOTICFARMS, ADDRESS_CHRONOPOOLS, ADDRESS_FARMMASTERV2, ADDRESS_MASTERROUTER} from "../../constants/addresses";
+import {ADDRESS_EXOTICFARMS, ADDRESS_CHRONOPOOLS, ADDRESS_FARMMASTERV2, ADDRESS_MASTERROUTER, ADDRESS_CZF, ADDRESS_CZUSD} from "../../constants/addresses";
 import styles from "./index.module.scss";
 import {getDailyCzfWei, getDailyAccountTokensWei, getCzfHarvestableChrono, getCzfHarvestableExotic, getCzfHarvestableFarmsV2, getCzfHarvestablePoolsV1, getTokensHarvestable} from "../../utils/getAccountStats"
 
@@ -105,20 +106,27 @@ const { state:stateHarvestAll, send:sendHarvestAll } = useContractFunction(
             <h2 className='is-size-6 m-0' style={{fontWeight:"300"}}>Your Estimated Harvestable</h2>
         </div>
       </div>
-      {!!account && (
-        <button className='button is-medium  is-rounded is-primary' style={{marginLeft:"auto",marginRight:"auto"}} 
-        onClick={()=>{
-          sendHarvestAll(
-            ADDRESS_CHRONOPOOLS,
-            harvestablePidsChrono,
-            ADDRESS_EXOTICFARMS,
-            harvestablePidsExotic,
-            ADDRESS_FARMMASTERV2,
-            harvestablePidsV2Farms
-          );
-        }}
-        >Harvest {weiToShortString(czfHarvestableChrono.add(czfHarvestableExotic).add(czfHarvestableFarmsV2),2)} CZF</button>
-      )}
+      <div style={{marginLeft:"auto",marginRight:"auto"}} >
+        <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZF</a>
+        <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZUSD</a>
+        <br/>
+        {!!account && (
+          <button className='button is-medium  is-rounded is-primary m-3' style={{marginLeft:"auto",marginRight:"auto"}} 
+          onClick={()=>{
+            sendHarvestAll(
+              ADDRESS_CHRONOPOOLS,
+              harvestablePidsChrono,
+              ADDRESS_EXOTICFARMS,
+              harvestablePidsExotic,
+              ADDRESS_FARMMASTERV2,
+              harvestablePidsV2Farms
+            );
+          }}
+          >Harvest {weiToShortString(czfHarvestableChrono.add(czfHarvestableExotic).add(czfHarvestableFarmsV2),2)} CZF
+          </button>
+        )}
+
+      </div >
   </>)
 }
 
