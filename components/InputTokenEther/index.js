@@ -18,7 +18,7 @@ export default function InputTokenEther({setInputEther,inputEther,style,classNam
         inputNum = Math.floor(inputNum*precision)/precision;
         setInputEther(inputNum);
       }} />
-    <span className="level-item " style={{justifyContent:"start"}}>{label}</span>
+    <span className="level-item ml-2 " style={{justifyContent:"start"}}>{label}</span>
   </div>
       
   </>);

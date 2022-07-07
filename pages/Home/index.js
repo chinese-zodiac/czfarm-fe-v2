@@ -69,7 +69,11 @@ function Home() {
       )}>
         <p className="mt-2 mb-2 ml-1" >Burn CZF, Get CZF every second.</p>
         {CHRONO_POOL.map((pool,index)=>(
-          <ManageChronoPool {...{account,pool,czfBal}} poolInfo={chronoPoolInfo?.[index]} />
+          <ManageChronoPool 
+            {...{account,library,pool,czfBal}}
+            poolInfo={chronoPoolInfo?.[index]}
+            poolAccountInfo={chronoPoolAccountInfo?.[index]}
+          />
         ))}
       </CollapsibleCard>
     </main>
