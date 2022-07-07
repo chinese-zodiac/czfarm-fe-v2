@@ -122,7 +122,7 @@ const { state:stateHarvestAll, send:sendHarvestAll } = useContractFunction(
               harvestablePidsV2Farms
             );
           }}
-          >Harvest {weiToShortString(czfHarvestableChrono.add(czfHarvestableExotic).add(czfHarvestableFarmsV2),2)} CZF
+          >Harvest All {weiToShortString(czfHarvestableChrono.add(czfHarvestableExotic).add(czfHarvestableFarmsV2),2)} CZF
           </button>
         )}
 
