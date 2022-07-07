@@ -25,10 +25,13 @@ import {CHRONO_POOL} from "../../constants/chronoPool";
 import {EXOTIC_FARMS} from "../../constants/exoticFarms";
 import {FARM_V2} from "../../constants/famsv2";
 import {POOLS_V1} from "../../constants/poolsv1";
+import {LINK_TELEGRAM} from "../../constants/links";
 import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_MASTERROUTER } from '../../constants/addresses';
 import WalletStatsBar from '../../components/WalletStatsBar';
 import styles from "./index.module.scss";
 import CollapsibleCard from '../../components/CollapsibleCard';
+import Web3ModalButton from '../../components/Web3ModalButton';
+import ConnectOrLearn from '../../components/ConnectOrLearn';
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
@@ -84,6 +87,11 @@ function Home() {
               <span className='is-size-5'>0.00%</span>
             </div>
           </div>)}>
+          {!account ? (<>
+            <ConnectOrLearn />
+          </>) : (<>
+
+          </>)}
           </CollapsibleCard>
         ))}
       </CollapsibleCard>
