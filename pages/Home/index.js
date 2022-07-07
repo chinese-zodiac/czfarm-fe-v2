@@ -30,8 +30,9 @@ import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_MASTERROUTER } from '../../constant
 import WalletStatsBar from '../../components/WalletStatsBar';
 import styles from "./index.module.scss";
 import CollapsibleCard from '../../components/CollapsibleCard';
-import Web3ModalButton from '../../components/Web3ModalButton';
+import InputTokenEther from '../../components/InputTokenEther';
 import ConnectOrLearn from '../../components/ConnectOrLearn';
+import ManageChronoPool from '../../components/ManageChronoPool';
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
@@ -68,31 +69,7 @@ function Home() {
       )}>
         <p className="mt-2 mb-2 ml-1" >Burn CZF, Get CZF every second.</p>
         {CHRONO_POOL.map((pool)=>(
-          <CollapsibleCard className="mb-3" key={pool.pid} title={(<div className='has-text-white pb-2 pt-2 level is-mobile'>
-            <div className="column is-narrow is-mobile level-item level m-0 p-0 pt-1 mr-2">
-              <figure className="image is-32x32 is-inline-block m-0 p-0 level-item">
-                  <img src={CZFLogo} />
-              </figure>
-              <span className='icon m-0 p-0 level-item' style={{width:"0.6em"}}><i className="fa-solid fa-angle-right level-item"></i></span>
-              <figure className="image is-32x32 is-inline-block m-0 p-0 level-item">
-                  <img src={CZFLogo} />
-              </figure>
-            </div>
-            <div className='column has-text-weight-light level-item m-0 p-0' style={{lineHeight:"1.2em",whiteSpace:"nowrap",width:"8.5em"}}>
-              <span className='is-size-7 has-text-grey'>DURATION</span><br/>
-              <span className='is-size-5'>{pool.title}</span>
-            </div>
-            <div className='column has-text-weight-light level-item m-0 p-0' style={{lineHeight:"1.2em"}}>
-              <span className='is-size-7 has-text-grey'>APR</span><br/>
-              <span className='is-size-5'>0.00%</span>
-            </div>
-          </div>)}>
-          {!account ? (<>
-            <ConnectOrLearn />
-          </>) : (<>
-
-          </>)}
-          </CollapsibleCard>
+          <ManageChronoPool {...{account,pool,czfBal}} />
         ))}
       </CollapsibleCard>
     </main>
