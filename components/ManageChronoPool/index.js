@@ -7,8 +7,18 @@ import CZFLogo from "../../public/static/assets/logo192.png"
 import { utils, Contract, BigNumber } from 'ethers'
 const { formatEther, parseEther, Interface } = utils;
 
-export default function ManageChronoPool({account,pool,czfBal}) {
+export default function ManageChronoPool({account,pool,czfBal,poolInfo}) {
+  const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
+  useEffect(()=>{
+    if(!poolInfo?.adjustedRateBasis || !poolInfo?.vestPeriod) {
+      setApr(0);
+      return;
+    }
+    setApr(
+      (Number(poolInfo.adjustedRateBasis) / 100) * (31536000 / Number(poolInfo.vestPeriod))
+    );
+  },[poolInfo?.adjustedRateBasis,poolInfo?.vestPeriod])
   return(<>
   <CollapsibleCard className="mb-3" key={pool.pid} 
     title={(<div className='has-text-white pb-2 pt-2 level is-mobile'>
@@ -25,9 +35,9 @@ export default function ManageChronoPool({account,pool,czfBal}) {
         <span className='is-size-7 has-text-grey'>DURATION</span><br/>
         <span className='is-size-5'>{pool.title}</span>
       </div>
-      <div className='column has-text-weight-light level-item m-0 p-0' style={{lineHeight:"1.2em"}}>
+      <div className='column has-text-weight-light level-item m-0 p-0 ml-2' style={{lineHeight:"1.2em"}}>
         <span className='is-size-7 has-text-grey'>APR</span><br/>
-        <span className='is-size-5'>0.00%</span>
+        <span className='is-size-5'>{apr.toFixed(2)}%</span>
       </div>
     </div>)}>
     {!account ? (<>
@@ -72,8 +82,7 @@ export default function ManageChronoPool({account,pool,czfBal}) {
                 return;
               }
               setInputEther(Math.floor(Number(formatEther(czfBal.div(2)))));
-            }}
-          >
+            }}>
             <span>50%</span>
           </button>
         </p>
@@ -85,8 +94,7 @@ export default function ManageChronoPool({account,pool,czfBal}) {
                 return;
               }
               setInputEther(Math.floor(Number(formatEther(czfBal))));
-            }}
-          >
+            }}>
             <span>100%</span>
           </button>
         </p>
