@@ -63,10 +63,10 @@ function Home() {
       <CollapsibleCard className={"has-text-left "+styles.StakingSection} title={(
         <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Chrono Pools</p>
       )}>
-        <p>Burn CZF, Get CZF every second.</p>
+        <p className="mt-2 mb-2 ml-1" >Burn CZF, Get CZF every second.</p>
         {CHRONO_POOL.map((pool)=>(
-          <CollapsibleCard className="mb-2" key={pool.pid} title={(<div className='has-text-white level is-mobile'>
-            <div className="column is-narrow is-mobile level-item level m-0 p-0 mr-2">
+          <CollapsibleCard className="mb-3" key={pool.pid} title={(<div className='has-text-white pb-2 pt-2 level is-mobile'>
+            <div className="column is-narrow is-mobile level-item level m-0 p-0 pt-1 mr-2">
               <figure className="image is-32x32 is-inline-block m-0 p-0 level-item">
                   <img src={CZFLogo} />
               </figure>
