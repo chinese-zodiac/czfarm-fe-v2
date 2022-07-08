@@ -20,6 +20,7 @@ import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import usePoolsV1Info from '../../hooks/usePoolsV1Info';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
 import usePoolsV1TokenBalance from '../../hooks/usePoolsV1TokenBalance';
+import useAccountLpBals from '../../hooks/useAccountLpBals';
 import CZFLogo from "../../public/static/assets/logo192.png"
 import {CHRONO_POOL} from "../../constants/chronoPool";
 import {EXOTIC_FARMS} from "../../constants/exoticFarms";
@@ -61,6 +62,8 @@ function Home() {
   const poolsV1Info = usePoolsV1Info(library);
   const poolsV1TokenBalance = usePoolsV1TokenBalance(library);
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library,account);
+  const accountLpBals = useAccountLpBals(library,account);
+  console.log({accountLpBals})
 
   return (<>
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
@@ -84,7 +87,8 @@ function Home() {
         <p className="mt-2 mb-2 ml-1" >Give LP to CZodiac Treasury, Get CZF every second.</p>
         {EXOTIC_FARMS.map((farmSet,farmSetIndex)=>(<>
           <h4 className="is-size-4 mt-5">{farmSet?.title}</h4>
-          <a className="has-text-primary" style={{textDecoration:"underline"}} href={czCashAddLink(farmSet?.tokens?.[0]?.address,farmSet?.tokens?.[2]?.address)}>
+          <a className="has-text-primary" style={{textDecoration:"underline"}} 
+            href={czCashAddLink(farmSet?.tokens?.[0]?.address,farmSet?.tokens?.[1]?.address)} target="_blank">
             Mint {farmSet?.tokens?.[0]?.symbol}/{farmSet?.tokens?.[1]?.symbol} on CZ.Cash <span className="icon"><i className="fa-solid fa-up-right-from-square"></i></span>
           </a>
           {farmSet?.farms.map((farm,farmIndex)=>{
@@ -94,6 +98,7 @@ function Home() {
                 {...{account,library,farm,farmSet}}
                 farmInfo={exoticFarmInfo?.[infoIndex]}
                 farmAccountInfo={exoticFarmAccountInfo?.[infoIndex]}
+                lpBal={accountLpBals?.[farmSet.lp]}
               />
             </>)
           })}
