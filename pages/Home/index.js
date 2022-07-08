@@ -33,6 +33,8 @@ import CollapsibleCard from '../../components/CollapsibleCard';
 import InputTokenEther from '../../components/InputTokenEther';
 import ConnectOrLearn from '../../components/ConnectOrLearn';
 import ManageChronoPool from '../../components/ManageChronoPool';
+import { czCashAddLink } from '../../utils/dexBuyLink';
+import ManageExoticFarm from '../../components/ManageExoticFarm';
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
@@ -64,7 +66,7 @@ function Home() {
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
-      <CollapsibleCard className={"mt-5 mb-5 has-text-left "+styles.StakingSection} title={(
+      <CollapsibleCard className={"mt-5 mb-3 has-text-left "+styles.StakingSection} title={(
         <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Chrono Pools</p>
       )}>
         <p className="mt-2 mb-2 ml-1" >Burn CZF, Get CZF every second.</p>
@@ -75,6 +77,27 @@ function Home() {
             poolAccountInfo={chronoPoolAccountInfo?.[index]}
           />
         ))}
+      </CollapsibleCard>
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(
+        <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Exotic Farms</p>
+      )}>
+        <p className="mt-2 mb-2 ml-1" >Give LP to CZodiac Treasury, Get CZF every second.</p>
+        {EXOTIC_FARMS.map((farmSet,farmSetIndex)=>(<>
+          <h4 className="is-size-4 mt-5">{farmSet?.title}</h4>
+          <a className="has-text-primary" style={{textDecoration:"underline"}} href={czCashAddLink(farmSet?.tokens?.[0]?.address,farmSet?.tokens?.[2]?.address)}>
+            Mint {farmSet?.tokens?.[0]?.symbol}/{farmSet?.tokens?.[1]?.symbol} on CZ.Cash <span className="icon"><i className="fa-solid fa-up-right-from-square"></i></span>
+          </a>
+          {farmSet?.farms.map((farm,farmIndex)=>{
+            const infoIndex = farmSetIndex*3+farmIndex;
+            return (<>
+              <ManageExoticFarm
+                {...{account,library,farm,farmSet}}
+                farmInfo={exoticFarmInfo?.[infoIndex]}
+                farmAccountInfo={exoticFarmAccountInfo?.[infoIndex]}
+              />
+            </>)
+          })}
+        </>))}
       </CollapsibleCard>
     </main>
     <Footer />

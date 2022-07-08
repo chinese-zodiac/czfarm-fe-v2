@@ -21,7 +21,7 @@ function CollapsibleCard ({children,title,className}) {
           </span>
         </div>
       </a>
-      <div class={"card-content p-2 has-text-white "+(isOpen ? "" : "is-hidden")}>          
+      <div className={"card-content p-2 has-text-white "+(isOpen ? "" : "is-hidden")}>          
         {children}
       </div>
     </div>
