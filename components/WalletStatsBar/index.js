@@ -1,16 +1,17 @@
 import React, {useState} from 'react';
 import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
 import {useContractFunction} from '@usedapp/core';
-import {weiToShortString, weiToUsdWeiVal} from '../../utils/bnDisplay';
+import {weiToShortString, weiToUsdWeiVal, weiTolpPricedWeiVal} from '../../utils/bnDisplay';
 import { czCashBuyLink } from '../../utils/dexBuyLink';
 import {getHarvestablePidsChrono, getHarvestablePidsExotic, getHarvestablePidsV2Farms} from '../../utils/getHarvestablePids';
 import { BigNumber, Contract } from 'ethers'
 import masterRouterAbi from "../../abi/MasterRouter.json";
+import {PRICING_LP} from "../../constants/pricingLp";
 import {ADDRESS_EXOTICFARMS, ADDRESS_CHRONOPOOLS, ADDRESS_FARMMASTERV2, ADDRESS_MASTERROUTER, ADDRESS_CZF, ADDRESS_CZUSD} from "../../constants/addresses";
 import styles from "./index.module.scss";
 import {getDailyCzfWei, getDailyAccountTokensWei, getCzfHarvestableChrono, getCzfHarvestableExotic, getCzfHarvestableFarmsV2, getCzfHarvestablePoolsV1, getTokensHarvestable} from "../../utils/getAccountStats"
 
-function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}) {
+function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos}) {
 
   const [dailyCzfWei,setDailyCzfWei] = useState(BigNumber.from(0));
   const [dailyAccountTokensWei,setDailyAccountTokensWei] = useState([]);
@@ -80,9 +81,21 @@ const { state:stateHarvestAll, send:sendHarvestAll } = useContractFunction(
                 ))}
               </div>
               <div className="column has-text-left m-0 p-1">
-                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(dailyCzfWei,2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(dailyCzfWei,czfPrice),2)})</span></p>
+                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(dailyCzfWei,2)}
+                  <span className="is-size-7 ml-1">(${weiToShortString(weiToUsdWeiVal(dailyCzfWei,czfPrice),2)})</span>
+                </p>
                 {dailyAccountTokensWei.map(tokenWei=>(
-                  <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.rewardPerDay,2)}</p>
+                  <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.rewardPerDay,2)}<span className="is-size-7 ml-1">($
+                    {tokenWei.name=="CZUSD" ? 
+                      weiToShortString(weiToUsdWeiVal(tokenWei.rewardPerDay,czusdPrice),2) :
+                      (!!PRICING_LP[tokenWei.name] &&
+                        weiToShortString(
+                          weiTolpPricedWeiVal(lpInfos,tokenWei?.name,tokenWei?.rewardPerDay,czfPrice,czusdPrice) 
+                        ,2)
+                      )
+                    }
+                    )
+                  </span></p>
                 ))}
               </div>
             </div>
@@ -97,9 +110,24 @@ const { state:stateHarvestAll, send:sendHarvestAll } = useContractFunction(
                 ))}
               </div>
               <div className="column has-text-left m-0 p-1">
-                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(czfHarvestableChrono.add(czfHarvestableExotic).add(czfHarvestableFarmsV2).add(czfHarvestablePoolsV1),2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czfHarvestableChrono?.add(czfHarvestableExotic).add(czfHarvestableFarmsV2).add(czfHarvestablePoolsV1),czfPrice),2)})</span></p>
+                <p className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>
+                  {weiToShortString(czfHarvestableChrono.add(czfHarvestableExotic).add(czfHarvestableFarmsV2).add(czfHarvestablePoolsV1),2)}
+                  <span className="is-size-7 ml-1">(${weiToShortString(weiToUsdWeiVal(czfHarvestableChrono?.add(czfHarvestableExotic).add(czfHarvestableFarmsV2).add(czfHarvestablePoolsV1),czfPrice),2)})</span>
+                </p>
                 {tokensHarvestable.map(tokenWei=>(
-                  <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.tokenHarvestable,2)}</p>
+                  <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.tokenHarvestable,2)}
+                  <span className="is-size-7 ml-1">($
+                    {tokenWei.name=="CZUSD" ? 
+                      weiToShortString(weiToUsdWeiVal(tokenWei.tokenHarvestable,czusdPrice),2) :
+                      (!!PRICING_LP[tokenWei.name] &&
+                        weiToShortString(
+                          weiTolpPricedWeiVal(lpInfos,tokenWei?.name,tokenWei?.tokenHarvestable,czfPrice,czusdPrice) 
+                        ,2)
+                      )
+                    }
+                    )
+                  </span>
+                </p>
                 ))}
               </div>
             </div>

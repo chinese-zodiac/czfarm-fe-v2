@@ -35,7 +35,7 @@ export const POOLS_V1 = [
       baseAssetAddress: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
       rewardDecimals: 18,
       logo: "./images/tokens/DEP.png",
-      feeBasis:1500
+      feeBasis:1500,
     },
     {
       subtitle: "Hold 50 LRT to withdraw, claim, or stake. 5% CZF burn on withdraw",

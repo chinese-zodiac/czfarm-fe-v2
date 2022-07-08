@@ -1,0 +1,3 @@
+export const PRICING_LP = {
+  DEP:"0xaCC6AF9C62B482Cb89522e262F8b315d870208ab"
+};

@@ -8,11 +8,11 @@ import CZFLogo from "../../public/static/assets/logo192.png";
 import { ADDRESS_CHRONOPOOLS } from '../../constants/addresses';
 import chronoPoolAbi from "../../abi/ChronoPoolService.json";
 import { utils, Contract, BigNumber } from 'ethers'
-import { weiToShortString } from '../../utils/bnDisplay';
+import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
 import {useContractFunction} from '@usedapp/core';
 const { formatEther, parseEther, Interface } = utils;
 
-export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,poolAccountInfo}) {
+export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,poolAccountInfo,czfPrice}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
@@ -87,6 +87,7 @@ export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,p
           minWadBn={BigNumber.from(0)} maxWadBn={czfBal}
           {...{setInputEther,inputEther}}
         />
+        <p className='is-size-7 mt-0 mb-1 ml-2' >(${weiToShortString(weiToUsdWeiVal(parseEther(inputEther.toString()),czfPrice),2)})</p>
         <QuickInputEther {...{setInputEther}} maxTokenWad={czfBal} />
         <button onClick={()=>sendDeposit(pool?.pid,parseEther(inputEther.toString()))} className='button has-background-grey-lighter is-fullwidth'>Burn CZF</button>
         <p>You will get {weiToShortString(parseEther(BigNumber.from(inputEther ?? 0).mul(BigNumber.from(10000).add(poolInfo?.adjustedRateBasis ?? 0)).div(10000).toString()),3)} CZF over {pool?.title}.</p>

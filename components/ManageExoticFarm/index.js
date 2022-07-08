@@ -8,11 +8,12 @@ import CZFLogo from "../../public/static/assets/logo192.png";
 import { ADDRESS_EXOTICFARMS } from '../../constants/addresses';
 import exoticFarmAbi from "../../abi/ExoticMaster.json";
 import { utils, Contract, BigNumber } from 'ethers'
-import { weiToShortString } from '../../utils/bnDisplay';
+import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
+import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import {useContractFunction} from '@usedapp/core';
 const { formatEther, parseEther, Interface } = utils;
 
-export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,farmInfo,farmAccountInfo}) {
+export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,farmInfo,farmAccountInfo,lpInfo,czfPrice,czusdPrice}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
@@ -88,6 +89,7 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
           minWadBn={BigNumber.from(0)} maxWadBn={lpBal}
           {...{setInputEther,inputEther}}
         />
+        <p className='is-size-7 mt-0 mb-1 ml-2' >(${weiToShortString(getLpTokenValueUsdWad(farmSet?.tokens?.[0]?.symbol,lpInfo?.tokens?.[0],parseEther(inputEther.toString()),lpInfo?.totalSupply,czfPrice,czusdPrice),2)})</p>
         <QuickInputEther {...{setInputEther}} maxTokenWad={lpBal} />
         <button onClick={()=>sendDeposit(farm?.pid,parseEther(inputEther.toString()))} className='button has-background-grey-lighter is-fullwidth'>Give {farmSet?.tokens?.[0]?.symbol}/{farmSet?.tokens?.[1]?.symbol} LP</button>
       </div>

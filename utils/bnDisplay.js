@@ -1,4 +1,5 @@
 import {utils, BigNumber} from "ethers";
+import {PRICING_LP} from "../constants/pricingLp";
 const { formatEther, parseEther } = utils;
 
 export function weiToFixed(bn,decimals) {
@@ -47,4 +48,11 @@ export function toShortString(bn,decimals) {
         return(Number(bn)/10**3).toFixed(decimals)+"K";
     }
     return Number(bn).toFixed(decimals);
+}
+
+export function weiTolpPricedWeiVal(lpInfos,tokenName,tokenWad,czfPrice,czusdPrice) {
+    //TODO: Handle when lp is czusd pair
+    let lpAddr = PRICING_LP[tokenName];
+    let tokens = lpInfos?.[lpAddr]?.tokens;
+    return weiToUsdWeiVal(tokenWad.mul(tokens?.[0]).div(tokens?.[1]),czfPrice);
 }

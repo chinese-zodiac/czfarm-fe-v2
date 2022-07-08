@@ -21,6 +21,7 @@ import usePoolsV1Info from '../../hooks/usePoolsV1Info';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
 import usePoolsV1TokenBalance from '../../hooks/usePoolsV1TokenBalance';
 import useAccountLpBals from '../../hooks/useAccountLpBals';
+import useLpInfo from '../../hooks/useLpInfo';
 import CZFLogo from "../../public/static/assets/logo192.png"
 import {CHRONO_POOL} from "../../constants/chronoPool";
 import {EXOTIC_FARMS} from "../../constants/exoticFarms";
@@ -63,19 +64,19 @@ function Home() {
   const poolsV1TokenBalance = usePoolsV1TokenBalance(library);
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library,account);
   const accountLpBals = useAccountLpBals(library,account);
-  console.log({accountLpBals})
+  const lpInfos = useLpInfo(library);
 
   return (<>
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
-      <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo}} />
+      <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos}} />
       <CollapsibleCard className={"mt-5 mb-3 has-text-left "+styles.StakingSection} title={(
         <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Chrono Pools</p>
       )}>
         <p className="mt-2 mb-2 ml-1" >Burn CZF, Get CZF every second.</p>
         {CHRONO_POOL.map((pool,index)=>(
           <ManageChronoPool 
-            {...{account,library,pool,czfBal}}
+            {...{account,library,pool,czfBal,czfPrice}}
             poolInfo={chronoPoolInfo?.[index]}
             poolAccountInfo={chronoPoolAccountInfo?.[index]}
           />
@@ -95,10 +96,11 @@ function Home() {
             const infoIndex = farmSetIndex*3+farmIndex;
             return (<>
               <ManageExoticFarm
-                {...{account,library,farm,farmSet}}
+                {...{account,library,farm,farmSet,czusdPrice,czfPrice}}
                 farmInfo={exoticFarmInfo?.[infoIndex]}
                 farmAccountInfo={exoticFarmAccountInfo?.[infoIndex]}
                 lpBal={accountLpBals?.[farmSet.lp]}
+                lpInfo={lpInfos?.[farmSet.lp]}
               />
             </>)
           })}

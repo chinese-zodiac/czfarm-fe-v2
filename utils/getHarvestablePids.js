@@ -29,6 +29,5 @@ export const getHarvestablePidsV2Farms = (v2FarmsPendingCzf) => {
       if(farm?.pendingCzf?.gt(0)) pidList.push(farm?.pid);
     });
   } catch(e){}
-  console.log("v2 farms",pidList)
   return pidList
 }
