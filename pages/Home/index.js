@@ -115,7 +115,7 @@ function Home() {
         <p className="mt-2 mb-2 ml-1" >Stake LP, Get CZF every second.</p>
         {FARM_V2.map((farm,index)=>(
           <ManageFarmV2 key={farm.pid} 
-            {...{account,library,farm,accountLpBals}}
+            {...{account,library,farm,accountLpBals,czfPrice,czusdPrice,v2FarmsSettings}}
             v2FarmsLpBal={v2FarmsLpBal?.[index]}
             v2FarmsPoolInfo={v2FarmsPoolInfo?.[index]}
             v2FarmsPendingCzf={v2FarmsPendingCzf?.[index]}

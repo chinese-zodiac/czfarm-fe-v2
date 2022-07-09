@@ -30,13 +30,17 @@ export const getCzfHarvestable = (v2FarmsPendingCzf, chronoPoolAccountInfo, exot
   return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic).add(czfFromPoolsV1);
 }
 
+export const getSingleV2FarmCzfPerSecondWei= (v2FarmsSettings, singleV2FarmsLpBal, singleV2FarmsPoolInfo, singleV2FarmsUserInfo) => {
+  const v2CzfPerSecondPerAllocPoint = v2FarmsSettings?.czfPerBlock?.div(3).div(v2FarmsSettings?.totalAllocPoint) ?? BigNumber.from(0); //3 seconds per block
+  return v2CzfPerSecondPerAllocPoint?.mul(singleV2FarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleV2FarmsUserInfo?.amount ?? BigNumber.from(0)).div(singleV2FarmsLpBal?.lpBal ?? BigNumber.from(1));
+}
+
 export const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo) => {
   try{//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
-   
-    const v2CzfPerSecondPerAllocPoint = v2FarmsSettings?.czfPerBlock?.div(3).div(v2FarmsSettings?.totalAllocPoint) ?? BigNumber.from(0); //3 seconds per block
-    const v2FarmsRps = v2FarmsUserInfo.reduce(
-      (acc,curr,index)=>v2CzfPerSecondPerAllocPoint?.mul(v2FarmsPoolInfo?.[index]?.allocPoint).mul(curr?.amount).div(v2FarmsLpBal?.[index]?.lpBal).add(acc)
-      ,BigNumber.from(0)) ?? BigNumber.from(0);
+   const v2FarmsRps = v2FarmsUserInfo.reduce(
+      (acc,curr,index)=>getSingleV2FarmCzfPerSecondWei(v2FarmsSettings,v2FarmsLpBal?.[index],v2FarmsPoolInfo?.[index],curr).add(acc)
+   ,BigNumber.from(0)) ?? BigNumber.from(0);
+    
 
     const currentEpoch = Math.floor(Date.now()/1000);
     const poolsV1Rps = poolsV1AccountInfo.reduce(

@@ -4,15 +4,18 @@ import InputTokenEther from '../../components/InputTokenEther';
 import ConnectOrLearn from '../../components/ConnectOrLearn';
 import CollapsibleCard from '../../components/CollapsibleCard';
 import QuickInputEther from '../../components/QuickInputEther';
+import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
 import CZFLogo from "../../public/static/assets/logo192.png";
 import { ADDRESS_CHRONOPOOLS } from '../../constants/addresses';
 import chronoPoolAbi from "../../abi/ChronoPoolService.json";
 import { utils, Contract, BigNumber } from 'ethers'
-import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
+import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString } from '../../utils/bnDisplay';
+import { getSingleV2FarmCzfPerSecondWei } from '../../utils/getAccountStats';
+import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import {useContractFunction} from '@usedapp/core';
 const { formatEther, parseEther, Interface } = utils;
 
-export default function ManageFarmV2({account,library,farm,v2FarmsLpBal,v2FarmsPoolInfo,v2FarmsPendingCzf,v2FarmsUserInfo,lpInfo,accountLpBal}) {
+export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2FarmsLpBal,v2FarmsPoolInfo,v2FarmsPendingCzf,v2FarmsUserInfo,lpInfo,accountLpBal,czfPrice,czusdPrice}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
@@ -30,6 +33,16 @@ export default function ManageFarmV2({account,library,farm,v2FarmsLpBal,v2FarmsP
   new Contract(ADDRESS_CHRONOPOOLS,chronoPoolAbi,library),
   'claimAndFastForward');
 
+  useEffect(()=>{
+    if(!v2FarmsSettings?.czfPerBlock || !v2FarmsSettings?.totalAllocPoint || !lpInfo?.totalSupply || !lpInfo?.tokens[0] || !v2FarmsPoolInfo?.allocPoint || !v2FarmsLpBal?.lpBal || !czfPrice || !czusdPrice) {
+      setApr("0.00");
+      return;
+    }
+    let usdPerYear = weiToUsdWeiVal(v2FarmsSettings.czfPerBlock.mul(10519200).mul(v2FarmsPoolInfo.allocPoint).div(v2FarmsSettings.totalAllocPoint),czfPrice);
+    let usdStaked = getLpTokenValueUsdWad(farm.tokens[0].symbol,lpInfo,v2FarmsLpBal.lpBal,czfPrice,czusdPrice);
+    setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked),4,2));
+  },[!v2FarmsSettings?.czfPerBlock || !v2FarmsSettings?.totalAllocPoint, lpInfo?.totalSupply, lpInfo?.tokens[0], v2FarmsPoolInfo?.allocPoint, v2FarmsLpBal?.lpBal, czfPrice, czusdPrice])
+
   return(<>
   <CollapsibleCard className="mb-3" 
     title={(<div className='has-text-white pb-2 pt-2 '>
@@ -45,30 +58,24 @@ export default function ManageFarmV2({account,library,farm,v2FarmsLpBal,v2FarmsP
             <img src={CZFLogo} />
         </figure>
       </div>
-      <div className='is-inline-block has-text-weight-light  m-0 p-0' style={{lineHeight:"1.2em",whiteSpace:"nowrap",width:"6.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>TYPE</span><br/>
+      <CollapsibleCardTitleItem title="TYPE" width="6.5em">
         <span className='is-size-6'>{farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol}</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light  m-0 p-0' style={{lineHeight:"1.2em",whiteSpace:"nowrap",width:"2em"}}>
-        <span className='is-size-7 has-text-grey-light'>DEX</span><br/>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="DEX" width="3em">
         <span className='is-size-6'>{farm?.dex?.shortName}</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>APR</span><br/>
-        <span className='is-size-5'>{apr.toFixed(2)}%</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2 has-text-center' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>CZF/DAY</span><br/>
-        <span className='is-size-5'>??</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2 has-text-center' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>STAKE</span><br/>
-        <span className='is-size-5'>??</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2 has-text-center' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>EST CLAIM</span><br/>
-        <span className='is-size-5'>{weiToShortString(v2FarmsUserInfo?.pendingRewards,1)}</span>
-      </div>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="APR" width="4.5em">
+        <span className='is-size-6'>{(apr)}%</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
+        <span className='is-size-6'>{weiToShortString(getSingleV2FarmCzfPerSecondWei(v2FarmsSettings,v2FarmsLpBal,v2FarmsPoolInfo,v2FarmsUserInfo).mul(86400),2)}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="STAKE" width="4.5em">
+        <span className='is-size-6'>${weiToShortString(getLpTokenValueUsdWad("CZF",lpInfo,v2FarmsUserInfo?.amount,czfPrice,czusdPrice),2)}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
+        <span className='is-size-6'>{weiToShortString(v2FarmsPendingCzf?.pendingCzf,1)}</span>
+      </CollapsibleCardTitleItem>
     </div>)}>
     {!account ? (<>
       <ConnectOrLearn />

@@ -47,7 +47,7 @@ export function toShortString(bn,decimals) {
     if(bn.gte(10**3)) {
         return(Number(bn)/10**3).toFixed(decimals)+"K";
     }
-    return Number(bn).toFixed(decimals);
+    return Number(bn.mul(10**decimals)).toFixed(decimals);
 }
 
 export function weiTolpPricedWeiVal(lpInfos,tokenName,tokenWad,czfPrice,czusdPrice) {

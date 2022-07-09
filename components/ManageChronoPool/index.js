@@ -10,6 +10,7 @@ import chronoPoolAbi from "../../abi/ChronoPoolService.json";
 import { utils, Contract, BigNumber } from 'ethers'
 import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
 import {useContractFunction} from '@usedapp/core';
+import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
 const { formatEther, parseEther, Interface } = utils;
 
 export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,poolAccountInfo,czfPrice}) {
@@ -51,26 +52,21 @@ export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,p
             <img src={CZFLogo} />
         </figure>
       </div>
-      <div className='is-inline-block has-text-weight-light  m-0 p-0' style={{lineHeight:"1.2em",whiteSpace:"nowrap",width:"5.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>DURATION</span><br/>
-        <span className='is-size-5'>{pool.title}</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>APR</span><br/>
-        <span className='is-size-5'>{apr.toFixed(2)}%</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2 has-text-center' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>CZF/DAY</span><br/>
-        <span className='is-size-5'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(86400),1)}</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2 has-text-center' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>VEST</span><br/>
-        <span className='is-size-5'>{weiToShortString(BigNumber.from(poolAccountInfo?.totalVesting ?? 0),1)}</span>
-      </div>
-      <div className='is-inline-block has-text-weight-light m-0 p-0 ml-2 has-text-center' style={{lineHeight:"1.2em",width:"4.5em"}}>
-        <span className='is-size-7 has-text-grey-light'>EST CLAIM</span><br/>
-        <span className='is-size-5'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(currentEpoch.sub(poolAccountInfo?.updateEpoch ?? currentEpoch)),1)}</span>
-      </div>
+      <CollapsibleCardTitleItem title="DURATION" width="5em">
+        <span className='is-size-6'>{pool.title}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="APR" width="4em">
+        <span className='is-size-6'>{apr.toFixed(2)}%</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
+        <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(86400),1)}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="VEST" width="4em">
+        <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.totalVesting ?? 0),1)}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
+        <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(currentEpoch.sub(poolAccountInfo?.updateEpoch ?? currentEpoch)),1)}</span>
+      </CollapsibleCardTitleItem>
     </div>)}>
     {!account ? (<>
       <ConnectOrLearn />
