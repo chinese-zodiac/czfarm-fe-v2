@@ -6,8 +6,9 @@ import CollapsibleCard from '../../components/CollapsibleCard';
 import QuickInputEther from '../../components/QuickInputEther';
 import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
 import CZFLogo from "../../public/static/assets/logo192.png";
-import { ADDRESS_CHRONOPOOLS } from '../../constants/addresses';
-import chronoPoolAbi from "../../abi/ChronoPoolService.json";
+import { ADDRESS_FARMMASTERV2 } from '../../constants/addresses';
+import { dexAddLink } from '../../utils/dexBuyLink';
+import czFarmMasterAbi from "../../abi/CZFarmMaster.json";
 import { utils, Contract, BigNumber } from 'ethers'
 import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString } from '../../utils/bnDisplay';
 import { getSingleV2FarmCzfPerSecondWei } from '../../utils/getAccountStats';
@@ -18,20 +19,18 @@ const { formatEther, parseEther, Interface } = utils;
 export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2FarmsLpBal,v2FarmsPoolInfo,v2FarmsPendingCzf,v2FarmsUserInfo,lpInfo,accountLpBal,czfPrice,czusdPrice}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
+  const [outputEther,setOutputEther] = useState(0);
   const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
 
-  const { state:stateClaimPool, send:sendClaimPool } = useContractFunction(
-  new Contract(ADDRESS_CHRONOPOOLS,chronoPoolAbi,library),
-  'claimPool');
-  const { state:stateReinvest, send:sendReinvest } = useContractFunction(
-  new Contract(ADDRESS_CHRONOPOOLS,chronoPoolAbi,library),
-  'reinvest');
-  const { state:stateDeposit, send:sendDeposit } = useContractFunction(
-  new Contract(ADDRESS_CHRONOPOOLS,chronoPoolAbi,library),
+  const { state:stateClaim, send:sendClaim } = useContractFunction(
+  new Contract(ADDRESS_FARMMASTERV2,czFarmMasterAbi,library),
+  'claim');
+  const { state:stateReinvest, send:sendWithdraw } = useContractFunction(
+  new Contract(ADDRESS_FARMMASTERV2,czFarmMasterAbi,library),
+  'withdraw');
+  const { state:stateWithdraw, send:sendDeposit } = useContractFunction(
+  new Contract(ADDRESS_FARMMASTERV2,czFarmMasterAbi,library),
   'deposit');
-  const { state:stateClaimAndFastForward, send:sendClaimAndFastForward } = useContractFunction(
-  new Contract(ADDRESS_CHRONOPOOLS,chronoPoolAbi,library),
-  'claimAndFastForward');
 
   useEffect(()=>{
     if(!v2FarmsSettings?.czfPerBlock || !v2FarmsSettings?.totalAllocPoint || !lpInfo?.totalSupply || !lpInfo?.tokens[0] || !v2FarmsPoolInfo?.allocPoint || !v2FarmsLpBal?.lpBal || !czfPrice || !czusdPrice) {
@@ -81,8 +80,46 @@ export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2Far
       <ConnectOrLearn />
     </>) : (<>
     <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
-
-
+      <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
+        <h3 className="is-size-4">Give {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP For CZF/Second</h3>
+        <p>Stake your ${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol} LP and get CZF every second. There are no restrictions or fees.</p>
+          <a className="has-text-primary" style={{textDecoration:"underline"}} 
+            href={dexAddLink(farm?.tokens?.[0]?.address,farm?.tokens?.[1]?.address,farm?.dex)} target="_blank">
+            Mint {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} on CZ.Cash <span className="icon"><i className="fa-solid fa-up-right-from-square"></i></span>
+          </a>
+        <InputTokenEther className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
+          style={{maxWidth:"10em",width:"100%"}}
+          step="any"
+          precision={0.01}
+          label={`${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol}`}
+          minWadBn={BigNumber.from(0)} maxWadBn={accountLpBal}
+          {...{setInputEther,inputEther}}
+        />
+        <p className='is-size-7 mt-0 mb-1 ml-2' >(${weiToShortString(getLpTokenValueUsdWad(farm?.tokens?.[0]?.symbol,lpInfo,parseEther(inputEther.toString()),czfPrice,czusdPrice),2)})</p>
+        <QuickInputEther {...{setInputEther}} maxTokenWad={accountLpBal} />
+        <button onClick={()=>sendDeposit(farm?.pid,parseEther(inputEther.toString()),true)} className='button has-background-grey-lighter is-fullwidth'>Stake {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP</button>
+      </div>
+      <div className="is-inline-block p-3 m-3 is-align-self-stretch " style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
+        <h3 className="is-size-4">Unstake your {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP</h3>
+        <p>Unstake your ${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol} LP. There are no restrictions or fees.</p>
+        <InputTokenEther className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
+          style={{maxWidth:"10em",width:"100%"}}
+          step="any"
+          precision={0.01}
+          label={`${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol}`}
+          minWadBn={BigNumber.from(0)} maxWadBn={v2FarmsUserInfo?.amount ?? BigNumber.from(0)}
+          inputEther={outputEther} setInputEther={setOutputEther}
+        />
+        <p className='is-size-7 mt-0 mb-1 ml-2' >(${weiToShortString(getLpTokenValueUsdWad(farm?.tokens?.[0]?.symbol,lpInfo,parseEther(outputEther.toString()),czfPrice,czusdPrice),2)})</p>
+        <QuickInputEther setInputEther={setOutputEther} maxTokenWad={v2FarmsUserInfo?.amount ?? BigNumber.from(0)} />
+        <button onClick={()=>sendWithdraw(farm?.pid,parseEther(outputEther.toString()),true)} className='button has-background-grey-lighter is-fullwidth'>Unstake {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP</button>
+      </div>
+      <div className="is-inline-block p-3 m-3 is-align-self-stretch" style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
+        <h3 className="is-size-4">Claim Your CZF</h3>
+        <p>Harvests your CZF for this farm only and transfers it to your wallet.</p><br/>
+        <button onClick={()=>sendClaim(farm?.pid)} className='button has-background-grey-lighter is-fullwidth'>Harvest</button>
+        <p>You will get {weiToShortString(v2FarmsPendingCzf?.pendingCzf,3)} CZF.</p>
+      </div>
     </div>
     </>)}
   </CollapsibleCard>
