@@ -12,7 +12,6 @@ import useV2FarmsLpBal from '../../hooks/useV2FarmsLpBal';
 import useV2FarmsPoolInfo from '../../hooks/useV2FarmsPoolInfo';
 import useV2FarmsPendingCzf from '../../hooks/useV2FarmsPendingCzf';
 import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
-import useFarmLpBalances from '../../hooks/useFarmLpBalances';
 import useChronoPoolInfo from '../../hooks/useChronoPoolInfo';
 import useChronoPoolAccountInfo from '../../hooks/useChronoPoolAccountInfo';
 import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
@@ -37,6 +36,7 @@ import ConnectOrLearn from '../../components/ConnectOrLearn';
 import ManageChronoPool from '../../components/ManageChronoPool';
 import { czCashAddLink } from '../../utils/dexBuyLink';
 import ManageExoticFarm from '../../components/ManageExoticFarm';
+import ManageFarmV2 from '../../components/ManageFarmV2';
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
@@ -55,7 +55,6 @@ function Home() {
   const v2FarmsPoolInfo = useV2FarmsPoolInfo(library);
   const v2FarmsPendingCzf = useV2FarmsPendingCzf(library,account);
   const v2FarmsUserInfo = useV2FarmsUserInfo(library,account);
-  const farmLpBalances = useFarmLpBalances(library,FARM_V2);
   const chronoPoolInfo = useChronoPoolInfo(library);
   const chronoPoolAccountInfo = useChronoPoolAccountInfo(library,account);
   const exoticFarmInfo = useExoticFarmInfo(library);
@@ -69,7 +68,9 @@ function Home() {
   return (<>
     <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} />
     <main id="main" className="hero has-text-centered has-background-special p-3">
+
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos}} />
+      
       <CollapsibleCard className={"mt-5 mb-3 has-text-left "+styles.StakingSection} title={(
         <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Chrono Pools</p>
       )}>
@@ -82,6 +83,7 @@ function Home() {
           />
         ))}
       </CollapsibleCard>
+
       <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(
         <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Exotic Farms</p>
       )}>
@@ -106,6 +108,24 @@ function Home() {
           })}
         </>))}
       </CollapsibleCard>
+
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(
+        <p className="is-size-4 has-text-white has-text-left has-text-weight-normal">Farms V2</p>
+      )}>
+        <p className="mt-2 mb-2 ml-1" >Stake LP, Get CZF every second.</p>
+        {FARM_V2.map((farm,index)=>(
+          <ManageFarmV2 key={farm.pid} 
+            {...{account,library,farm,accountLpBals}}
+            v2FarmsLpBal={v2FarmsLpBal?.[index]}
+            v2FarmsPoolInfo={v2FarmsPoolInfo?.[index]}
+            v2FarmsPendingCzf={v2FarmsPendingCzf?.[index]}
+            v2FarmsUserInfo={v2FarmsUserInfo?.[index]}
+            lpInfo={lpInfos?.[farm?.lp]}
+            accountLpBal={accountLpBals?.[farm?.lp]}
+          />
+        ))}
+      </CollapsibleCard>
+
     </main>
     <Footer />
     
