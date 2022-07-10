@@ -37,7 +37,6 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
     }
     const usdStaked = weiToUsdWeiVal(poolTokenBalance.tokenBal,pool.baseAssetName == "CZF" ? czfPrice : czusdPrice);
     const usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600),coingeckoRewardPrice);
-    console.log(Number(formatEther(usdStaked)).toFixed(),Number(formatEther(usdPerYear)).toFixed());
     if(usdStaked.lte(0)) {
       setApr("0.00");
       return;
