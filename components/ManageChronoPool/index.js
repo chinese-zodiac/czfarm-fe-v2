@@ -11,12 +11,12 @@ import { utils, Contract, BigNumber } from 'ethers'
 import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
 import {useContractFunction} from '@usedapp/core';
 import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
-const { formatEther, parseEther, Interface } = utils;
+const { parseEther } = utils;
 
-export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,poolAccountInfo,czfPrice}) {
+export default function ManageChronoPool({account,library,pool,currentEpoch,czfBal,poolInfo,poolAccountInfo,czfPrice}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
-  const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
+  const [epochDelta,setEpochDelta] = useState(0);
 
   const { state:stateClaimPool, send:sendClaimPool } = useContractFunction(
   new Contract(ADDRESS_CHRONOPOOLS,chronoPoolAbi,library),
@@ -31,6 +31,7 @@ export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,p
   new Contract(ADDRESS_CHRONOPOOLS,chronoPoolAbi,library),
   'claimAndFastForward');
 
+
   useEffect(()=>{
     if(!poolInfo?.adjustedRateBasis || !poolInfo?.vestPeriod) {
       setApr(0);
@@ -39,9 +40,19 @@ export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,p
     setApr(
       (Number(poolInfo.adjustedRateBasis) / 100) * (31536000 / Number(poolInfo.vestPeriod))
     );
-  },[poolInfo?.adjustedRateBasis,poolInfo?.vestPeriod])
+  },[poolInfo?.adjustedRateBasis,poolInfo?.vestPeriod]);
+
+  useEffect(()=>{
+    if(!poolAccountInfo?.updateEpoch || !currentEpoch) {
+      setEpochDelta(0);
+      return
+    }
+    console.log("Setting delta",currentEpoch,poolAccountInfo?.updateEpoch,currentEpoch-poolAccountInfo?.updateEpoch);
+    setEpochDelta(currentEpoch - poolAccountInfo?.updateEpoch);
+  },[poolAccountInfo?.updateEpoch,currentEpoch]);
+  
   return(<>
-  <CollapsibleCard className="mb-3" key={pool.pid} 
+  <CollapsibleCard className="mb-3" 
     title={(<div className='has-text-white pb-2 pt-2 '>
       <div className="is-inline-block is-narrow is-mobile m-0 p-0 pt-1 mr-2">
         <figure className="image is-32x32 is-inline-block m-0 p-0">
@@ -65,7 +76,7 @@ export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,p
         <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.totalVesting ?? 0),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
-        <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(currentEpoch.sub(poolAccountInfo?.updateEpoch ?? currentEpoch)),1)}</span>
+        <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(epochDelta),1)}</span>
       </CollapsibleCardTitleItem>
     </div>)}>
     {!account ? (<>
@@ -97,7 +108,7 @@ export default function ManageChronoPool({account,library,pool,czfBal,poolInfo,p
         <h3 className="is-size-4">Claim Your CZF</h3>
         <p>Harvests your CZF for this pool only and transfers it to your wallet.</p><br/>
         <button onClick={()=>sendClaimPool(pool?.pid)} className='button has-background-grey-lighter is-fullwidth'>Harvest</button>
-        <p>You will get {weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(currentEpoch.sub(poolAccountInfo?.updateEpoch ?? currentEpoch)),3)} CZF approximately. Actual value can be different if your emissions are expiring.</p>
+        <p>You will get {weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(epochDelta),3)} CZF approximately. Actual value can be different if your emissions are expiring.</p>
       </div>
       <div className="is-inline-block p-3 m-3 is-align-self-stretch" style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
         <h3 className="is-size-4">Fast Forward Rewards</h3>

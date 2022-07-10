@@ -9,15 +9,15 @@ import CZFLogo from "../../public/static/assets/logo192.png";
 import { ADDRESS_EXOTICFARMS } from '../../constants/addresses';
 import exoticFarmAbi from "../../abi/ExoticMaster.json";
 import { utils, Contract, BigNumber } from 'ethers'
-import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
+import { weiToShortString } from '../../utils/bnDisplay';
 import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import {useContractFunction} from '@usedapp/core';
-const { formatEther, parseEther, Interface } = utils;
+const { parseEther } = utils;
 
-export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,farmInfo,farmAccountInfo,lpInfo,czfPrice,czusdPrice}) {
+export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,farmInfo,farmAccountInfo,lpInfo,czfPrice,czusdPrice,currentEpoch}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
-  const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
+  const [epochDelta,setEpochDelta] = useState(0);
 
   const { state:stateClaimFarm, send:sendClaimFarm } = useContractFunction(
   new Contract(ADDRESS_EXOTICFARMS,exoticFarmAbi,library),
@@ -28,6 +28,7 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
   const { state:stateClaimAndFastForward, send:sendClaimAndFastForward } = useContractFunction(
   new Contract(ADDRESS_EXOTICFARMS,exoticFarmAbi,library),
   'claimAndFastForward');
+  //TODO: Add approve if approval balance is too low for lp token
 
   useEffect(()=>{
     if(!farmInfo?.adjustedRateBasis || !farmInfo?.vestPeriod) {
@@ -37,10 +38,19 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
     setApr(
       (Number(farmInfo.adjustedRateBasis) / 100) * (31536000 / Number(farmInfo.vestPeriod))
     );
-  },[farmInfo?.adjustedRateBasis,farmInfo?.vestPeriod])
+  },[farmInfo?.adjustedRateBasis,farmInfo?.vestPeriod]);
+
+  useEffect(()=>{
+    if(!farmAccountInfo?.updateEpoch || !currentEpoch) {
+      setEpochDelta(0);
+      return
+    }
+    console.log("Setting delta",currentEpoch,farmAccountInfo.updateEpoch,currentEpoch-farmAccountInfo.updateEpoch);
+    setEpochDelta(currentEpoch - farmAccountInfo.updateEpoch);
+  },[farmAccountInfo?.updateEpoch,currentEpoch]);
 
   return(<>
-  <CollapsibleCard className="mb-3" key={farm.pid} 
+  <CollapsibleCard className="mb-3" 
     title={(<div className='has-text-white pb-2 pt-2 '>
       <div className="is-inline-block is-narrow is-mobile m-0 p-0 pt-1 mr-2" style={{position:"relative"}}>
         <figure className="image is-32x32 is-inline-block m-0 p-0">
@@ -67,7 +77,7 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
         <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.totalVesting ?? 0),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
-        <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(currentEpoch.sub(farmAccountInfo?.updateEpoch ?? currentEpoch)),1)}</span>
+        <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(epochDelta),1)}</span>
       </CollapsibleCardTitleItem>
     </div>)}>
     {!account ? (<>
@@ -93,7 +103,7 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
         <h3 className="is-size-4">Claim Your CZF</h3>
         <p>Harvests your CZF for this farm only and transfers it to your wallet.</p><br/>
         <button onClick={()=>sendClaimFarm(farm?.pid)} className='button has-background-grey-lighter is-fullwidth'>Harvest</button>
-        <p>You will get {weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(currentEpoch.sub(farmAccountInfo?.updateEpoch ?? currentEpoch)),3)} CZF approximately. Actual value can be different if your emissions are expiring.</p>
+        <p>You will get {weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(epochDelta),3)} CZF approximately. Actual value can be different if your emissions are expiring.</p>
       </div>
       <div className="is-inline-block p-3 m-3 is-align-self-stretch" style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
         <h3 className="is-size-4">Fast Forward Rewards</h3>

@@ -14,23 +14,23 @@ import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString } from '../../u
 import { getSingleV2FarmCzfPerSecondWei } from '../../utils/getAccountStats';
 import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import {useContractFunction} from '@usedapp/core';
-const { formatEther, parseEther, Interface } = utils;
+const { parseEther } = utils;
 
 export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2FarmsLpBal,v2FarmsPoolInfo,v2FarmsPendingCzf,v2FarmsUserInfo,lpInfo,accountLpBal,czfPrice,czusdPrice}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const [outputEther,setOutputEther] = useState(0);
-  const currentEpoch = BigNumber.from(Math.floor(Date.now()/1000));
 
   const { state:stateClaim, send:sendClaim } = useContractFunction(
   new Contract(ADDRESS_FARMMASTERV2,czFarmMasterAbi,library),
   'claim');
-  const { state:stateReinvest, send:sendWithdraw } = useContractFunction(
+  const { state:stateWithdraw, send:sendWithdraw } = useContractFunction(
   new Contract(ADDRESS_FARMMASTERV2,czFarmMasterAbi,library),
   'withdraw');
-  const { state:stateWithdraw, send:sendDeposit } = useContractFunction(
+  const { state:stateDeposit, send:sendDeposit } = useContractFunction(
   new Contract(ADDRESS_FARMMASTERV2,czFarmMasterAbi,library),
   'deposit');
+  //TODO: Add approve if approval balance is too low for lp token
 
   useEffect(()=>{
     if(!v2FarmsSettings?.czfPerBlock || !v2FarmsSettings?.totalAllocPoint || !lpInfo?.totalSupply || !lpInfo?.tokens[0] || !v2FarmsPoolInfo?.allocPoint || !v2FarmsLpBal?.lpBal || !czfPrice || !czusdPrice) {
@@ -101,7 +101,7 @@ export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2Far
       </div>
       <div className="is-inline-block p-3 m-3 is-align-self-stretch " style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
         <h3 className="is-size-4">Unstake your {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP</h3>
-        <p>Unstake your ${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol} LP. There are no restrictions or fees.</p>
+        <p>Unstake your ${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol} LP. There are no restrictions or fees. Rewards are claimed.</p>
         <InputTokenEther className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
           style={{maxWidth:"10em",width:"100%"}}
           step="any"
