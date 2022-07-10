@@ -129,7 +129,7 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
         <button onClick={()=>sendWithdraw(parseEther(outputEther.toString()))} className='button has-background-grey-lighter is-fullwidth'>Unstake {pool.baseAssetName}</button>
       </div>
       {!isLaunching && (<div className="is-inline-block p-3 m-3 is-align-self-stretch" style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
-        <h3 className="is-size-4">Claim Your {pool.baseAssetName}</h3>
+        <h3 className="is-size-4">Claim Your {pool.rewardAssetName}</h3>
         <p>Harvests your {pool.rewardAssetName} for this pool only and transfers it to your wallet.</p><br/>
         <button onClick={()=>sendWithdraw(0)} className='button has-background-grey-lighter is-fullwidth'>Harvest</button>
         <p>You will get {weiToShortString(accountInfo?.pendingReward ?? 0,3)} {pool.rewardAssetName}.</p>
