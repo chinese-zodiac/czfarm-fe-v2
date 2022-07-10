@@ -47,7 +47,6 @@ export default function ManageChronoPool({account,library,pool,currentEpoch,czfB
       setEpochDelta(0);
       return
     }
-    console.log("Setting delta",currentEpoch,poolAccountInfo?.updateEpoch,currentEpoch-poolAccountInfo?.updateEpoch);
     setEpochDelta(currentEpoch - poolAccountInfo?.updateEpoch);
   },[poolAccountInfo?.updateEpoch,currentEpoch]);
   
