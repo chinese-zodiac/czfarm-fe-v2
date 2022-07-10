@@ -7,9 +7,11 @@ import {getHarvestablePidsChrono, getHarvestablePidsExotic, getHarvestablePidsV2
 import { BigNumber, Contract } from 'ethers'
 import masterRouterAbi from "../../abi/MasterRouter.json";
 import {PRICING_LP} from "../../constants/pricingLp";
+import {POOLS_V1} from "../../constants/poolsv1";
 import {ADDRESS_EXOTICFARMS, ADDRESS_CHRONOPOOLS, ADDRESS_FARMMASTERV2, ADDRESS_MASTERROUTER, ADDRESS_CZF, ADDRESS_CZUSD} from "../../constants/addresses";
 import styles from "./index.module.scss";
 import {getDailyCzfWei, getDailyAccountTokensWei, getCzfHarvestableChrono, getCzfHarvestableExotic, getCzfHarvestableFarmsV2, getCzfHarvestablePoolsV1, getTokensHarvestable} from "../../utils/getAccountStats"
+import HarvestV1PoolButton from '../HarvestV1PoolButton';
 
 function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos}) {
 
@@ -138,7 +140,7 @@ const { state:stateHarvestAll, send:sendHarvestAll } = useContractFunction(
         <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZF</a>
         <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZUSD</a>
         <br/>
-        {!!account && (
+        {!!account && (<>
           <button className='button is-medium  is-rounded is-primary m-3' style={{marginLeft:"auto",marginRight:"auto"}} 
           onClick={()=>{
             sendHarvestAll(
@@ -152,7 +154,19 @@ const { state:stateHarvestAll, send:sendHarvestAll } = useContractFunction(
           }}
           >Harvest All {weiToShortString(czfHarvestableChrono.add(czfHarvestableExotic).add(czfHarvestableFarmsV2),2)} CZF
           </button>
-        )}
+          <p>Harvest All currently only supports Chrono, Exotic, and Farms V2. Pools v1 must be harvested individually.</p>
+          {POOLS_V1.map((pool,index)=>{
+          const accountInfo = poolsV1AccountInfo?.[index];
+          if(!!accountInfo?.pendingReward && accountInfo?.pendingReward.gt(0)) {
+              return (<HarvestV1PoolButton key={pool.address}
+                {...{library}}
+                pendingReward={accountInfo.pendingReward}
+                assetName={pool.rewardAssetName}
+                poolAddress={pool.address}
+              />)
+            }
+          })}
+        </>)}
 
       </div >
   </>)
