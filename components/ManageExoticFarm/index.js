@@ -8,11 +8,13 @@ import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
 import CZFLogo from "../../public/static/assets/logo192.png";
 import { ADDRESS_EXOTICFARMS } from '../../constants/addresses';
 import exoticFarmAbi from "../../abi/ExoticMaster.json";
-import { utils, Contract, BigNumber } from 'ethers'
+import ierc20Abi from "../../abi/IERC20.json";
+import { utils, Contract, BigNumber, constants } from 'ethers'
 import { weiToShortString } from '../../utils/bnDisplay';
 import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
-import {useContractFunction} from '@usedapp/core';
+import {useContractFunction,useTokenAllowance} from '@usedapp/core';
 const { parseEther } = utils;
+const {MaxUint256} = constants;
 
 export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,farmInfo,farmAccountInfo,lpInfo,czfPrice,czusdPrice,currentEpoch}) {
   const [apr,setApr] = useState(0);
@@ -28,7 +30,11 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
   const { state:stateClaimAndFastForward, send:sendClaimAndFastForward } = useContractFunction(
   new Contract(ADDRESS_EXOTICFARMS,exoticFarmAbi,library),
   'claimAndFastForward');
-  //TODO: Add approve if approval balance is too low for lp token
+
+  const lpAllowance = useTokenAllowance(farmSet.lp,account,ADDRESS_EXOTICFARMS);
+  const { state:stateApprove, send:sendApprove } = useContractFunction(
+  new Contract(farmSet.lp,ierc20Abi,library),
+  'approve');
 
   useEffect(()=>{
     if(!farmInfo?.adjustedRateBasis || !farmInfo?.vestPeriod) {
@@ -80,9 +86,16 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
         <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(epochDelta),1)}</span>
       </CollapsibleCardTitleItem>
     </div>)}>
-    {!account ? (<>
+    {!account && (<>
       <ConnectOrLearn />
-    </>) : (<>
+    </>)}
+    {(!!account && lpAllowance?.lte(lpBal ?? 0)) && (
+      <div>
+        <p className='mb-2'>To use {farmSet?.tokens?.[0]?.symbol}/{farmSet?.tokens?.[1]?.symbol} Exotic Farms, you need to approve the Exotic Master address <code>{ADDRESS_EXOTICFARMS}</code> to use your {farmSet?.tokens?.[0]?.symbol}/{farmSet?.tokens?.[1]?.symbol} LP tokens. You can use the button below.</p>
+        <button onClick={()=>sendApprove(ADDRESS_EXOTICFARMS,MaxUint256)} className='button has-background-grey-lighter is-fullwidth'>Approve</button>
+      </div>
+    )}    
+    {(!!account && lpAllowance?.gt(lpBal ?? 0)) && (<>
     <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
       <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
         <h3 className="is-size-4">Give {farmSet?.tokens?.[0]?.symbol}/{farmSet?.tokens?.[1]?.symbol} LP For CZF/Second</h3>

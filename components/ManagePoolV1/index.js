@@ -114,7 +114,7 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
       </div>)}
       <div className="is-inline-block p-3 m-3 is-align-self-stretch " style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
         <h3 className="is-size-4">Unstake your {pool.baseAssetName}</h3>
-        <p>Unstake your {pool.baseAssetName}. There are no restrictions or fees. Rewards are claimed.</p>
+        <p>Unstake your {pool.baseAssetName}. {pool.subtitle ?? "There are no restrictions or fees."} Rewards are claimed.</p>
         <InputTokenEther className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
           style={{maxWidth:"10em",width:"100%"}}
           step="any"
