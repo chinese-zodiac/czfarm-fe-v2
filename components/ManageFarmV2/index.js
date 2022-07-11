@@ -94,7 +94,7 @@ export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2Far
     {(!!account && lpAllowance?.gt(accountLpBal ?? 0)) && (<>
     <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
       <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{border:"solid 1px #dbdbdb",maxWidth:"25em"}}>
-        <h3 className="is-size-4">Give {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP For CZF/Second</h3>
+        <h3 className="is-size-4">Stake {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP For CZF/Second</h3>
         <p>Stake your ${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol} LP and get CZF every second. There are no restrictions or fees.</p>
           <a className="has-text-primary" style={{textDecoration:"underline"}} 
             href={dexAddLink(farm?.tokens?.[0]?.address,farm?.tokens?.[1]?.address,farm?.dex)} target="_blank">
