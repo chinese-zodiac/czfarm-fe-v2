@@ -75,11 +75,12 @@ function Home() {
 
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos}} />
       
-      <CollapsibleCard className={"mt-5 mb-3 has-text-left "+styles.StakingSection} title={(
-        <p className="is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Chrono Pools<br/>
+      <CollapsibleCard className={"mt-5 mb-3 has-text-left "+styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{width:"100%"}}>
+        <img className="column is-3" src="./static/assets/images/sections/chrono.png" style={{borderRadius:"1.5em",objectFit:"cover"}} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Chrono Pools<br/>
           <span className='is-size-6' >Burn CZF, Get CZF every second.</span>
         </p>
-      )}>
+      </div>)}>
         {CHRONO_POOL.map((pool,index)=>(
           <ManageChronoPool key={pool.pid}
             {...{account,library,pool,currentEpoch,czfBal,czfPrice}}
@@ -89,10 +90,12 @@ function Home() {
         ))}
       </CollapsibleCard>
 
-      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(
-        <p className="is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Exotic Farms<br/>
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{width:"100%"}}>
+        <img className="column is-3" src="./static/assets/images/sections/exotic.png" style={{borderRadius:"1.5em",objectFit:"cover"}} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Exotic Farms<br/>
           <span className='is-size-6' >Give LP to CZodiac Treasury, Get CZF every second.</span>
         </p>
+      </div>
       )}>
         {EXOTIC_FARMS.map((farmSet,farmSetIndex)=>(<div className='m-0 p-0' key={"farmset-"+farmSetIndex}>
           <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>{farmSet?.title}</h4>
@@ -114,10 +117,12 @@ function Home() {
         </div>))}
       </CollapsibleCard>
 
-      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(
-        <p className="is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Farms V2<br/>
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{width:"100%"}}>
+        <img className="column is-3" src="./static/assets/images/sections/farmsv2.png" style={{borderRadius:"1.5em",objectFit:"cover"}} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Farms V2<br/>
           <span className='is-size-6' >Stake LP, Get CZF every second.</span>
         </p>
+      </div>
       )}>
         {FARM_V2.map((farm,index)=>(
           <ManageFarmV2 key={farm.pid} 
@@ -132,10 +137,12 @@ function Home() {
         ))}
       </CollapsibleCard>
 
-      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(
-        <p className="is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Pools V1<br/>
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left "+styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{width:"100%"}}>
+        <img className="column is-3" src="./static/assets/images/sections/poolsv1.png" style={{borderRadius:"1.5em",objectFit:"cover"}} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{lineHeight:"1em"}}>Pools V1<br/>
           <span className='is-size-6' >Stake CZF or CZUSD, Get partner tokens every second.</span>
         </p>
+      </div>
       )}>
         <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>ACTIVE</h4>
         {POOLS_V1.map((pool,index)=>{
