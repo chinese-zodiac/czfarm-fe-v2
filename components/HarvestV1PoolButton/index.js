@@ -11,7 +11,7 @@ export default function HarvestV1PoolButton({library,pendingReward,assetName,poo
   'withdraw');
 
   return(<>
-  <button onClick={()=>sendWithdraw(0)} className='button is-small  is-rounded is-primary m-1' >Harvest {weiToShortString(pendingReward,2)} {assetName}</button>
+  <button onClick={()=>sendWithdraw(0)} className='button is-small  is-rounded is-primary has-background-info-dark m-1' >PoolsV1 Harvest {weiToShortString(pendingReward,2)} {assetName}</button>
       
   </>);
 }

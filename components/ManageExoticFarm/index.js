@@ -51,7 +51,6 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
       setEpochDelta(0);
       return
     }
-    console.log("Setting delta",currentEpoch,farmAccountInfo.updateEpoch,currentEpoch-farmAccountInfo.updateEpoch);
     setEpochDelta(currentEpoch - farmAccountInfo.updateEpoch);
   },[farmAccountInfo?.updateEpoch,currentEpoch]);
 
