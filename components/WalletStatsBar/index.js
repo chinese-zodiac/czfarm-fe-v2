@@ -163,7 +163,7 @@ function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, librar
       </div>
       <div style={{marginLeft:"auto",marginRight:"auto"}} >
         <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZF</a>
-        <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZUSD</a>
+        <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZUSD)} target="_blank" >Buy CZUSD</a>
         <br/>
         {!!account && (<>
           <button className='button is-medium  is-rounded is-primary has-background-primary-dark m-3' style={{marginLeft:"auto",marginRight:"auto"}} 

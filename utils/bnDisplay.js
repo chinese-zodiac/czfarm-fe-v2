@@ -9,7 +9,7 @@ export function weiToFixed(bn,decimals) {
 
 export function weiToShortString(bn,decimals) {
     if(!bn) return (0).toFixed(decimals);
-    if(bn.lt(parseEther("1000"))) return weiToShortStringSmall(bn,18,decimals)
+    if(bn.lt(parseEther("1000"))) return weiToShortStringSmall(bn,18,decimals);
     return toShortString(bn.div(BigNumber.from("10").pow(18)),decimals);
 }
 
@@ -22,7 +22,11 @@ export function tokenAmtToShortString(bn,tokenDecimals,decimals) {
 export function weiToShortStringSmall(bn,tokenDecimals,decimals) {
     if(!bn) return (0).toFixed(decimals);
     let power = BigNumber.from("10").pow((tokenDecimals));
-    if(bn.lt(power)) return ((Number(bn) / Number(power)).toPrecision(decimals));
+    if(bn.lt(power)) {
+        let num = Number(bn) / Number(power);
+        if(num < 10e-7) return (0).toFixed(decimals);;
+        return num.toPrecision(decimals);
+    }
     let powerPrecision = Math.floor(tokenDecimals/2);
     return (Number(bn.div(BigNumber.from("10").pow((tokenDecimals - powerPrecision)))).toFixed(decimals) / Math.pow(10,powerPrecision)).toFixed(decimals);
 }

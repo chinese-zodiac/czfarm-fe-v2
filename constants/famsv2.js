@@ -257,8 +257,8 @@ export const FARM_V2 = [
     ]
   },
   {
-    lp:"0x33FcB84f5e79082f62BA7de8285C9b37a68f1a02", //CZF/DONK -PCS
-    dex:DEX.PCS,
+    lp:"0x33FcB84f5e79082f62BA7de8285C9b37a68f1a02", //CZF/DONK -DONK
+    dex:DEX.DONK,
     pid:17,
     tokens:[
       {
