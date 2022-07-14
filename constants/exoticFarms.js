@@ -19,15 +19,18 @@ export const EXOTIC_FARMS = [
     farms: [
       {
         title: "7 DAYS",
-        pid: 0
+        pid: 0,
+        chronoVesting:"0x5351e4fcD656B56C442f761760495568426c7279"
       },
       {
         title: "90 DAYS",
-        pid: 1
+        pid: 1,
+        chronoVesting:"0xd84B90E2c581Ee36532B9F9035Da3daC6D9B5A07"
       },
       {
         title: "1 YEAR",
-        pid: 2
+        pid: 2,
+        chronoVesting:"0x3fFfD7d941cc38831E7F72AAe640c31113A435f9"
       }
     ]
   },
@@ -49,15 +52,18 @@ export const EXOTIC_FARMS = [
     farms: [
       {
         title: "7 DAYS",
-        pid: 3
+        pid: 3,
+        chronoVesting:"0x162d7b60226c627BA384B97AFe76c7a63EDd5c4B"
       },
       {
         title: "90 DAYS",
-        pid: 4
+        pid: 4,
+        chronoVesting:"0xFd7f3189b7E09e4995F07F550e01e91254F58D30"
       },
       {
         title: "1 YEAR",
-        pid: 5
+        pid: 5,
+        chronoVesting:"0x227f88eDDe39399eF01de7eD11DA322e536F152d"
       }
     ]
   },
@@ -80,15 +86,18 @@ export const EXOTIC_FARMS = [
     farms: [
       {
         title: "7 DAYS",
-        pid: 6
+        pid: 6,
+        chronoVesting:"0x016f33A0Fe6A9476C46BdBDe2D1decebc3016d0a"
       },
       {
         title: "90 DAYS",
-        pid: 7
+        pid: 7,
+        chronoVesting:"0x07E94E47eA08A55661be01AbCe527aA8084076d1"
       },
       {
         title: "1 YEAR",
-        pid: 8
+        pid: 8,
+        chronoVesting:"0x000ba08bA482EFdF557A47eDe2477eCFa224C70f"
       }
     ]
   }

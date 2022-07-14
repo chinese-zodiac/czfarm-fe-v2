@@ -72,11 +72,14 @@ export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2Far
       <CollapsibleCardTitleItem title="APR" width="4.5em">
         <span className='is-size-6'>{(apr)}%</span>
       </CollapsibleCardTitleItem>
-      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
-        <span className='is-size-6'>{weiToShortString(getSingleV2FarmCzfPerSecondWei(v2FarmsSettings,v2FarmsLpBal,v2FarmsPoolInfo,v2FarmsUserInfo).mul(86400),2)}</span>
+      <CollapsibleCardTitleItem title="TVL" width="4.5em">
+        <span className='is-size-6'>${weiToShortString(getLpTokenValueUsdWad(farm?.tokens?.[0]?.symbol ?? "CZF",lpInfo,v2FarmsLpBal?.lpBal,czfPrice,czusdPrice),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="STAKE" width="4.5em">
-        <span className='is-size-6'>${weiToShortString(getLpTokenValueUsdWad("CZF",lpInfo,v2FarmsUserInfo?.amount,czfPrice,czusdPrice),2)}</span>
+        <span className='is-size-6'>${weiToShortString(getLpTokenValueUsdWad(farm?.tokens?.[0]?.symbol ?? "CZF",lpInfo,v2FarmsUserInfo?.amount,czfPrice,czusdPrice),1)}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
+        <span className='is-size-6'>{weiToShortString(getSingleV2FarmCzfPerSecondWei(v2FarmsSettings,v2FarmsLpBal,v2FarmsPoolInfo,v2FarmsUserInfo).mul(86400),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
         <span className='is-size-6'>{weiToShortString(v2FarmsPendingCzf?.pendingCzf,1)}</span>

@@ -13,7 +13,7 @@ import {useContractFunction} from '@usedapp/core';
 import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
 const { parseEther } = utils;
 
-export default function ManageChronoPool({account,library,pool,currentEpoch,czfBal,poolInfo,poolAccountInfo,czfPrice}) {
+export default function ManageChronoPool({account,library,pool,currentEpoch,czfBal,poolInfo,poolAccountInfo,czfPrice,totalVesting}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const [epochDelta,setEpochDelta] = useState(0);
@@ -68,11 +68,14 @@ export default function ManageChronoPool({account,library,pool,currentEpoch,czfB
       <CollapsibleCardTitleItem title="APR" width="4em">
         <span className='is-size-6'>{apr.toFixed(2)}%</span>
       </CollapsibleCardTitleItem>
-      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
-        <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(86400),1)}</span>
+      <CollapsibleCardTitleItem title="TVL" width="4.5em">
+        <span className='is-size-6'>${weiToShortString(weiToUsdWeiVal(totalVesting ?? 0,czfPrice),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="VEST" width="4em">
         <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.totalVesting ?? 0),1)}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
+        <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(86400),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
         <span className='is-size-6'>{weiToShortString(BigNumber.from(poolAccountInfo?.emissionRate ?? 0).mul(epochDelta),1)}</span>

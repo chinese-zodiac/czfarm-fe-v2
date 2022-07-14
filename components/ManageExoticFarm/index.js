@@ -10,13 +10,13 @@ import { ADDRESS_EXOTICFARMS } from '../../constants/addresses';
 import exoticFarmAbi from "../../abi/ExoticMaster.json";
 import ierc20Abi from "../../abi/IERC20.json";
 import { utils, Contract, BigNumber, constants } from 'ethers'
-import { weiToShortString } from '../../utils/bnDisplay';
+import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
 import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import {useContractFunction,useTokenAllowance} from '@usedapp/core';
 const { parseEther } = utils;
 const {MaxUint256} = constants;
 
-export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,farmInfo,farmAccountInfo,lpInfo,czfPrice,czusdPrice,currentEpoch}) {
+export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,farmInfo,farmAccountInfo,lpInfo,czfPrice,czusdPrice,currentEpoch,totalVesting}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const [epochDelta,setEpochDelta] = useState(0);
@@ -75,11 +75,14 @@ export default function ManageExoticFarm({account,library,lpBal,farmSet,farm,far
       <CollapsibleCardTitleItem title="APR" width="4em">
         <span className='is-size-6'>{apr.toFixed(2)}%</span>
       </CollapsibleCardTitleItem>
-      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
-        <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(86400),1)}</span>
+      <CollapsibleCardTitleItem title="TVL" width="4.5em">
+        <span className='is-size-6'>${weiToShortString(weiToUsdWeiVal(totalVesting ?? 0,czfPrice),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="VEST" width="4em">
         <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.totalVesting ?? 0),1)}</span>
+      </CollapsibleCardTitleItem>
+      <CollapsibleCardTitleItem title="CZF/DAY" width="4em">
+        <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(86400),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
         <span className='is-size-6'>{weiToShortString(BigNumber.from(farmAccountInfo?.emissionRate ?? 0).mul(epochDelta),1)}</span>
