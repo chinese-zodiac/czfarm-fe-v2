@@ -78,6 +78,43 @@ function Home() {
   const [farmsV2TvlWei,setFarmsv2TvlWei] = useState(BigNumber.from(0));
   const [poolsV1TvlWei,setPoolsV1TvlWei] = useState(BigNumber.from(0));
 
+  const [chronoAccountStakeWei,setChronoAccountStakeWei] = useState(BigNumber.from(0));
+  const [exoticAccountStakeWei,setExoticAccountStakeWei] = useState(BigNumber.from(0));
+  const [farmsV2AccountStakeWei,setFarmsv2AccountStakeWei] = useState(BigNumber.from(0));
+  const [poolsV1AccountStakeWei,setPoolsV1AccountStakeWei] = useState(BigNumber.from(0));
+
+  useDeepCompareEffect(()=>{
+    if(!account || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !lpInfos || !v2FarmsUserInfo) {
+      setChronoAccountStakeWei(BigNumber.from(0));
+      setExoticAccountStakeWei(BigNumber.from(0));
+      setFarmsv2AccountStakeWei(BigNumber.from(0));
+      setPoolsV1AccountStakeWei(BigNumber.from(0));
+      return;
+    }
+
+    setChronoAccountStakeWei(
+      weiToUsdWeiVal(chronoPoolAccountInfo.reduce((prev,curr)=>prev.add(curr?.totalVesting ?? 0),BigNumber.from(0)),czfPrice)
+    );
+
+    setExoticAccountStakeWei(
+      weiToUsdWeiVal(exoticFarmAccountInfo.reduce((prev,curr)=>prev.add(curr?.totalVesting ?? 0),BigNumber.from(0)),czfPrice)
+    );
+    
+    setFarmsv2AccountStakeWei(
+      FARM_V2.reduce((prev,curr,index)=>{
+        const symbol = curr.tokens[0].symbol;
+        const lpInfo = lpInfos?.[curr.lp];
+        const lpBal = v2FarmsUserInfo?.[index]?.amount;
+        return prev.add(getLpTokenValueUsdWad(symbol, lpInfo, lpBal, czfPrice, czusdPrice) ?? 0);
+      },BigNumber.from(0))
+    );
+
+    setPoolsV1AccountStakeWei(
+      poolsV1AccountInfo.reduce((prev,curr,index)=>prev.add(weiToUsdWeiVal(curr?.amount,POOLS_V1[index].baseAssetName == "CZF" ? czfPrice : czusdPrice)),BigNumber.from(0))
+    )
+
+  },[account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, czfPrice, czusdPrice])
+
   useDeepCompareEffect(()=>{
     if(!czfPrice || !czusdPrice || !chronoVestingsTotalVesting || !poolsV1TokenBalance || !v2FarmsLpBal || !lpInfos) {
       setChronoTvlWei(BigNumber.from(0));
@@ -111,7 +148,9 @@ function Home() {
     />
     <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{minHeight:"100vh"}}>
 
-      <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos,currentEpoch}} />
+      <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos,currentEpoch,
+        chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei
+      }} />
       
       <CollapsibleCard className={"mt-5 mb-3 has-text-left "+styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{width:"100%"}}>
         <img className="column is-3" src="./static/assets/images/sections/chrono.png" style={{borderRadius:"1.5em",objectFit:"cover"}} />
@@ -127,6 +166,7 @@ function Home() {
             totalVesting={chronoVestingsTotalVesting?.[pool.chronoVesting]}
           />
         ))}
+        <p className="has-text-right pr-2">Your Chrono Vesting: ${weiToShortString(chronoAccountStakeWei,2)}</p>
         <p className="has-text-right pr-2">Chrono Pools TVL: ${weiToShortString(chronoTvlWei,2)}</p>
       </CollapsibleCard>
 
@@ -156,6 +196,7 @@ function Home() {
               />)
           })}
         </div>))}
+        <p className="has-text-right pr-2">Your Exotic Vesting: ${weiToShortString(exoticAccountStakeWei,2)}</p>
         <p className="has-text-right pr-2">Exotic Farms TVL: ${weiToShortString(exoticTvlWei,2)}</p>
       </CollapsibleCard>
 
@@ -177,6 +218,7 @@ function Home() {
             accountLpBal={accountLpBals?.[farm?.lp]}
           />
         ))}
+        <p className="has-text-right pr-2">Your Farms V2 Staked: ${weiToShortString(farmsV2AccountStakeWei,2)}</p>
         <p className="has-text-right pr-2">Farms V2 TVL: ${weiToShortString(farmsV2TvlWei,2)}</p>
       </CollapsibleCard>
 
@@ -229,6 +271,7 @@ function Home() {
               />)
             }
           })}
+        <p className="has-text-right pr-2">Your Pools V1 Staked: ${weiToShortString(poolsV1AccountStakeWei,2)}</p>
         <p className="has-text-right pr-2">Pools V1 TVL: ${weiToShortString(poolsV1TvlWei,2)}</p>
       </CollapsibleCard>
 
