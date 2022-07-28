@@ -4,7 +4,7 @@ import InputTokenEther from '../../components/InputTokenEther';
 import ConnectOrLearn from '../../components/ConnectOrLearn';
 import CollapsibleCard from '../../components/CollapsibleCard';
 import QuickInputEther from '../../components/QuickInputEther';
-import CZFLogo from "../../public/static/assets/logo192.png";
+import CZFLogo from "../../public/static/assets/images/tokens/CZF.png";
 import { ADDRESS_CHRONOPOOLS } from '../../constants/addresses';
 import chronoPoolAbi from "../../abi/ChronoPoolService.json";
 import { utils, Contract, BigNumber } from 'ethers'
@@ -55,11 +55,11 @@ export default function ManageChronoPool({account,library,pool,currentEpoch,czfB
     title={(<div className='has-text-white pb-2 pt-2 '>
       <div className="is-inline-block is-narrow is-mobile m-0 p-0 pt-1 mr-2">
         <figure className="image is-32x32 is-inline-block m-0 p-0">
-            <img src={CZFLogo} />
+            <img  className="has-background-special is-rounded" src={CZFLogo} />
         </figure>
         <span className='icon m-0 p-0 ' style={{width:"0.6em",position:"relative",top:"-0.6em"}}><i className="fa-solid fa-angle-right"></i></span>
         <figure className="image is-32x32 is-inline-block m-0 p-0 ">
-            <img src={CZFLogo} />
+            <img  className="has-background-special is-rounded" src={CZFLogo} />
         </figure>
       </div>
       <CollapsibleCardTitleItem title="DURATION" width="5em">

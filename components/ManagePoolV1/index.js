@@ -6,7 +6,7 @@ import ConnectOrLearn from '../ConnectOrLearn';
 import CollapsibleCard from '../CollapsibleCard';
 import QuickInputEther from '../QuickInputEther';
 import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
-import CZFLogo from "../../public/static/assets/logo192.png";
+import CZFLogo from "../../public/static/assets/images/tokens/CZF.png";
 import { dexAddLink } from '../../utils/dexBuyLink';
 import czFarmPoolAbi from "../../abi/CZFarmPool.json";
 import { utils, Contract, BigNumber } from 'ethers'

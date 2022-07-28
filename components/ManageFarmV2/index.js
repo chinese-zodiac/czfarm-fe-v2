@@ -5,7 +5,7 @@ import ConnectOrLearn from '../../components/ConnectOrLearn';
 import CollapsibleCard from '../../components/CollapsibleCard';
 import QuickInputEther from '../../components/QuickInputEther';
 import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
-import CZFLogo from "../../public/static/assets/logo192.png";
+import CZFLogo from "../../public/static/assets/images/tokens/CZF.png";
 import { ADDRESS_FARMMASTERV2 } from '../../constants/addresses';
 import { dexAddLink } from '../../utils/dexBuyLink';
 import czFarmMasterAbi from "../../abi/CZFarmMaster.json";
@@ -53,14 +53,14 @@ export default function ManageFarmV2({account,library,farm,v2FarmsSettings,v2Far
     title={(<div className='has-text-white pb-2 pt-2 '>
       <div className="is-inline-block is-narrow is-mobile m-0 p-0 pt-1 mr-2" style={{position:"relative"}}>
         <figure className="image is-32x32 is-inline-block m-0 p-0">
-            <img src={`./static/assets/images/tokens/${farm?.tokens?.[0]?.symbol}.png`} />
+            <img className="has-background-special is-rounded"  src={`./static/assets/images/tokens/${farm?.tokens?.[0]?.symbol}.png`} />
         </figure>
         <figure className="image is-32x32 is-inline-block ml-0 mt-0 mb-0 p-0" style={{position:"relative",top:"0.5em",left:"-1em",marginRight:"-1em"}}>
-            <img src={`./static/assets/images/tokens/${farm?.tokens?.[1]?.symbol}.png`} />
+            <img className="has-background-special is-rounded"  src={`./static/assets/images/tokens/${farm?.tokens?.[1]?.symbol}.png`} />
         </figure>
         <span className='icon m-0 p-0 ' style={{width:"0.6em",position:"relative",top:"-0.6em"}}><i className="fa-solid fa-angle-right"></i></span>
         <figure className="image is-32x32 is-inline-block m-0 p-0 ">
-            <img src={CZFLogo} />
+            <img className="has-background-special is-rounded"  src={CZFLogo} />
         </figure>
       </div>
       <CollapsibleCardTitleItem title="TYPE" width="6.5em">
