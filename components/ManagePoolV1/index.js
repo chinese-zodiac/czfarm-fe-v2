@@ -50,11 +50,11 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
     title={(<div className='has-text-white pb-2 pt-2 '>
       <div className="is-inline-block is-narrow is-mobile m-0 p-0 pt-1 mr-2">
         <figure className="image is-32x32 is-inline-block m-0 p-0">
-            <img src={`./static/assets/images/tokens/${pool.baseAssetName}.png`} />
+            <img className="has-background-special is-rounded" src={`./static/assets/images/tokens/${pool.baseAssetName}.png`} />
         </figure>
         <span className='icon m-0 p-0 ' style={{width:"0.6em",position:"relative",top:"-0.6em"}}><i className="fa-solid fa-angle-right"></i></span>
         <figure className="image is-32x32 is-inline-block m-0 p-0 ">
-            <img src={`./static/assets/images/tokens/${pool.rewardAssetName}.png`} />
+            <img className="has-background-special is-rounded" src={`./static/assets/images/tokens/${pool.rewardAssetName}.png`} />
         </figure>
       </div>
       <CollapsibleCardTitleItem title="BASE" width="3.5em">

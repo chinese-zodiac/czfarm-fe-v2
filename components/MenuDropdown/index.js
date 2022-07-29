@@ -2,8 +2,8 @@ import React, {useState} from 'react'
 import { LINK_TWITTER, LINK_TELEGRAM, LINK_GITHUB, LINK_DISCORD, LINK_MEDIUM, LINK_WHITEPAPER, LINK_TELEGRAM_ANN,
 LINK_CZFARM, LINK_CZCASH, LINK_NUMIS} from '../../constants/links';
 import {ADDRESS_CZF, ADDRESS_CZUSD} from '../../constants/addresses';
-import LOGO_CZF from "../../public/static/assets/images/tokens/CZF.png";
-import LOGO_CZUSD from "../../public/static/assets/images/tokens/CZUSD.png";
+import LOGO_CZF from "../../public/static/assets/images/czf.svg";
+import LOGO_CZUSD from "../../public/static/assets/images/czusd.svg";
 import CzcashLogo from "../../public/static/assets/logo-czcash.png"
 import NumisLogo from "../../public/static/assets/logo-numis.png"
 import {tokenHref} from '../../utils/tokenHref';
