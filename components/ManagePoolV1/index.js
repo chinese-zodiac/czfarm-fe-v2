@@ -79,7 +79,7 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
         <span className='is-size-6'>{weiToShortString(accountInfo?.amount ?? 0,1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title={`${pool.rewardAssetName}/DAY`} width="4.5em">
-        <span className='is-size-6'>{weiToShortString(poolInfo?.rewardPerSecond?.mul(86400).mul(accountInfo?.amount ?? 0).div(poolTokenBalance?.tokenBal ?? 1),2)}</span>
+        <span className='is-size-6'>{(!!poolTokenBalance?.tokenBal && poolTokenBalance.tokenBal.gt(0)) ? weiToShortString(poolInfo?.rewardPerSecond?.mul(86400).mul(accountInfo?.amount ?? 0).div(poolTokenBalance?.tokenBal ?? 1),2) : "N/A"}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
         <span className='is-size-6'>{weiToShortString(accountInfo?.pendingReward ?? 0,1)}</span>
