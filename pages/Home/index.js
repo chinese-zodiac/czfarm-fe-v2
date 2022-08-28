@@ -232,6 +232,8 @@ function Home() {
         <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>ACTIVE</h4>
         {POOLS_V1.map((pool,index)=>{
           const poolInfo = poolsV1Info?.[index];
+          if(poolInfo.address == "0x8562c5fd7E994ddC84420375f587880814b7a288")
+          return (<div className="p-4 mb-2" key={pool.address}>14.98% TAX POOL TEMPORARILY DISABLED</div> )
           if(!!poolInfo?.timestampStart && !!poolInfo?.timestampEnd && !!currentEpoch &&
             poolInfo.timestampStart.lte(currentEpoch) && poolInfo.timestampEnd.gte(currentEpoch)) {
               return (<ManagePoolV1 key={pool.address} 
