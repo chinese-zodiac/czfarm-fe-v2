@@ -92,7 +92,7 @@ export const POOLS_V1 = [
     },
     {
       subtitle: "14.98% CZF burn on unstake.",
-      address: "0x88B77333FAf12E49e7c98bc69898756787D9FA41",
+      address: "0x6615f3B9FE17fa63F35817cfD669224BA3d00b12",
       rewardAssetName: "CZUSD",
       rewardAddress: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
       baseAssetName: "CZF",
