@@ -29,7 +29,7 @@ import {CHRONO_POOL} from "../../constants/chronoPool";
 import {EXOTIC_FARMS} from "../../constants/exoticFarms";
 import {FARM_V2} from "../../constants/famsv2";
 import {POOLS_V1} from "../../constants/poolsv1";
-import {LINK_TELEGRAM} from "../../constants/links";
+import {LINK_TELEGRAM, LINK_OBR} from "../../constants/links";
 import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_MASTERROUTER } from '../../constants/addresses';
 import WalletStatsBar from '../../components/WalletStatsBar';
 import styles from "./index.module.scss";
@@ -229,6 +229,7 @@ function Home() {
         </p>
       </div>
       )}>
+        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>Want no tax? Visit: <a href="https://bad.rabbitcatch.com">ONE BAD RABBIT</a></h4>
         <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>ACTIVE</h4>
         {POOLS_V1.map((pool,index)=>{
           const poolInfo = poolsV1Info?.[index];
