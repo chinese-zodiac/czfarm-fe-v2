@@ -1,13 +1,13 @@
-import { useCalls } from "@usedapp/core";
+import { useCalls, useEthers } from "@usedapp/core";
 import {FARM_V2} from "../constants/famsv2";
 import {ADDRESS_FARMMASTERV2}  from "../constants/addresses";
 import { Contract } from 'ethers';
 import IERC20 from "../abi/IERC20.json";
 
 
-function useV2FarmsLpBal(provider) {
+function useV2FarmsLpBal(library) {
   const calls = FARM_V2.map(farm=>({
-    contract:new Contract(farm.lp,IERC20,provider),
+    contract:new Contract(farm.lp,IERC20,library),
     method:'balanceOf',
     args: [ADDRESS_FARMMASTERV2]
   })) ?? [];

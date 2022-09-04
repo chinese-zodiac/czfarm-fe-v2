@@ -1,12 +1,12 @@
-import { useCalls } from "@usedapp/core";
+import { useCalls,useEthers } from "@usedapp/core";
 import {POOLS_V1} from "../constants/poolsv1";
 import { Contract } from 'ethers';
 import IERC20 from "../abi/IERC20.json";
 
 
-function usePoolsV1TokenBalance(provider) {
+function usePoolsV1TokenBalance(library) {
   const calls = POOLS_V1.map(pool=>({
-    contract:new Contract(pool.baseAssetAddress,IERC20,provider),
+    contract:new Contract(pool.baseAssetAddress,IERC20,library),
     method:'balanceOf',
     args: [pool.address]
   })) ?? [];

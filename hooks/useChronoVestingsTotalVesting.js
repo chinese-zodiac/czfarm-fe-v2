@@ -1,4 +1,4 @@
-import { useCalls } from "@usedapp/core";
+import { useCalls, useEthers } from "@usedapp/core";
 import { Contract, BigNumber } from 'ethers';
 import ChronoVesting from "../abi/ChronoVesting.json";
 import {CHRONO_POOL} from "../constants/chronoPool";
@@ -6,13 +6,13 @@ import {EXOTIC_FARMS} from "../constants/exoticFarms";
 
 //TODO: accept list of chrono vesting addresses
 
-function useChronoVestingsTotalVesting(provider) {
+function useChronoVestingsTotalVesting(library) {
   const chronoVestingAddresses = [
     ...CHRONO_POOL.map((pool)=>pool.chronoVesting),
     ...EXOTIC_FARMS.flatMap((farmSet)=>farmSet.farms.map(farm=>farm.chronoVesting))
   ]
   const calls = chronoVestingAddresses.flatMap(chronoVestingAddress=>{
-    const chronoVestingSc = new Contract(chronoVestingAddress,ChronoVesting,provider);
+    const chronoVestingSc = new Contract(chronoVestingAddress,ChronoVesting,library);
     return [
       {
         contract:chronoVestingSc,

@@ -145,7 +145,7 @@ function WalletStatsBar({czfPrice, czusdPrice, czfBal, czusdBal, account, librar
                   <p key={tokenWei.name} className='is-size-5 m-0' style={{whiteSpace:"nowrap"}}>{weiToShortString(tokenWei.tokenHarvestable,2)}
                   <span className="is-size-7 ml-1">($
                     {tokenWei.name=="CZUSD" ? 
-                      weiToShortString(weiToUsdWeiVal(tokenWei.tokenHarvestable,czusdPrice),2) :
+                      weiToShortString(weiToUsdWeiVal(tokenWei?.tokenHarvestable,czusdPrice),2) :
                       (!!PRICING_LP[tokenWei.name] &&
                         weiToShortString(
                           weiTolpPricedWeiVal(lpInfos,tokenWei?.name,tokenWei?.tokenHarvestable,czfPrice,czusdPrice) 

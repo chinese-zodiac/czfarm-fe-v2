@@ -1,8 +1,10 @@
 
-import React from 'react';
+import React, {useContext} from 'react';
+import { useEthers,useEtherBalance } from "@usedapp/core";
 import Web3ModalButton from '../Web3ModalButton';
 import MenuDropdown from '../MenuDropdown'
 import AccountInfo from '../AccountInfo'
+import CZFarmContext from '../../contexts/CZFarmContext';
 import CZFLogo from "../../public/static/assets/logo192.png"
 import CzcashLogo from "../../public/static/assets/logo-czcash.png"
 import NumisLogo from "../../public/static/assets/logo-numis.png"
@@ -11,7 +13,13 @@ import { LINK_CZFARM, LINK_CZCASH, LINK_CZODIAC, LINK_NUMIS } from '../../consta
 import styles from "./index.module.scss";
 import { toShortString, weiToShortString } from '../../utils/bnDisplay';
 
-export default function Header({czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance,tvlWei}) {
+export default function Header() {
+  const {account,library,chainId} = useEthers();
+  const {czfPrice,bnbPrice,czusdPrice,chronoTvlWei,
+    exoticTvlWei,
+    farmsV2TvlWei,
+    poolsV1TvlWei} = useContext(CZFarmContext);
+  const accountEtherBalance = useEtherBalance(account);
   return(<>
     <header id="top" className={"hero has-text-centered has-background-black-bis p-4 "+styles.Header}>
       <div className="hero-head columns is-desktop has-text-right pt-2">
@@ -57,7 +65,7 @@ export default function Header({czfPrice,bnbPrice,czusdPrice,account,chainId,acc
             <div 
               className="m-1 has-background-special has-text-white p-2 is-inline-block has-text-centered"
               style={{border:"solid 1px gray",borderRadius:"30px"}} >
-              TVL: ${weiToShortString(tvlWei,2)}
+              TVL: ${weiToShortString(chronoTvlWei?.add(exoticTvlWei??0).add(farmsV2TvlWei??0).add(poolsV1TvlWei??0),2)}
             </div>
           </div>
           <div style={{minWidth:"17.5em",minHeight:"6.8em"}} className="has-text-right is-inline-block level-right has-text-right">

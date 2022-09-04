@@ -58,5 +58,6 @@ export function weiTolpPricedWeiVal(lpInfos,tokenName,tokenWad,czfPrice,czusdPri
     //TODO: Handle when lp is czusd pair
     let lpAddr = PRICING_LP[tokenName];
     let tokens = lpInfos?.[lpAddr]?.tokens;
-    return weiToUsdWeiVal(tokenWad.mul(tokens?.[0]).div(tokens?.[1]),czfPrice);
+    if(!tokens?.[1]) return weiToUsdWeiVal(0,czfPrice);
+    return weiToUsdWeiVal(tokenWad?.mul(tokens?.[0] ?? 0).div(tokens?.[1]),czfPrice);
 }

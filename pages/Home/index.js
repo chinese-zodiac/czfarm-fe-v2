@@ -1,14 +1,11 @@
 
-import React, { Component, useState } from 'react';
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
+import React, { Component, useContext, useState } from 'react';
 import { useEthers, useCall, useEtherBalance, useTokenBalance  } from '@usedapp/core';
-import {useCoingeckoPrice } from '@usedapp/coingecko';
 import { utils, Contract, BigNumber } from 'ethers'
 import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
+import CZFarmContext from '../../contexts/CZFarmContext';
 import {weiToShortString, weiToFixed, weiToUsdWeiVal} from '../../utils/bnDisplay';
 import useV2FarmsSettings from '../../hooks/useV2FarmsSettings';
-import useV2FarmsLpBal from '../../hooks/useV2FarmsLpBal';
 import useV2FarmsPoolInfo from '../../hooks/useV2FarmsPoolInfo';
 import useV2FarmsPendingCzf from '../../hooks/useV2FarmsPendingCzf';
 import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
@@ -18,11 +15,8 @@ import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
 import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import usePoolsV1Info from '../../hooks/usePoolsV1Info';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
-import usePoolsV1TokenBalance from '../../hooks/usePoolsV1TokenBalance';
 import useAccountLpBals from '../../hooks/useAccountLpBals';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
-import useLpInfo from '../../hooks/useLpInfo';
-import useChronoVestingsTotalVesting from '../../hooks/useChronoVestingsTotalVesting';
 import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import CZFLogo from "../../public/static/assets/logo192.png"
 import {CHRONO_POOL} from "../../constants/chronoPool";
@@ -45,19 +39,13 @@ const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
   const {account,library,chainId} = useEthers();
-  const czusdPrice = useCoingeckoPrice("czusd");
-  const czfPrice = useCoingeckoPrice("czfarm");
-  const bnbPrice = useCoingeckoPrice("binancecoin");
-  const deapPrice = useCoingeckoPrice("deapcoin");
-  const accountEtherBalance = useEtherBalance(account);
-
+  const {czfPrice,czusdPrice,bnbPrice,chronoVestingsTotalVesting,poolsV1TokenBalance,v2FarmsLpBal,lpInfos,accountEtherBalance,chronoTvlWei,exoticTvlWei,farmsV2TvlWei,poolsV1TvlWei} = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
   const czusdBal = useTokenBalance(ADDRESS_CZUSD, account);
 
   const v2FarmsSettings = useV2FarmsSettings(library);
-  const v2FarmsLpBal = useV2FarmsLpBal(library);
   const v2FarmsPoolInfo = useV2FarmsPoolInfo(library);
   const v2FarmsPendingCzf = useV2FarmsPendingCzf(library,account);
   const v2FarmsUserInfo = useV2FarmsUserInfo(library,account);
@@ -66,17 +54,8 @@ function Home() {
   const exoticFarmInfo = useExoticFarmInfo(library);
   const exoticFarmAccountInfo = useExoticFarmAccountInfo(library,account);
   const poolsV1Info = usePoolsV1Info(library);
-  const poolsV1TokenBalance = usePoolsV1TokenBalance(library);
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library,account);
   const accountLpBals = useAccountLpBals(library,account);
-  const lpInfos = useLpInfo(library);
-
-  const chronoVestingsTotalVesting = useChronoVestingsTotalVesting(library);
-
-  const [chronoTvlWei,setChronoTvlWei] = useState(BigNumber.from(0));
-  const [exoticTvlWei,setExoticTvlWei] = useState(BigNumber.from(0));
-  const [farmsV2TvlWei,setFarmsv2TvlWei] = useState(BigNumber.from(0));
-  const [poolsV1TvlWei,setPoolsV1TvlWei] = useState(BigNumber.from(0));
 
   const [chronoAccountStakeWei,setChronoAccountStakeWei] = useState(BigNumber.from(0));
   const [exoticAccountStakeWei,setExoticAccountStakeWei] = useState(BigNumber.from(0));
@@ -113,40 +92,10 @@ function Home() {
       poolsV1AccountInfo.reduce((prev,curr,index)=>prev.add(weiToUsdWeiVal(curr?.amount,POOLS_V1[index].baseAssetName == "CZF" ? czfPrice : czusdPrice)),BigNumber.from(0))
     )
 
-  },[account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, czfPrice, czusdPrice])
-
-  useDeepCompareEffect(()=>{
-    if(!czfPrice || !czusdPrice || !chronoVestingsTotalVesting || !poolsV1TokenBalance || !v2FarmsLpBal || !lpInfos) {
-      setChronoTvlWei(BigNumber.from(0));
-      setExoticTvlWei(BigNumber.from(0));
-      setFarmsv2TvlWei(BigNumber.from(0));
-      setPoolsV1TvlWei(BigNumber.from(0));
-      return;
-    }
-
-    setChronoTvlWei(
-      weiToUsdWeiVal(CHRONO_POOL.map((pool)=>pool.chronoVesting)
-        .reduce((prev,curr)=>prev.add(chronoVestingsTotalVesting?.[curr] ?? 0),BigNumber.from(0)),czfPrice)
-    );
-    setExoticTvlWei(
-      weiToUsdWeiVal(EXOTIC_FARMS.flatMap((farmSet)=>farmSet.farms.map(farm=>farm.chronoVesting))
-        .reduce((prev,curr)=>prev.add(chronoVestingsTotalVesting?.[curr] ?? 0),BigNumber.from(0)),czfPrice)
-    );
-    setFarmsv2TvlWei(FARM_V2.reduce((prev,curr,index)=>prev.add(
-      getLpTokenValueUsdWad(curr.tokens[0].symbol ?? "CZF",lpInfos?.[curr.lp],v2FarmsLpBal?.[index]?.lpBal,czfPrice,czusdPrice)
-    ),BigNumber.from(0)));
-    setPoolsV1TvlWei(
-      POOLS_V1.reduce((prev,curr,index)=>prev.add(
-        weiToUsdWeiVal(poolsV1TokenBalance?.[index]?.tokenBal,curr.baseAssetName == "CZF" ? czfPrice : czusdPrice)
-      ),BigNumber.from(0))      
-    );
-  },[czfPrice,czusdPrice,chronoVestingsTotalVesting,poolsV1TokenBalance,v2FarmsLpBal,lpInfos])
+  },[account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, czfPrice, czusdPrice]);
 
   return (<>
-    <Header {...{czfPrice,bnbPrice,czusdPrice,account,chainId,accountEtherBalance}} 
-      tvlWei={chronoTvlWei.add(exoticTvlWei).add(farmsV2TvlWei).add(poolsV1TvlWei)}
-    />
-    <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{minHeight:"125vh"}}>
+    <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{minHeight:"100vh"}}>
 
       <WalletStatsBar {...{czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo,lpInfos,currentEpoch,
         chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei
@@ -229,7 +178,7 @@ function Home() {
         </p>
       </div>
       )}>
-        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>Want no tax? Visit: <a href="https://bad.rabbitcatch.com">ONE BAD RABBIT</a></h4>
+        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>Want no tax? Visit: <a target="_blank" href="https://bad.rabbitcatch.com">ONE BAD RABBIT</a></h4>
         <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>ACTIVE</h4>
         {POOLS_V1.map((pool,index)=>{
           const poolInfo = poolsV1Info?.[index];
@@ -279,7 +228,6 @@ function Home() {
       </CollapsibleCard>
 
     </main>
-    <Footer />
     
   </>);
 }
