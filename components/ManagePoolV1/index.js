@@ -8,17 +8,24 @@ import QuickInputEther from '../QuickInputEther';
 import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
 import CZFLogo from "../../public/static/assets/images/tokens/CZF.png";
 import { dexAddLink } from '../../utils/dexBuyLink';
+import { getIpfsJson, getIpfsUrl } from '../../utils/getIpfsJson';
 import czFarmPoolAbi from "../../abi/CZFarmPool.json";
+import IERC721EnumerableAbi from "../../abi/IERC721Enumerable.json";
 import { utils, Contract, BigNumber } from 'ethers'
 import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString } from '../../utils/bnDisplay';
 import { deltaCountdown } from '../../utils/timeDisplay';
-import {useContractFunction} from '@usedapp/core';
+import {useCall, useContractFunction} from '@usedapp/core';
+import {ADDRESS_OBR}  from "../../constants/addresses";
 const { formatEther, parseEther, Interface } = utils;
 
 export default function ManagePoolV1({account,library,pool,currentEpoch,accountInfo, poolInfo, poolTokenBalance, czfBal,czusdBal,czfPrice,czusdPrice, isExpired, isLaunching, isActive}) {
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const [outputEther,setOutputEther] = useState(0);
+
+  const [style,setStyle] = useState();
+  const [scene,setScene] = useState();
+  const [imageUrl,setImageUrl] = useState();
 
   //TODO: Move prices for all assets to a react state management system to centrally store prices
   const coingeckoRewardPrice = useCoingeckoTokenPrice(pool.rewardAddress, 'usd','binance-smart-chain');
@@ -43,7 +50,16 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
     }
     setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked),4,2));
   },[!poolInfo?.rewardPerSecond, !poolTokenBalance?.tokenBal, coingeckoRewardPrice])
-  //TODO: Timing stuff
+  
+  useEffect(()=>{
+    if(!accountInfo?.slottedObr || accountInfo.slottedObr.eq(0)) return;
+    (async ()=>{
+      const metadata = await getIpfsJson(`ipfs://QmYeWi4DVNiGatPsVf4zNFebgM3NnhkMvAMzaiaXj85sCo/obr-dat/${accountInfo.slottedObr}.json`);
+      setStyle(metadata?.attributes?.[0]?.value);
+      setScene(metadata?.attributes?.[1]?.value);
+      !!metadata?.image && setImageUrl(getIpfsUrl(metadata?.image));
+    })();
+  },[accountInfo?.slottedObr])
 
   return(<>
   <CollapsibleCard className="mb-3" 
@@ -85,15 +101,29 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
         <span className='is-size-6'>{weiToShortString(accountInfo?.pendingReward ?? 0,1)}</span>
       </CollapsibleCardTitleItem>
       {isActive && (
-        <CollapsibleCardTitleItem title="END TIME" width="4em">
+        <CollapsibleCardTitleItem title="END TIME" width="9em">
           <span className='is-size-6'>{deltaCountdown(currentEpoch,poolInfo?.timestampEnd)}</span>
         </CollapsibleCardTitleItem>
       )}
       {isLaunching && (
-        <CollapsibleCardTitleItem title="START TIME" width="4em">
+        <CollapsibleCardTitleItem title="START TIME" width="9em">
           <span className='is-size-6'>{deltaCountdown(currentEpoch,poolInfo?.timestampStart)}</span>
         </CollapsibleCardTitleItem>
       )}
+      {!isExpired && pool.has1Bad0TaxSlot && (
+        <div className='is-inline-block has-text-weight-light is-size-7 m-0 has-text-centered has-background-primary-dark' style={{border:"solid 1px grey",borderRadius:"4px",boxShadow: "inset 1px 2px 5px rgba(0,0,0,0.5)",position:"relative",width:"3.7em",height:"3.7em",overflow:"hidden"}}>
+        {!!accountInfo?.slottedObr && accountInfo?.slottedObr.gt(0) ? (<>
+          <img style={{width:"100%"}} src={imageUrl} />
+        </>) : (<>
+          <div className='m-0 p-1'>
+            +1BAD<br/>
+            0TAX
+            </div>
+        </>) }
+        
+      </div>
+      )}
+      
     </div>)}>
     {!account ? (<>
       <ConnectOrLearn />
