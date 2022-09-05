@@ -112,7 +112,7 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
         </CollapsibleCardTitleItem>
       )}
       {!isExpired && pool.has1Bad0TaxSlot && (
-        <a target="_blank" href="https://bad.rabbitcatch.com" >
+        <a target="_blank" href="https://bad.rabbitcatch.com" className='has-text-white' >
           <div className='is-inline-block has-text-weight-light is-size-7 m-0 has-text-centered has-background-primary-dark' style={{border:"solid 1px grey",borderRadius:"4px",boxShadow: "inset 1px 2px 5px rgba(0,0,0,0.5)",position:"relative",width:"3.7em",height:"3.7em",overflow:"hidden"}}>
           {!!accountInfo?.slottedObr && accountInfo?.slottedObr.gt(0) ? (<>
               <img style={{width:"100%"}} src={imageUrl} />
