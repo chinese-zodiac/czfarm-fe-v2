@@ -1,5 +1,6 @@
 
 import React, {useEffect, useState} from 'react';
+import Link from 'next/link';
 import { useCoingeckoTokenPrice } from '@usedapp/coingecko'
 import InputTokenEther from '../InputTokenEther';
 import ConnectOrLearn from '../ConnectOrLearn';
@@ -86,7 +87,7 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
         <span className='is-size-6'>${weiToShortString(weiToUsdWeiVal(poolTokenBalance.tokenBal ?? 0,pool.baseAssetName == "CZF" ? czfPrice : czusdPrice),1)}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="FEE" width="4em">
-        <span className='is-size-6'>{pool.feeBasis ? `${(pool.feeBasis/100).toFixed(2)}%` : "N/A"}</span>
+        <span className='is-size-6' style={(accountInfo?.slottedObr && accountInfo?.slottedObr?.gt(0)) ? {textDecoration:"line-through"} : {}}>{pool.feeBasis ? `${(pool.feeBasis/100).toFixed(2)}%` : "N/A"}</span>
       </CollapsibleCardTitleItem>
       <CollapsibleCardTitleItem title="DUTY" width="4em">
         <span className='is-size-6'>{pool.duty ?? "N/A"}</span>
@@ -111,17 +112,19 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
         </CollapsibleCardTitleItem>
       )}
       {!isExpired && pool.has1Bad0TaxSlot && (
-        <div className='is-inline-block has-text-weight-light is-size-7 m-0 has-text-centered has-background-primary-dark' style={{border:"solid 1px grey",borderRadius:"4px",boxShadow: "inset 1px 2px 5px rgba(0,0,0,0.5)",position:"relative",width:"3.7em",height:"3.7em",overflow:"hidden"}}>
-        {!!accountInfo?.slottedObr && accountInfo?.slottedObr.gt(0) ? (<>
-          <img style={{width:"100%"}} src={imageUrl} />
-        </>) : (<>
-          <div className='m-0 p-1'>
-            +1BAD<br/>
-            0TAX
-            </div>
-        </>) }
-        
-      </div>
+        <a target="_blank" href="https://bad.rabbitcatch.com" >
+          <div className='is-inline-block has-text-weight-light is-size-7 m-0 has-text-centered has-background-primary-dark' style={{border:"solid 1px grey",borderRadius:"4px",boxShadow: "inset 1px 2px 5px rgba(0,0,0,0.5)",position:"relative",width:"3.7em",height:"3.7em",overflow:"hidden"}}>
+          {!!accountInfo?.slottedObr && accountInfo?.slottedObr.gt(0) ? (<>
+              <img style={{width:"100%"}} src={imageUrl} />
+            </>) : (<>
+              <div className='m-0 p-1'>
+                +1BAD<br/>
+                0TAX
+              </div>
+            </>) }
+          
+          </div>
+        </a>
       )}
       
     </div>)}>
