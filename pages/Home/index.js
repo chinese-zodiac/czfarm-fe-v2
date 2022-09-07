@@ -185,7 +185,7 @@ function Home() {
           if(!!poolInfo?.timestampStart && !!poolInfo?.timestampEnd && !!currentEpoch &&
             poolInfo.timestampStart.lte(currentEpoch) && poolInfo.timestampEnd.gte(currentEpoch)) {
               return (<ManagePoolV1 key={pool.address} 
-                {...{account,library,currentEpoch,pool,czfBal,czusdBal,czfPrice,czusdPrice}}
+                {...{currentEpoch,pool,czfBal,czusdBal,czfPrice,czusdPrice}}
                 accountInfo={poolsV1AccountInfo?.[index]}
                 poolInfo={poolInfo}
                 poolTokenBalance={poolsV1TokenBalance?.[index]}

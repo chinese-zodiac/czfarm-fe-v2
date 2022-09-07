@@ -1,5 +1,6 @@
 
 import React, {useEffect, useState} from 'react';
+import { useEthers } from '@usedapp/core';
 import Link from 'next/link';
 import { useCoingeckoTokenPrice } from '@usedapp/coingecko'
 import InputTokenEther from '../InputTokenEther';
@@ -19,7 +20,9 @@ import {useCall, useContractFunction} from '@usedapp/core';
 import {ADDRESS_OBR}  from "../../constants/addresses";
 const { formatEther, parseEther, Interface } = utils;
 
-export default function ManagePoolV1({account,library,pool,currentEpoch,accountInfo, poolInfo, poolTokenBalance, czfBal,czusdBal,czfPrice,czusdPrice, isExpired, isLaunching, isActive}) {
+export default function ManagePoolV1({pool,currentEpoch,accountInfo, poolInfo, poolTokenBalance, czfBal,czusdBal,czfPrice,czusdPrice, isExpired, isLaunching, isActive}) {
+  const {account,library,chainId} = useEthers();
+
   const [apr,setApr] = useState(0);
   const [inputEther,setInputEther] = useState(0);
   const [outputEther,setOutputEther] = useState(0);
@@ -31,11 +34,13 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
   //TODO: Move prices for all assets to a react state management system to centrally store prices
   const coingeckoRewardPrice = useCoingeckoTokenPrice(pool.rewardAddress, 'usd','binance-smart-chain');
 
+  const PoolContract = new Contract(pool.address,czFarmPoolAbi,library);
+
   const { state:stateWithdraw, send:sendWithdraw } = useContractFunction(
-  new Contract(pool.address,czFarmPoolAbi,library),
+  PoolContract,
   'withdraw');
   const { state:stateDeposit, send:sendDeposit } = useContractFunction(
-  new Contract(pool.address,czFarmPoolAbi,library),
+  PoolContract,
   'deposit');
 
   useEffect(()=>{
@@ -52,9 +57,7 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
     setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked),4,2));
   },[!poolInfo?.rewardPerSecond, !poolTokenBalance?.tokenBal, coingeckoRewardPrice])
   
-  useEffect(()=>{
-    if(pool?.address=="0x6615f3B9FE17fa63F35817cfD669224BA3d00b12") console.log(accountInfo?.slottedObr);
-    
+  /*useEffect(()=>{    
     if(!accountInfo?.slottedObr || accountInfo.slottedObr.eq(0)) return;
     (async ()=>{
       const metadata = await getIpfsJson(`ipfs://QmYeWi4DVNiGatPsVf4zNFebgM3NnhkMvAMzaiaXj85sCo/obr-dat/${accountInfo.slottedObr.toString()}.json`);
@@ -62,7 +65,7 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
       setScene(metadata?.attributes?.[1]?.value);
       !!metadata?.image && setImageUrl(getIpfsUrl(metadata?.image));
     })();
-  },[accountInfo?.slottedObr])
+  },[accountInfo?.slottedObr])*/
 
   return(<>
   <CollapsibleCard className="mb-3" 

@@ -44,10 +44,6 @@ function usePoolsV1AccountInfo(provider,account) {
       resultGetSlottedObr = iter;
       iter++;
     }
-    if(pool?.address=="0x6615f3B9FE17fa63F35817cfD669224BA3d00b12") {
-      console.log(results);
-      console.log(results?.[resultGetSlottedObr]?.value?.[0]);
-    }
     return {
       address:pool.address,
       amount:results?.[resultIndexUserInfo]?.value?.[0],
