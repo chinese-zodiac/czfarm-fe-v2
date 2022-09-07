@@ -53,9 +53,11 @@ export default function ManagePoolV1({account,library,pool,currentEpoch,accountI
   },[!poolInfo?.rewardPerSecond, !poolTokenBalance?.tokenBal, coingeckoRewardPrice])
   
   useEffect(()=>{
+    if(pool?.address=="0x6615f3B9FE17fa63F35817cfD669224BA3d00b12") console.log(accountInfo?.slottedObr);
+    
     if(!accountInfo?.slottedObr || accountInfo.slottedObr.eq(0)) return;
     (async ()=>{
-      const metadata = await getIpfsJson(`ipfs://QmYeWi4DVNiGatPsVf4zNFebgM3NnhkMvAMzaiaXj85sCo/obr-dat/${accountInfo.slottedObr}.json`);
+      const metadata = await getIpfsJson(`ipfs://QmYeWi4DVNiGatPsVf4zNFebgM3NnhkMvAMzaiaXj85sCo/obr-dat/${accountInfo.slottedObr.toString()}.json`);
       setStyle(metadata?.attributes?.[0]?.value);
       setScene(metadata?.attributes?.[1]?.value);
       !!metadata?.image && setImageUrl(getIpfsUrl(metadata?.image));
