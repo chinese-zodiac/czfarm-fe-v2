@@ -57,7 +57,7 @@ export default function ManagePoolV1({pool,currentEpoch,accountInfo, poolInfo, p
     setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked),4,2));
   },[!poolInfo?.rewardPerSecond, !poolTokenBalance?.tokenBal, coingeckoRewardPrice])
   
-  /*useEffect(()=>{    
+  useEffect(()=>{    
     if(!accountInfo?.slottedObr || accountInfo.slottedObr.eq(0)) return;
     (async ()=>{
       const metadata = await getIpfsJson(`ipfs://QmYeWi4DVNiGatPsVf4zNFebgM3NnhkMvAMzaiaXj85sCo/obr-dat/${accountInfo.slottedObr.toString()}.json`);
@@ -65,7 +65,7 @@ export default function ManagePoolV1({pool,currentEpoch,accountInfo, poolInfo, p
       setScene(metadata?.attributes?.[1]?.value);
       !!metadata?.image && setImageUrl(getIpfsUrl(metadata?.image));
     })();
-  },[accountInfo?.slottedObr])*/
+  },[accountInfo?.slottedObr])
 
   return(<>
   <CollapsibleCard className="mb-3" 
