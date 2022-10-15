@@ -1,7 +1,7 @@
 {
   "name": "czfarm-fe-v2",
   "version": "1.0.0",
-  "homepage": ".",
+  "homepage": "./",
   "description": "Earn the best BSC tokens with stablecoin yield and defi high yield farms and pools.",
   "license": "GPL-3.0",
   "scripts": {
