@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useEthers } from '@usedapp/core';
 import Link from 'next/link';
+import fetchRetry from '../../utils/fetchRetry';
 import { useCoingeckoTokenPrice } from '@usedapp/coingecko'
 import InputTokenEther from '../InputTokenEther';
 import ConnectOrLearn from '../ConnectOrLearn';
@@ -18,7 +19,7 @@ import { utils, Contract, BigNumber } from 'ethers'
 import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString } from '../../utils/bnDisplay';
 import { deltaCountdown } from '../../utils/timeDisplay';
 import { useCall, useContractFunction } from '@usedapp/core';
-import { ADDRESS_OBR } from "../../constants/addresses";
+import { ADDRESS_OBR, ADDRESS_CZUSD } from "../../constants/addresses";
 const { formatEther, parseEther, Interface } = utils;
 
 export default function ManageTribePool({ pool, rewardAddress, accountInfo, poolInfo, czfBal, czfPrice }) {
@@ -54,16 +55,35 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
       return;
     }
     const usdStaked = weiToUsdWeiVal(poolInfo.totalStaked, czfPrice);
-    console.log("rewardAddress", rewardAddress)
-    console.log("coingeckoRewardPrice", coingeckoRewardPrice);
-    console.log("usdStaked", usdStaked);
-    const usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), coingeckoRewardPrice);
-    if (usdStaked.lte(0)) {
-      setApr("0.00");
-      return;
+    if (!!coingeckoRewardPrice) {
+      const usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), coingeckoRewardPrice);
+      if (usdStaked.lte(0)) {
+        setApr("0.00");
+        return;
+      }
+      setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
+    } else {
+      //coingecko broken, backup is dexscreener
+      (async () => {
+        const result = await fetchRetry(
+          `https://api.dexscreener.com/latest/dex/tokens/${rewardAddress}`
+        );
+        try {
+          const item = await result.json();
+          const dexscreenerCzusdPair = item.pairs.find((pair) => pair.quoteToken.name == "CZUSD");
+          const priceUsd = dexscreenerCzusdPair.priceUsd;
+          const usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), priceUsd);
+          if (usdStaked.lte(0) || usdPerYear.lte(0)) {
+            return;
+          }
+          setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
+        }
+        catch {
+          console.log("Failed to fetch dexcreener price info");
+        }
+      })();
     }
-    setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
-  }, [!poolInfo?.totalStaked, !poolInfo?.rewardPerSecond, coingeckoRewardPrice])
+  }, [!poolInfo?.totalStaked, !poolInfo?.rewardPerSecond, coingeckoRewardPrice]);
 
   useEffect(() => {
     if (!accountInfo?.slottedObr || accountInfo.slottedObr.eq(0)) return;
