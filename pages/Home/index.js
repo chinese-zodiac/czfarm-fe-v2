@@ -43,7 +43,7 @@ const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
   const { account, library, chainId } = useEthers();
-  const { czfPrice, czusdPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei } = useContext(CZFarmContext);
+  const { czfPrice, czusdPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei } = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
@@ -110,7 +110,7 @@ function Home() {
     <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{ minHeight: "100vh" }}>
 
       <WalletStatsBar {...{
-        czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, lpInfos, currentEpoch,
+        czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
         chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei
       }} />
 
@@ -257,7 +257,7 @@ function Home() {
           />)
         })}
         <p className="has-text-right pr-2">Your Tribe Pools Staked: ${weiToShortString(tribePoolAccountStakeWei, 2)}</p>
-        <p className="has-text-right pr-2">Tribe Pools TVL: UNDER CONSTRUCTION</p>
+        <p className="has-text-right pr-2">Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}</p>
       </CollapsibleCard>
 
     </main>

@@ -8,6 +8,17 @@ export const TRIBE_POOLS = [
         rewardAssetName: "LSDT",
         rewardAddress: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
         rewardDecimals: 18,
+        lp: "0x1A067fFcE2aE6Ae395d6508891CAE339639F1c0A",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
+                symbol: "LSDT"
+            }
+        ],
         logo: "./images/tokens/LSDT.png",
         feeBasis: 1498
     },
@@ -18,6 +29,17 @@ export const TRIBE_POOLS = [
         rewardAssetName: "LSDT",
         rewardAddress: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
         rewardDecimals: 18,
+        lp: "0x1A067fFcE2aE6Ae395d6508891CAE339639F1c0A",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
+                symbol: "LSDT"
+            }
+        ],
         logo: "./images/tokens/LSDT.png",
         feeBasis: 998,
         duty: "50 LRT"
@@ -29,6 +51,17 @@ export const TRIBE_POOLS = [
         rewardAssetName: "DGOD",
         rewardAddress: "0x99F4cc2BAE97F82A823CA80DcAe52EF972B7F270",
         rewardDecimals: 18,
+        lp: "0xC0B4dCC1d249D177a43bdAA13649f9b2830744A7",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0x99F4cc2BAE97F82A823CA80DcAe52EF972B7F270",
+                symbol: "DGOD"
+            }
+        ],
         logo: "./images/tokens/DGOD.png",
         feeBasis: 1498
     },
@@ -39,6 +72,17 @@ export const TRIBE_POOLS = [
         rewardAssetName: "DGOD",
         rewardAddress: "0x99F4cc2BAE97F82A823CA80DcAe52EF972B7F270",
         rewardDecimals: 18,
+        lp: "0xC0B4dCC1d249D177a43bdAA13649f9b2830744A7",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0x99F4cc2BAE97F82A823CA80DcAe52EF972B7F270",
+                symbol: "DGOD"
+            }
+        ],
         logo: "./images/tokens/DGOD.png",
         feeBasis: 998,
         duty: "50 LRT"
@@ -50,6 +94,17 @@ export const TRIBE_POOLS = [
         rewardAssetName: "GEM",
         rewardAddress: "0x701F1ed50Aa5e784B8Fb89d1Ba05cCCd627839a7",
         rewardDecimals: 18,
+        lp: "0x9321907037fa062b52b3f564b3350Adf935Bf698",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0x701F1ed50Aa5e784B8Fb89d1Ba05cCCd627839a7",
+                symbol: "GEM"
+            }
+        ],
         logo: "./images/tokens/GEM.png",
         feeBasis: 1498
     },
@@ -60,6 +115,17 @@ export const TRIBE_POOLS = [
         rewardAssetName: "GEM",
         rewardAddress: "0x701F1ed50Aa5e784B8Fb89d1Ba05cCCd627839a7",
         rewardDecimals: 18,
+        lp: "0x9321907037fa062b52b3f564b3350Adf935Bf698",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0x701F1ed50Aa5e784B8Fb89d1Ba05cCCd627839a7",
+                symbol: "GEM"
+            }
+        ],
         logo: "./images/tokens/GEM.png",
         feeBasis: 998,
         duty: "50 LRT"
