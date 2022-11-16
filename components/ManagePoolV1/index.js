@@ -49,12 +49,27 @@ export default function ManagePoolV1({ pool, rewardAddress, currentEpoch, accoun
       return;
     }
     const usdStaked = weiToUsdWeiVal(poolTokenBalance.tokenBal, pool.baseAssetName == "CZF" ? czfPrice : czusdPrice);
-    const usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), coingeckoRewardPrice);
-    if (usdStaked.lte(0)) {
-      setApr("0.00");
-      return;
+    let rewardPrice = coingeckoRewardPrice;
+    if (!rewardPrice) {
+      //coingecko didnt work, check if we can use czf or czusd
+      console.log("pool.rewardAssetName", pool.rewardAssetName)
+      if (pool.rewardAssetName == "CZF") {
+        rewardPrice = czfPrice;
+      } else if (pool.rewardAssetName == "CZUSD") {
+        rewardPrice = czusdPrice;
+      }
     }
-    setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
+    console.log("rp2", rewardPrice);
+    if (!rewardPrice) {
+      //TODO: still no reward price, check dexcreener.
+    } else {
+      const usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), rewardPrice);
+      if (usdStaked.lte(0)) {
+        setApr("0.00");
+        return;
+      }
+      setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
+    }
   }, [!poolInfo?.rewardPerSecond, !poolTokenBalance?.tokenBal, coingeckoRewardPrice])
 
   useEffect(() => {
