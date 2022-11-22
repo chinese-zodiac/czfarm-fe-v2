@@ -164,6 +164,5 @@ export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, pools
       }
     });
   } catch (e) { }
-  console.log("dailyTokensList", dailyTokensList)
   return dailyTokensList;
 }

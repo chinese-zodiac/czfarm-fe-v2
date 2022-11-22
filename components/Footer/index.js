@@ -65,7 +65,7 @@ function Footer() {
         </small>
       </p>
     </div>
-    <p className='is-size-7 p-5'>v0.0.2001a(experimental)</p>
+    <p className='is-size-7 p-5'>v0.0.2002a(experimental)</p>
   </footer>);
 }
 

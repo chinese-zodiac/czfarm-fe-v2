@@ -14,12 +14,13 @@ import { dexAddLink } from '../../utils/dexBuyLink';
 import { getIpfsJson, getIpfsUrl } from '../../utils/getIpfsJson';
 import tribePoolAbi from "../../abi/TribePool.json";
 import tribePoolStakeWrapperTokenAbi from "../../abi/TribePoolStakeWrapperToken.json";
+import tribePoolRescueCzfTokenAbi from "../../abi/TribePoolRescueCzf.json";
 import IERC721EnumerableAbi from "../../abi/IERC721Enumerable.json";
 import { utils, Contract, BigNumber } from 'ethers'
 import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString } from '../../utils/bnDisplay';
 import { deltaCountdown } from '../../utils/timeDisplay';
 import { useCall, useContractFunction } from '@usedapp/core';
-import { ADDRESS_OBR, ADDRESS_CZUSD } from "../../constants/addresses";
+import { ADDRESS_OBR, ADDRESS_CZUSD, ADDRESS_TRIBEPOOLRESCUECZF } from "../../constants/addresses";
 const { formatEther, parseEther, Interface } = utils;
 
 export default function ManageTribePool({ pool, rewardAddress, accountInfo, poolInfo, czfBal, czfPrice }) {
@@ -38,6 +39,7 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
 
   const PoolWrapperContract = new Contract(pool.wrapperAddress, tribePoolStakeWrapperTokenAbi, library);
   const PoolContract = new Contract(pool.address, tribePoolAbi, library);
+  const TribePoolRescueCzfContract = new Contract(ADDRESS_TRIBEPOOLRESCUECZF, tribePoolRescueCzfTokenAbi, library);
 
   const { state: stateWithdrawTo, send: sendWithdrawTo } = useContractFunction(
     PoolWrapperContract,
@@ -48,6 +50,15 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
   const { state: stateClaim, send: sendClaim } = useContractFunction(
     PoolContract,
     'claim');
+  const { state: stateRescue, send: sendRescue } = useContractFunction(
+    TribePoolRescueCzfContract,
+    'rescue');
+
+  const { value: accountWrapperIsRescuedValue, error: accountWrapperIsRescuedErr } = useCall(account && {
+    contract: TribePoolRescueCzfContract,
+    method: 'accountWrapperIsRescued',
+    args: [account, pool.wrapperAddress]
+  }) ?? {}
 
   useEffect(() => {
     if (!poolInfo?.totalStaked || !poolInfo?.rewardPerSecond) {
@@ -114,10 +125,10 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
           <span className='is-size-6'>{pool.rewardAssetName}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="APR" width="4.5em">
-          <span className='is-size-6'>{(apr)}%</span>
+          <span className='is-size-6'>-{/*{(apr)}%*/}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="TVL" width="4.5em">
-          <span className='is-size-6'>${weiToShortString(weiToUsdWeiVal(poolInfo?.totalStaked ?? 0, czfPrice), 1)}</span>
+          <span className='is-size-6'>-{/*${weiToShortString(weiToUsdWeiVal(poolInfo?.totalStaked ?? 0, czfPrice), 1)}*/}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="FEE" width="4em">
           <span className='is-size-6' style={(accountInfo?.slottedObr && accountInfo?.slottedObr?.gt(0)) ? { textDecoration: "line-through" } : {}}>{pool.feeBasis ? `${(pool.feeBasis / 100).toFixed(2)}%` : "N/A"}</span>
@@ -126,10 +137,10 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
           <span className='is-size-6'>{pool.duty ?? "N/A"}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="STAKE" width="4em">
-          <span className='is-size-6'>{weiToShortString(accountInfo?.stakedBal ?? 0, 1)}</span>
+          <span className='is-size-6'>{accountWrapperIsRescuedValue?.[0] ? "0" : weiToShortString(accountInfo?.stakedBal ?? 0, 1)}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title={`${pool.rewardAssetName}/DAY`} width="4.5em">
-          <span className='is-size-6'>{(!!poolInfo?.totalStaked && poolInfo.totalStaked.gt(0)) ? weiToShortString(poolInfo?.rewardPerSecond?.mul(86400).mul(accountInfo?.stakedBal ?? 0).div(poolInfo?.totalStaked ?? 1), 2) : "N/A"}</span>
+          <span className='is-size-6'>-{/*{(!!poolInfo?.totalStaked && poolInfo.totalStaked.gt(0)) ? weiToShortString(poolInfo?.rewardPerSecond?.mul(86400).mul(accountInfo?.stakedBal ?? 0).div(poolInfo?.totalStaked ?? 1), 2) : "N/A"}*/}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
           <span className='is-size-6'>{weiToShortString(accountInfo?.pendingReward ?? 0, 1)}</span>
@@ -153,7 +164,16 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
         <ConnectOrLearn />
       </>) : (<>
         <p>{pool.subtitle}</p>
-        <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
+        {(!accountWrapperIsRescuedValue?.[0] && !!account && !!accountInfo?.stakedBal?.gt(0)) ? (<>
+          <h3 className="is-size-4">Rescue your CZF.</h3>
+          <p>Your stake will be removed and CZF transferred to your wallet. No fees or claims.</p>
+          <p>Click the button and approve the transaction to Rescue your CZF.</p>
+          <button onClick={() => sendRescue(pool.wrapperAddress)} className='button has-background-primary'>Rescue CZF</button>
+        </>) : (<>
+          <h3 className="is-size-4">You have no CZF to rescue.</h3>
+          <p>Tribe pools will be relaunched shortly.</p>
+        </>)}
+        {/*<div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
           <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
             <h3 className="is-size-4">Stake CZF</h3>
             <p>Stake CZF and get {pool.rewardAssetName} every second. {pool.subtitle ?? "There are no restrictions or fees."} </p>
@@ -190,7 +210,7 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
             <button onClick={() => sendClaim()} className='button has-background-grey-lighter is-fullwidth'>Harvest</button>
             <p>You will get {weiToShortString(accountInfo?.pendingReward ?? 0, 3)} {pool.rewardAssetName}.</p>
           </div>
-        </div>
+        </div>*/}
       </>)}
     </CollapsibleCard>
 
