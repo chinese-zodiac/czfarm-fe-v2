@@ -15,6 +15,8 @@ import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
 import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import usePoolsV1Info from '../../hooks/usePoolsV1Info';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
+import useBurnPoolInfo from '../../hooks/useBurnPoolInfo';
+import useBurnPoolAccountInfo from '../../hooks/useBurnPoolAccountInfo';
 import useTribePoolInfo from '../../hooks/useTribePoolInfo';
 import useTribePoolAccountInfo from '../../hooks/useTribePoolAccountInfo';
 import useAccountLpBals from '../../hooks/useAccountLpBals';
@@ -26,7 +28,7 @@ import { EXOTIC_FARMS } from "../../constants/exoticFarms";
 import { FARM_V2 } from "../../constants/famsv2";
 import { POOLS_V1 } from "../../constants/poolsv1";
 import { LINK_TELEGRAM, LINK_OBR } from "../../constants/links";
-import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_MASTERROUTER } from '../../constants/addresses';
+import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_CZR, ADDRESS_MASTERROUTER } from '../../constants/addresses';
 import WalletStatsBar from '../../components/WalletStatsBar';
 import styles from "./index.module.scss";
 import CollapsibleCard from '../../components/CollapsibleCard';
@@ -38,15 +40,18 @@ import ManageExoticFarm from '../../components/ManageExoticFarm';
 import ManageFarmV2 from '../../components/ManageFarmV2';
 import ManagePoolV1 from '../../components/ManagePoolV1';
 import ManageTribePool from '../../components/ManageTribePool';
+import ManageBurnPool from '../../components/ManageBurnPool';
 import { TRIBE_POOLS } from '../../constants/tribepools';
+import { BURN_POOLS } from '../../constants/burnpools';
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
   const { account, library, chainId } = useEthers();
-  const { czfPrice, czusdPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei } = useContext(CZFarmContext);
+  const { czfPrice, czusdPrice, czrPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei } = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
+  const czrBal = useTokenBalance(ADDRESS_CZR, account);
   const czusdBal = useTokenBalance(ADDRESS_CZUSD, account);
 
   const v2FarmsSettings = useV2FarmsSettings(library);
@@ -61,6 +66,8 @@ function Home() {
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library, account);
   const tribePoolInfo = useTribePoolInfo(library);
   const tribePoolAccountInfo = useTribePoolAccountInfo(library, account);
+  const burnPoolInfo = useBurnPoolInfo(library);
+  const burnPoolAccountInfo = useBurnPoolAccountInfo(library, account);
   const accountLpBals = useAccountLpBals(library, account);
 
   const [chronoAccountStakeWei, setChronoAccountStakeWei] = useState(BigNumber.from(0));
@@ -110,13 +117,68 @@ function Home() {
     <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{ minHeight: "100vh" }}>
 
       <WalletStatsBar {...{
-        czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
+        czfPrice, czrPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
         chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei
       }} />
 
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/x.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Burn Pools<br />
+          <span className='is-size-6' >Burn CZF or CZUSD, Get CZRed every second.</span>
+        </p>
+      </div>
+      )}>
+        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>ACTIVE</h4>
+        {BURN_POOLS.map((pool, index) => {
+          const poolInfo = burnPoolInfo?.[index];
+          if (!!poolInfo?.timestampStart && !!poolInfo?.timestampEnd && !!currentEpoch &&
+            poolInfo.timestampStart.lte(currentEpoch) && poolInfo.timestampEnd.gte(currentEpoch)) {
+            return (<ManageBurnPool key={pool.address}
+              {...{ currentEpoch, pool, czfBal, czusdBal, czfPrice, czusdPrice, czrPrice }}
+              accountInfo={burnPoolAccountInfo?.[index]}
+              poolInfo={poolInfo}
+              isActive
+            />)
+          }
+        })}
+        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>LAUNCHING</h4>
+        {BURN_POOLS.map((pool, index) => {
+          const poolInfo = burnPoolInfo?.[index];
+          if (!!poolInfo?.timestampStart && !!poolInfo?.timestampEnd && !!currentEpoch &&
+            poolInfo.timestampStart.gte(currentEpoch)) {
+            return (<ManageBurnPool key={pool.address}
+              {...{ currentEpoch, pool, czfBal, czusdBal, czfPrice, czusdPrice, czrPrice }}
+              accountInfo={burnPoolAccountInfo?.[index]}
+              poolInfo={poolInfo}
+              isLaunching
+            />)
+          }
+        })}
+        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>EXPIRED</h4>
+        {BURN_POOLS.map((pool, index) => {
+          const poolInfo = burnPoolInfo?.[index];
+          if (!!poolInfo?.timestampStart && !!poolInfo?.timestampEnd && !!currentEpoch &&
+            poolInfo.timestampEnd.lte(currentEpoch)) {
+            return (<ManageBurnPool key={pool.address}
+              {...{ currentEpoch, pool, czfBal, czusdBal, czfPrice, czusdPrice, czrPrice }}
+              accountInfo={burnPoolAccountInfo?.[index]}
+              poolInfo={poolInfo}
+              isExpired
+            />)
+          }
+        })}
+        <p className="has-text-right pr-2">Your Burn Pools Boost Adjusted Staked: (TBD){/* weiToShortString(poolsV1AccountStakeWei, 2) */}</p >
+        <p className="has-text-right pr-2">Burn Pools Boost Adjusted TVL: (TBD){/*weiToShortString(poolsV1TvlWei, 2)*/}</p>
+      </CollapsibleCard>
+
+      <hr />
+
+      <h2 style={{ color: "#888", fontSize: "3em", borderTop: "solid 4px" }} className="mt-5 pt-2">LEGACY</h2>
+      <subtitle style={{ color: "#888" }}>Deprecated defi tools for CZF</subtitle>
+
       <CollapsibleCard className={"mt-5 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Chrono.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
-        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Chrono Pools<br />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZF Chrono Pools<br />
           <span className='is-size-6' >Burn CZF, Get CZF every second.</span>
         </p>
       </div>)}>
@@ -134,7 +196,7 @@ function Home() {
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Exotic.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
-        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Exotic Farms<br />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZF Exotic Farms<br />
           <span className='is-size-6' >Give LP to CZodiac Treasury, Get CZF every second.</span>
         </p>
       </div>
@@ -240,7 +302,7 @@ function Home() {
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Tribe.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
-        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Tribe Pools<br />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZF Tribe Pools<br />
           <span className='is-size-6' >Stake CZF, Get fairtribe tokens every second.</span>
         </p>
       </div>

@@ -56,9 +56,8 @@ export function toShortString(bn, decimals) {
 }
 
 export function weiTolpCzusdPricedWeiVal(lpInfos, tokenName, tokenWad, czusdPrice) {
-    //TODO: Handle when lp is czusd pair
     let lpAddr = PRICING_LP[tokenName];
     let tokens = lpInfos?.[lpAddr]?.tokens;
-    if (!tokens?.[1]) return weiToUsdWeiVal(0, czfPrice);
+    if (!tokens?.[1]) return weiToUsdWeiVal(0, czusdPrice);
     return weiToUsdWeiVal(tokenWad?.mul(tokens?.[0] ?? 0).div(tokens?.[1]), czusdPrice);
 }

@@ -1,4 +1,4 @@
-
+import React, { createContext, useState, useEffect } from 'react';
 import { useCoingeckoPrice } from '@usedapp/coingecko';
 import { useEthers, useEtherBalance } from "@usedapp/core";
 import Footer from '../components/Footer';
@@ -9,8 +9,10 @@ import usePoolsV1TokenBalance from '../hooks/usePoolsV1TokenBalance';
 import useLpInfo from '../hooks/useLpInfo'
 import useChronoVestingsTotalVesting from '../hooks/useChronoVestingsTotalVesting';
 import useTribePoolInfo from '../hooks/useTribePoolInfo';
-
-import { createContext, useState } from 'react';
+import { PRICING_LP } from "../constants/pricingLp";
+import { weiTolpCzusdPricedWeiVal } from '../utils/bnDisplay';
+import { BigNumber, utils } from 'ethers';
+const { parseEther, formatEther } = utils;
 
 const CZFarmContext = createContext(0);
 
@@ -18,7 +20,6 @@ export const CZFarmProvider = ({ children }) => {
   const czusdPrice = useCoingeckoPrice("czusd");
   const czfPrice = useCoingeckoPrice("czfarm");
   const bnbPrice = useCoingeckoPrice("binancecoin");
-  const deapPrice = useCoingeckoPrice("deapcoin");
   const { library } = useEthers();
 
 
@@ -28,6 +29,8 @@ export const CZFarmProvider = ({ children }) => {
   const v2FarmsLpBal = useV2FarmsLpBal(library);
   const lpInfos = useLpInfo(library);
 
+  const [czrPrice, setCzrPrice] = useState(BigNumber.from(0));
+
   const {
     chronoTvlWei,
     exoticTvlWei,
@@ -36,9 +39,13 @@ export const CZFarmProvider = ({ children }) => {
     tribePoolsTvlWei
   } = useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo);
 
+  useEffect(() => {
+    setCzrPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZR", parseEther("1"), czusdPrice)));
+  }, [lpInfos?.[PRICING_LP.CZR]?.tokens?.[0]])
+
   return (
     <CZFarmContext.Provider value={{
-      czusdPrice, czfPrice, bnbPrice, deapPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei,
+      czusdPrice, czfPrice, bnbPrice, czrPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei,
       //React doesnt know how to properly check if bignumbers have changed, so use these to trigger refreshes
       updateCheckerViaStringChronoTvlWei: chronoTvlWei?.toString(),
       updateCheckerViaStringExoticTvlWei: exoticTvlWei?.toString(),

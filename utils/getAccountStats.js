@@ -87,7 +87,7 @@ export const getTokensHarvestable = (poolsV1AccountInfo, tribePoolAccountInfo) =
       }
 
     });
-    tribePoolAccountInfo.forEach((pool, index) => {
+    /*tribePoolAccountInfo.forEach((pool, index) => {
       if (TRIBE_POOLS?.[index].rewardAssetName == "CZF") return; //dont need CZF
       const tokenIndex = tokensHarvestableList.findIndex((elem) => elem.name == TRIBE_POOLS?.[index].rewardAssetName);
       const tokenHarvestable = pool?.pendingReward ?? BigNumber.from(0);
@@ -107,7 +107,7 @@ export const getTokensHarvestable = (poolsV1AccountInfo, tribePoolAccountInfo) =
         tokensHarvestableList[tokenIndex].tokenHarvestable = tokensHarvestableList[tokenIndex].tokenHarvestable.add(tokenHarvestable);
       }
 
-    });
+    });*/
   } catch (e) { }
   return tokensHarvestableList;
 }
@@ -140,7 +140,7 @@ export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, pools
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
     });
-    tribePoolAccountInfo.forEach((pool, index) => {
+    /*tribePoolAccountInfo.forEach((pool, index) => {
       if (TRIBE_POOLS?.[index].rewardAssetName == "CZF") return; //dont need CZF
       const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == TRIBE_POOLS?.[index].rewardAssetName);
       const poolInfo = tribePoolInfo?.[index];
@@ -162,7 +162,7 @@ export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, pools
       } else {
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
-    });
+    });*/
   } catch (e) { }
   return dailyTokensList;
 }

@@ -15,7 +15,7 @@ import { toShortString, weiToShortString } from '../../utils/bnDisplay';
 
 export default function Header() {
   const { account, library, chainId } = useEthers();
-  const { czfPrice, bnbPrice, czusdPrice, chronoTvlWei,
+  const { czfPrice, czrPrice, bnbPrice, czusdPrice, chronoTvlWei,
     exoticTvlWei,
     farmsV2TvlWei,
     poolsV1TvlWei,
@@ -50,11 +50,11 @@ export default function Header() {
         </a>
         <div className="level-item level-right has-text-right ml-2" >
           <a
-            href="https://dexscreener.com/bsc/0x98b5f5e7ec32cda1f3e89936c9972f92296afe47"
+            href="https://dexscreener.com/bsc/0xbf92a0c60a129a56485a3fb891851cf88798602d"
             target="_blank"
             style={{ border: "solid 1px gray", borderRadius: "30px" }}
             className="m-1 has-background-special is-rounded has-text-white p-2 has-text-centered">
-            CZF: ${Number(czfPrice).toFixed(8)}
+            CZR: ${Number(czrPrice).toFixed(2)}
           </a>
           <a
             href="https://dexscreener.com/bsc/0xd7c6fc00fae64cb7d242186bfd21e31c5b175671"
@@ -66,7 +66,7 @@ export default function Header() {
           <div
             className="m-1 has-background-special has-text-white p-2 is-inline-block has-text-centered"
             style={{ border: "solid 1px gray", borderRadius: "30px" }} >
-            TVL: ${weiToShortString(chronoTvlWei?.add(exoticTvlWei ?? 0).add(farmsV2TvlWei ?? 0).add(poolsV1TvlWei ?? 0).add(tribePoolsTvlWei ?? 0), 2)}
+            TVL: (TBD){/*weiToShortString(chronoTvlWei?.add(exoticTvlWei ?? 0).add(farmsV2TvlWei ?? 0).add(poolsV1TvlWei ?? 0).add(tribePoolsTvlWei ?? 0), 2)*/}
           </div>
         </div>
         <div style={{ minWidth: "17.5em", minHeight: "6.8em" }} className="has-text-right is-inline-block level-right has-text-right">

@@ -14,7 +14,7 @@ import styles from "./index.module.scss";
 import { getDailyCzfWei, getDailyAccountTokensWei, getCzfHarvestableChrono, getCzfHarvestableExotic, getCzfHarvestableFarmsV2, getCzfHarvestablePoolsV1, getTokensHarvestable } from "../../utils/getAccountStats"
 import HarvestV1PoolButton from '../HarvestV1PoolButton';
 
-function WalletStatsBar({ czfPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, tribePoolInfo, tribePoolAccountInfo, poolsV1AccountInfo, lpInfos, currentEpoch, chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei }) {
+function WalletStatsBar({ czfPrice, czrPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, tribePoolInfo, tribePoolAccountInfo, poolsV1AccountInfo, lpInfos, currentEpoch, chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei }) {
 
   const [dailyCzfWei, setDailyCzfWei] = useState(BigNumber.from(0));
   const [dailyAccountTokensWei, setDailyAccountTokensWei] = useState([]);
@@ -161,7 +161,7 @@ function WalletStatsBar({ czfPrice, czusdPrice, czfBal, czusdBal, account, libra
         <h2 className='is-size-6 m-0' style={{ fontWeight: "300" }}>Your Estimated Harvestable</h2>
       </div>
       <div className={"column p-5 pb-5 m-3 " + styles.UserTotalItem}>
-        <p className='is-size-3 m-0'>${weiToShortString(chronoAccountStakeWei.add(poolsV1AccountStakeWei).add(farmsV2AccountStakeWei).add(exoticAccountStakeWei).add(tribePoolAccountStakeWei), 2)}</p>
+        <p className='is-size-3 m-0'>(TBD){/*weiToShortString(chronoAccountStakeWei.add(poolsV1AccountStakeWei).add(farmsV2AccountStakeWei).add(exoticAccountStakeWei).add(tribePoolAccountStakeWei), 2)*/}</p>
         <h2 className='is-size-6 m-0' style={{ fontWeight: "300" }}>Your TVL</h2>
       </div>
     </div>

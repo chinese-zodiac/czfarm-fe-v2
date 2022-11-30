@@ -2,6 +2,8 @@ import { useCalls, useEthers } from "@usedapp/core";
 import { FARM_V2 } from "../constants/famsv2";
 import { EXOTIC_FARMS } from "../constants/exoticFarms";
 import { TRIBE_POOLS } from "../constants/tribepools";
+import { PRICING_LP } from "../constants/pricingLp";
+import { ADDRESS_CZR } from "../constants/addresses";
 import { Contract } from 'ethers';
 import IERC20 from "../abi/IERC20.json";
 
@@ -15,6 +17,18 @@ function useLpInfo(library) {
       lpTokens[farm.lp] = farm.tokens;
     }
   });
+  //TODO: Refactor how lp token addresses are stored to a single location
+  lpTokens[PRICING_LP.CZR] = [
+    {
+      address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+      symbol: "CZUSD"
+    },
+    {
+      address: ADDRESS_CZR,
+      symbol: "CZR"
+    }
+  ]
+  lpAddresses.push(PRICING_LP.CZR);
   const calls = lpAddresses.flatMap((lpAddress) => ([
     {
       contract: new Contract(lpTokens[lpAddress][0].address, IERC20, library),
