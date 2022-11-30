@@ -78,7 +78,7 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
           <span className='is-size-6'>{(apr)}%</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="BOOST" width="4em">
-          <span className='is-size-6'>{!!accountInfo?.isBoostEligible ? "5x" : "1x"}</span>
+          <span className='is-size-6'>{accountInfo?.isBoostEligible ? "5x" : "1x"}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="ADJ. TVL" width="4.5em">
           <span className='is-size-6'>${weiToShortString(weiToUsdWeiVal(poolInfo?.totalShares ?? 0, pool.baseAssetName == "CZF" ? czfPrice : czusdPrice), 1)}</span>
