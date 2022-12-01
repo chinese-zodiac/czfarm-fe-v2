@@ -48,6 +48,7 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
       return;
     }
     const usdBurned = weiToUsdWeiVal(tokenBurned, pool?.baseAssetName == "CZF" ? czfPrice : czusdPrice);
+    const boostAprMultiplier = tokenBurned.mul(10000).div(poolInfo?.totalShares);
     if (!czrPrice) {
       //TODO: still no reward price, check dexcreener.
     } else {
@@ -57,7 +58,7 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
         setApr("0.00");
         return;
       }
-      setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).mul(accountInfo?.isBoostEligible ? 5 : 1).div(usdBurned), 4, 2));
+      setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).mul(accountInfo?.isBoostEligible ? 5 : 1).div(usdBurned.mul(10000).div(boostAprMultiplier)), 4, 2));
     }
   }, [pool?.baseAssetAddress, tokenBurned?.toString(), poolInfo?.rewardPerSecond?.toString(), poolInfo?.totalShares?.toString(), czrPrice, accountInfo?.isBoostEligible]);
 
