@@ -40,7 +40,7 @@ function useBurnPoolInfo(provider) {
         const resultIndexTimestampStart = index * 4;
         const resultIndexTimestampEnd = resultIndexTimestampStart + 1;
         const resultIndexRewardPerSecond = resultIndexTimestampStart + 2;
-        const resultIndexTotalShares = resultIndexTimestampStart + 23;
+        const resultIndexTotalShares = resultIndexTimestampStart + 3;
         return {
             address: pool.address,
             timestampStart: results?.[resultIndexTimestampStart]?.value?.[0],

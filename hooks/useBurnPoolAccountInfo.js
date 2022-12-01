@@ -37,7 +37,6 @@ function useBurnPoolAccountInfo(provider, account) {
         const resultIndexUserInfo = index * 3;
         const resultIndexPendingReward = resultIndexUserInfo + 1;
         const resultIndexIsBoostEligible = resultIndexUserInfo + 2;
-        console.log("useBurnPoolAccountInfo results:", results?.[resultIndexIsBoostEligible]?.value?.[0])
         return {
             address: pool.address,
             shares: results?.[resultIndexUserInfo]?.value?.[0],

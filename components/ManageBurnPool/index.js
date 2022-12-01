@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useEthers } from '@usedapp/core';
+import { useEthers, useTokenBalance } from '@usedapp/core';
 import Link from 'next/link';
 import { useCoingeckoTokenPrice } from '@usedapp/coingecko'
 import InputTokenEther from '../InputTokenEther';
@@ -26,6 +26,9 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
   const [apr, setApr] = useState(0);
   const [inputEther, setInputEther] = useState(0);
   const [outputEther, setOutputEther] = useState(0);
+  const [totalValueBurned, setTotalValueBurned] = useState(0);
+
+  const tokenBurned = useTokenBalance(pool?.baseAssetAddress, pool?.address);
 
   const PoolContract = new Contract(pool.address, BurnPoolAbi, library);
 
@@ -37,24 +40,26 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
     'deposit');
 
   useEffect(() => {
-    if (!poolInfo?.rewardPerSecond || !poolInfo?.totalShares || isExpired) {
+    console.log("Calling apr..")
+    console.log(!poolInfo?.rewardPerSecond, !poolInfo?.totalShares, !!isExpired, !tokenBurned)
+    if (!poolInfo?.rewardPerSecond || !poolInfo?.totalShares || !!isExpired || !tokenBurned) {
       setApr("0.00");
+      setTotalValueBurned(BigNumber.from(0));
       return;
     }
-    const usdStaked = weiToUsdWeiVal(poolTokenBalance.tokenBal, czusdPrice);
-    console.log("rp2", czrPrice);
+    const usdBurned = weiToUsdWeiVal(tokenBurned, pool?.baseAssetName == "CZF" ? czfPrice : czusdPrice);
     if (!czrPrice) {
       //TODO: still no reward price, check dexcreener.
     } else {
-      const usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), czrPrice);
-      if (accountInfo?.isBoostEligible) usdStaked = usdStaked.div(5);
-      if (usdStaked.lte(0)) {
+      const usdPerYear = weiToUsdWeiVal(poolInfo?.rewardPerSecond.mul(31557600), czrPrice);
+      console.log({ usdPerYear })
+      if (usdBurned.lte(0)) {
         setApr("0.00");
         return;
       }
-      setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
+      setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).mul(accountInfo?.isBoostEligible ? 5 : 1).div(usdBurned), 4, 2));
     }
-  }, [poolInfo?.rewardPerSecond?.toString(), poolInfo?.totalShares?.toString(), czrPrice, accountInfo?.isBoostEligible]);
+  }, [pool?.baseAssetAddress, tokenBurned?.toString(), poolInfo?.rewardPerSecond?.toString(), poolInfo?.totalShares?.toString(), czrPrice, accountInfo?.isBoostEligible]);
 
   return (<>
     <CollapsibleCard className="mb-3"
@@ -80,8 +85,8 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
         <CollapsibleCardTitleItem title="BOOST" width="4em">
           <span className='is-size-6'>{accountInfo?.isBoostEligible ? "5x" : "1x"}</span>
         </CollapsibleCardTitleItem>
-        <CollapsibleCardTitleItem title="ADJ. TVL" width="4.5em">
-          <span className='is-size-6'>${weiToShortString(weiToUsdWeiVal(poolInfo?.totalShares ?? 0, pool.baseAssetName == "CZF" ? czfPrice : czusdPrice), 1)}</span>
+        <CollapsibleCardTitleItem title="TVB" width="4.5em">
+          <span className='is-size-6'>${weiToShortString(weiToUsdWeiVal(tokenBurned, pool?.baseAssetName == "CZF" ? czfPrice : czusdPrice), 1)}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="FEE" width="4em">
           <span className='is-size-6'>100%</span>
