@@ -66,7 +66,7 @@ export default function Header() {
           <div
             className="m-1 has-background-special has-text-white p-2 is-inline-block has-text-centered"
             style={{ border: "solid 1px gray", borderRadius: "30px" }} >
-            TVL: (TBD){/*weiToShortString(chronoTvlWei?.add(exoticTvlWei ?? 0).add(farmsV2TvlWei ?? 0).add(poolsV1TvlWei ?? 0).add(tribePoolsTvlWei ?? 0), 2)*/}
+            TVL: ${weiToShortString(chronoTvlWei?.add(exoticTvlWei ?? 0).add(farmsV2TvlWei ?? 0).add(poolsV1TvlWei ?? 0) /*.add(tribePoolsTvlWei ?? 0)*/, 2)}
           </div>
         </div>
         <div style={{ minWidth: "17.5em", minHeight: "6.8em" }} className="has-text-right is-inline-block level-right has-text-right">

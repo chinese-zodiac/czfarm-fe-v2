@@ -47,7 +47,7 @@ const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
   const { account, library, chainId } = useEthers();
-  const { czfPrice, czusdPrice, czrPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei } = useContext(CZFarmContext);
+  const { czfPrice, czusdPrice, czrPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei } = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
@@ -75,14 +75,16 @@ function Home() {
   const [farmsV2AccountStakeWei, setFarmsv2AccountStakeWei] = useState(BigNumber.from(0));
   const [poolsV1AccountStakeWei, setPoolsV1AccountStakeWei] = useState(BigNumber.from(0));
   const [tribePoolAccountStakeWei, setTribePoolAccountStakeWei] = useState(BigNumber.from(0));
+  const [burnPoolAccountTvb, setBurnPoolAccountTvb] = useState(BigNumber.from(0));
 
   useDeepCompareEffect(() => {
-    if (!account || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !lpInfos || !v2FarmsUserInfo || !tribePoolAccountInfo) {
+    if (!account || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !lpInfos || !v2FarmsUserInfo || !tribePoolAccountInfo || !burnPoolAccountInfo) {
       setChronoAccountStakeWei(BigNumber.from(0));
       setExoticAccountStakeWei(BigNumber.from(0));
       setFarmsv2AccountStakeWei(BigNumber.from(0));
       setPoolsV1AccountStakeWei(BigNumber.from(0));
       setTribePoolAccountStakeWei(BigNumber.from(0));
+      setBurnPoolAccountTvb(BigNumber.from(0));
       return;
     }
 
@@ -111,7 +113,16 @@ function Home() {
       tribePoolAccountInfo.reduce((prev, curr, index) => prev.add(weiToUsdWeiVal(curr?.stakedBal, czfPrice)), BigNumber.from(0))
     )
 
-  }, [account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, tribePoolAccountInfo, czfPrice, czusdPrice]);
+    setBurnPoolAccountTvb(
+      burnPoolAccountInfo.reduce((prev, curr, index) =>
+        prev.add(
+          weiToUsdWeiVal(curr?.shares?.div(curr?.isBoostEligible ? 5 : 1), BURN_POOLS[index].baseAssetName == "CZF" ? czfPrice : czusdPrice)
+        ), BigNumber.from(0))
+    )
+
+
+
+  }, [account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, tribePoolAccountInfo, burnPoolAccountInfo, czfPrice, czusdPrice]);
 
   return (<>
     <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{ minHeight: "100vh" }}>
@@ -167,8 +178,8 @@ function Home() {
             />)
           }
         })}
-        <p className="has-text-right pr-2">Your Burn Pools Boost Adjusted Staked: (TBD){/* weiToShortString(poolsV1AccountStakeWei, 2) */}</p >
-        <p className="has-text-right pr-2">Burn Pools Boost Adjusted TVL: (TBD){/*weiToShortString(poolsV1TvlWei, 2)*/}</p>
+        <p className="has-text-right pr-2">Your Total Burned: ${weiToShortString(burnPoolAccountTvb, 2)}</p >
+        <p className="has-text-right pr-2">Burn Pools Total Value Burned (TVB): ${weiToShortString(burnPoolsTvbWei, 2)}</p>
       </CollapsibleCard>
 
       <hr />

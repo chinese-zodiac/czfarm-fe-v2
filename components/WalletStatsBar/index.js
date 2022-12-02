@@ -4,7 +4,7 @@ import { useContractFunction, useCall } from '@usedapp/core';
 import { weiToShortString, weiToUsdWeiVal, weiTolpCzusdPricedWeiVal } from '../../utils/bnDisplay';
 import { czCashBuyLink } from '../../utils/dexBuyLink';
 import { getHarvestablePidsChrono, getHarvestablePidsExotic, getHarvestablePidsV2Farms } from '../../utils/getHarvestablePids';
-import { BigNumber, Contract } from 'ethers'
+import { BigNumber, Contract, utils } from 'ethers'
 import masterRouterAbi from "../../abi/MasterRouter.json";
 import lossCompAbi from "../../abi/LossCompensation.json";
 import { PRICING_LP } from "../../constants/pricingLp";
@@ -13,6 +13,7 @@ import { ADDRESS_LOSSCOMP, ADDRESS_EXOTICFARMS, ADDRESS_CHRONOPOOLS, ADDRESS_FAR
 import styles from "./index.module.scss";
 import { getDailyCzfWei, getDailyAccountTokensWei, getCzfHarvestableChrono, getCzfHarvestableExotic, getCzfHarvestableFarmsV2, getCzfHarvestablePoolsV1, getTokensHarvestable } from "../../utils/getAccountStats"
 import HarvestV1PoolButton from '../HarvestV1PoolButton';
+const { formatEther, parseEther, Interface } = utils;
 
 function WalletStatsBar({ czfPrice, czrPrice, czusdPrice, czfBal, czusdBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, tribePoolInfo, tribePoolAccountInfo, poolsV1AccountInfo, lpInfos, currentEpoch, chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei }) {
 
@@ -169,7 +170,7 @@ function WalletStatsBar({ czfPrice, czrPrice, czusdPrice, czfBal, czusdBal, acco
       <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZF</a>
       <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZUSD)} target="_blank" >Buy CZUSD</a>
       <br />
-      {!!account && (<>
+      {(!!account && !!czfHarvestableChrono?.add(czfHarvestableExotic).add(czfHarvestableFarmsV2).gt(parseEther("1000000"))) && (<>
         <button className='button is-medium  is-rounded is-primary has-background-primary-dark m-3' style={{ marginLeft: "auto", marginRight: "auto" }}
           onClick={() => {
             sendHarvestAll(

@@ -12,6 +12,7 @@ import useTribePoolInfo from '../hooks/useTribePoolInfo';
 import { PRICING_LP } from "../constants/pricingLp";
 import { weiTolpCzusdPricedWeiVal } from '../utils/bnDisplay';
 import { BigNumber, utils } from 'ethers';
+import useBurnPoolInfo from '../hooks/useBurnPoolInfo';
 const { parseEther, formatEther } = utils;
 
 const CZFarmContext = createContext(0);
@@ -27,6 +28,7 @@ export const CZFarmProvider = ({ children }) => {
   const poolsV1TokenBalance = usePoolsV1TokenBalance(library);
   const tribePoolsInfo = useTribePoolInfo(library);
   const v2FarmsLpBal = useV2FarmsLpBal(library);
+  const burnPoolsInfo = useBurnPoolInfo(library);
   const lpInfos = useLpInfo(library);
 
   const [czrPrice, setCzrPrice] = useState(BigNumber.from(0));
@@ -36,8 +38,9 @@ export const CZFarmProvider = ({ children }) => {
     exoticTvlWei,
     farmsV2TvlWei,
     poolsV1TvlWei,
-    tribePoolsTvlWei
-  } = useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo);
+    tribePoolsTvlWei,
+    burnPoolsTvbWei
+  } = useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, burnPoolsInfo);
 
   useEffect(() => {
     setCzrPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZR", parseEther("1"), czusdPrice)));
@@ -45,13 +48,14 @@ export const CZFarmProvider = ({ children }) => {
 
   return (
     <CZFarmContext.Provider value={{
-      czusdPrice, czfPrice, bnbPrice, czrPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei,
+      czusdPrice, czfPrice, bnbPrice, czrPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei,
       //React doesnt know how to properly check if bignumbers have changed, so use these to trigger refreshes
       updateCheckerViaStringChronoTvlWei: chronoTvlWei?.toString(),
       updateCheckerViaStringExoticTvlWei: exoticTvlWei?.toString(),
       updateCheckerViaStringFarmsV2TvlWei: farmsV2TvlWei?.toString(),
       updateCheckerViaStringPoolsV1TvlWei: poolsV1TvlWei?.toString(),
-      updateCheckerViaStringPoolsV1TvlWei: tribePoolsTvlWei?.toString()
+      updateCheckerViaStringTribePoolsV1TvlWei: tribePoolsTvlWei?.toString(),
+      updateCheckerViaStringBurnPoolsTvbWei: burnPoolsTvbWei?.toString()
     }}>
       {children}
     </CZFarmContext.Provider>
