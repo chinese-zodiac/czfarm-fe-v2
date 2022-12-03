@@ -75,7 +75,8 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
       setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
     } else {
       //coingecko broken, backup is dexscreener
-      (async () => {
+      //WARNING: Below code may hit api limits for dexscreener.
+      /*(async () => {
         const result = await fetchRetry(
           `https://api.dexscreener.com/latest/dex/tokens/${rewardAddress}`
         );
@@ -92,7 +93,7 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
         catch {
           console.log("Failed to fetch dexcreener price info");
         }
-      })();
+      })();*/
     }
   }, [!poolInfo?.totalStaked, !poolInfo?.rewardPerSecond, coingeckoRewardPrice]);
 
