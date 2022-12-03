@@ -2,6 +2,7 @@ import { BigNumber } from 'ethers';
 import { FARM_V2 } from "../constants/famsv2";
 import { POOLS_V1 } from "../constants/poolsv1";
 import { TRIBE_POOLS } from "../constants/tribepools";
+import { BURN_POOLS } from "../constants/burnpools";
 
 export const getCzfHarvestableChrono = (chronoPoolAccountInfo) => {
   const currentEpoch = BigNumber.from(Math.floor(Date.now() / 1000));
@@ -29,6 +30,10 @@ export const getCzfHarvestable = (v2FarmsPendingCzf, chronoPoolAccountInfo, exot
   const czfFromExotic = getCzfHarvestableExotic(exoticFarmAccountInfo);
   const czfFromPoolsV1 = getCzfHarvestablePoolsV1(poolsV1AccountInfo);
   return czfFromV2Farms.add(czfFromChrono).add(czfFromExotic).add(czfFromPoolsV1);
+}
+
+export const getCzrHarvestableBurnPools = (burnPoolsAccountInfo) => {
+  return burnPoolsAccountInfo.reduce((acc, curr) => acc.add(curr?.pendingReward ?? BigNumber.from(0)), BigNumber.from(0)) ?? BigNumber.from(0);
 }
 
 export const getSingleV2FarmCzfPerSecondWei = (v2FarmsSettings, singleV2FarmsLpBal, singleV2FarmsPoolInfo, singleV2FarmsUserInfo) => {
@@ -112,7 +117,7 @@ export const getTokensHarvestable = (poolsV1AccountInfo, tribePoolAccountInfo) =
   return tokensHarvestableList;
 }
 
-export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo) => {
+export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, burnPoolInfo, burnPoolAccountInfo) => {
   let dailyTokensList = []
   const currentEpoch = Math.floor(Date.now() / 1000);
   try {//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
@@ -140,6 +145,33 @@ export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, pools
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
     });
+    burnPoolAccountInfo.forEach((poolAccountInfo, index) => {
+      const poolInfo = burnPoolInfo?.[index];
+      const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == BURN_POOLS?.[index].rewardAssetName);
+      const totalShares = burnPoolInfo?.[index]?.totalShares ?? BigNumber.from(0);
+      if (burnPoolInfo?.timestampStart > currentEpoch || burnPoolInfo?.timestampEnd < currentEpoch || totalShares.eq(0)) return; //inactive
+      const rewardPerSecond = poolAccountInfo?.shares?.mul(burnPoolInfo?.[index]?.rewardPerSecond ?? 0)?.div(totalShares) ?? BigNumber.from(0);
+      console.log({ rewardPerSecond })
+      console.log(burnPoolInfo)
+      console.log({ poolAccountInfo })
+      if (rewardPerSecond?.eq(0)) return; //No earnings
+      const rewardPerDay = rewardPerSecond.mul(86400);
+      if (tokenIndex == -1) {
+        //Token not in array yet
+        let tokenWei = {
+          name: BURN_POOLS?.[index].rewardAssetName,
+          rewardPerDay: rewardPerDay
+        }
+        if (BURN_POOLS?.[index].rewardAssetName == "CZUSD") { //CZUSD must be first
+          dailyTokensList.unshift(tokenWei);
+        } else {
+          dailyTokensList.push(tokenWei);
+        }
+      } else {
+        dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
+      }
+
+    })
     /*tribePoolAccountInfo.forEach((pool, index) => {
       if (TRIBE_POOLS?.[index].rewardAssetName == "CZF") return; //dont need CZF
       const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == TRIBE_POOLS?.[index].rewardAssetName);
@@ -163,6 +195,6 @@ export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, pools
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
     });*/
-  } catch (e) { }
+  } catch (e) { console.log(e) }
   return dailyTokensList;
 }
