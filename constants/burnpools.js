@@ -3,7 +3,7 @@ const { parseEther } = utils;
 
 export const BURN_POOLS = [
     {
-        subtitle: "100% Burn CZF for CZR.",
+        subtitle: "100% Burn CZF for CZR. WARNING: Accounts which purchase CZF and then deposit will have stake set to zero.",
         address: "0xa34b2d12dd2426cA93bA2C3bBA86BF24a2FAAAEf",
         rewardAssetName: "CZR",
         rewardAddress: "0x5cd0c2C744caF04cda258Efc6558A3Ed3defE97b",
