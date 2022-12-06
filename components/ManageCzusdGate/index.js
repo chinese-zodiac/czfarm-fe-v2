@@ -135,7 +135,7 @@ export default function ManageCzusdGate({
                         setInputEther={setInputEtherCzusd}
                         inputEther={inputEtherCzusd}
                     />
-                    <QuickInputEther setInputEther={setInputEtherCzusd} maxTokenWad={busdBal} />
+                    <QuickInputEther setInputEther={setInputEtherCzusd} maxTokenWad={czusdBal} />
                     <button onClick={() => sendBusdOut(parseEther(inputEtherCzusd.toString()), account)} className='button has-background-grey-lighter is-fullwidth'>Swap</button>
                     <p>You will get {(BigNumber.from(inputEtherCzusd ?? 0).mul(BigNumber.from(10000).sub(!!isBoostEligibleResult?.[0] ? (feeBoostBpsResult?.[0] ?? 10000) : (feePublicBpsResult?.[0] ?? 10000))).div(100).toNumber() / 100).toFixed(2)} BUSD immediately.</p>
                     <p>Global Daily Limit: TBD</p>
