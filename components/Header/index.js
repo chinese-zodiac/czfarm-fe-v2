@@ -50,14 +50,14 @@ export default function Header() {
         </a>
         <div className="level-item level-right has-text-right ml-2" >
           <a
-            href="https://dexscreener.com/bsc/0xbf92a0c60a129a56485a3fb891851cf88798602d"
+            href="https://www.geckoterminal.com/bsc/pools/0xbf92a0c60a129a56485a3fb891851cf88798602d"
             target="_blank"
             style={{ border: "solid 1px gray", borderRadius: "30px" }}
             className="m-1 has-background-special is-rounded has-text-white p-2 has-text-centered">
             CZR: ${Number(czrPrice).toFixed(2)}
           </a>
           <a
-            href="https://dexscreener.com/bsc/0xd7c6fc00fae64cb7d242186bfd21e31c5b175671"
+            href="https://www.geckoterminal.com/bsc/pools/0xd7c6fc00fae64cb7d242186bfd21e31c5b175671"
             target="_blank"
             style={{ border: "solid 1px gray", borderRadius: "30px" }}
             className="m-1 has-background-special is-rounded has-text-white p-2 has-text-centered">

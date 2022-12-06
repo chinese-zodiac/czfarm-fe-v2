@@ -151,9 +151,6 @@ export const getDailyAccountTokensWei = (poolsV1Info, poolsV1TokenBalance, pools
       const totalShares = burnPoolInfo?.[index]?.totalShares ?? BigNumber.from(0);
       if (burnPoolInfo?.timestampStart > currentEpoch || burnPoolInfo?.timestampEnd < currentEpoch || totalShares.eq(0)) return; //inactive
       const rewardPerSecond = poolAccountInfo?.shares?.mul(burnPoolInfo?.[index]?.rewardPerSecond ?? 0)?.div(totalShares) ?? BigNumber.from(0);
-      console.log({ rewardPerSecond })
-      console.log(burnPoolInfo)
-      console.log({ poolAccountInfo })
       if (rewardPerSecond?.eq(0)) return; //No earnings
       const rewardPerDay = rewardPerSecond.mul(86400);
       if (tokenIndex == -1) {
