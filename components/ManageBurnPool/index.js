@@ -128,7 +128,7 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
             <QuickInputEther {...{ setInputEther }} maxTokenWad={pool.baseAssetName == "CZF" ? czfBal : czusdBal} />
             <button onClick={() => sendDeposit(parseEther(inputEther.toString()))} className='button has-background-grey-lighter is-fullwidth'>Stake {pool.baseAssetName}</button>
             {pool.baseAssetName == "CZF" && (
-              <p className='is-size-5' style={{ fontWeight: "bold", color: "red" }}>WARNING: DO NOT STAKE EXPLOITED CZF. Accounts holding, staking, or trading post Nov 3 exploited CZF will have Burn Pool Stake, CZF Balance, and potentially other tokens burrned to 0 (ZERO) unless otherwise advised and without recourse.</p>
+              <p className='is-size-5' style={{ fontWeight: "bold", color: "red" }}>WARNING: DO NOT STAKE EXPLOITED CZF. Accounts holding, staking, or trading post Dec 3 exploited CZF will have Burn Pool Stake, CZF Balance, and potentially other tokens burrned to 0 (ZERO) unless otherwise advised and without recourse.</p>
             )}
           </div>)}
           {!isLaunching && (<div className="is-inline-block p-3 m-3 is-align-self-stretch" style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
