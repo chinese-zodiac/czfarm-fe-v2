@@ -113,7 +113,7 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
       </>) : (<>
         <p>{pool.subtitle}</p>
         <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
-          {!isExpired && (<div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
+          {(!isExpired && pool.baseAssetName != "CZF") && (<div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
             <h3 className="is-size-4">Burn {pool.baseAssetName}</h3>
             <p>Burn {pool.baseAssetName} and get CZRED every second. Stake is fully burned and cannot be withdrawn. </p>
             <InputTokenEther className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
