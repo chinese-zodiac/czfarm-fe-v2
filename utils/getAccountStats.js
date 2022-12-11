@@ -62,7 +62,13 @@ export const getDailyCzfWei = (v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v
     const chronoRps = chronoPoolAccountInfo.reduce((acc, curr) => curr?.emissionRate?.add(acc), BigNumber.from(0)) ?? BigNumber.from(0);
     const exoticRps = exoticFarmAccountInfo.reduce((acc, curr) => curr?.emissionRate?.add(acc), BigNumber.from(0)) ?? BigNumber.from(0);
 
-    return chronoRps.add(exoticRps).add(v2FarmsRps).add(poolsV1Rps).mul(86400); //86400 seconds per day
+    const rps = chronoRps.add(exoticRps).add(v2FarmsRps).add(poolsV1Rps).mul(86400);
+
+    if (rps.gt(parseEther("1000000"))) {
+      return rps;
+    } else {
+      return parseEther("0");
+    }
   } catch (e) {
     return BigNumber.from(0)
   }

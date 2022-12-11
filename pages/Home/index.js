@@ -135,6 +135,29 @@ function Home() {
       }} />
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Tribe.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZR Tribe Pools<br />
+          <span className='is-size-6' >Stake CZR, Get fairtribe tokens every second.</span>
+        </p>
+      </div>
+      )}>
+        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>Want no tax? Visit: <a target="_blank" href="https://bad.rabbitcatch.com">ONE BAD RABBIT</a></h4>
+
+        {TRIBE_POOLS.map((pool, index) => {
+          const poolInfo = poolsV1Info?.[index];
+          return (<ManageTribePool key={pool.address}
+            {...{ pool, czrBal, czrPrice, czusdPrice }}
+            rewardAddress={pool?.rewardAddress}
+            accountInfo={tribePoolAccountInfo?.[index]}
+            poolInfo={tribePoolInfo?.[index]}
+            lpInfos={lpInfos}
+          />)
+        })}
+        <p className="has-text-right pr-2">Your Tribe Pools Staked: ${weiToShortString(tribePoolAccountStakeWei, 2)}</p>
+        <p className="has-text-right pr-2">Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}</p>
+      </CollapsibleCard>
+
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/CzusdGate.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
         <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZUSD Gate<br />
           <span className='is-size-6' >Swap BUSD and CZUSD.</span>
@@ -323,28 +346,6 @@ function Home() {
         })}
         <p className="has-text-right pr-2">Your Pools V1 Staked: ${weiToShortString(poolsV1AccountStakeWei, 2)}</p>
         <p className="has-text-right pr-2">Pools V1 TVL: ${weiToShortString(poolsV1TvlWei, 2)}</p>
-      </CollapsibleCard>
-
-      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
-        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Tribe.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
-        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZF Tribe Pools<br />
-          <span className='is-size-6' >Stake CZF, Get fairtribe tokens every second.</span>
-        </p>
-      </div>
-      )}>
-        <h4 className='is-size-5 has-text-grey-light mt-4 mb-0'>Want no tax? Visit: <a target="_blank" href="https://bad.rabbitcatch.com">ONE BAD RABBIT</a></h4>
-
-        {TRIBE_POOLS.map((pool, index) => {
-          const poolInfo = poolsV1Info?.[index];
-          return (<ManageTribePool key={pool.address}
-            {...{ pool, czfBal, czfPrice }}
-            rewardAddress={pool?.rewardAddress}
-            accountInfo={tribePoolAccountInfo?.[index]}
-            poolInfo={tribePoolInfo?.[index]}
-          />)
-        })}
-        <p className="has-text-right pr-2">Your Tribe Pools Staked: ${weiToShortString(tribePoolAccountStakeWei, 2)}</p>
-        <p className="has-text-right pr-2">Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}</p>
       </CollapsibleCard>
 
     </main>

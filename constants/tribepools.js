@@ -3,8 +3,8 @@ const { parseEther } = utils;
 export const TRIBE_POOLS = [
     {
         subtitle: "14.98% CZF burn on unstake.",
-        address: "0x8C244BAdbeED72737Eee567beC479e57A665f831",
-        wrapperAddress: "0x482d4455964Eb6C7a7deb9769E02972B73c38b75",
+        address: "0x4c9e47a32fd569dc5bf8b3ba150e57b22b9bbd8b",
+        wrapperAddress: "0xaf4702983e124c575d1dd2d105c2e030a2caf47d",
         rewardAssetName: "LSDT",
         rewardAddress: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
         rewardDecimals: 18,
@@ -24,8 +24,8 @@ export const TRIBE_POOLS = [
     },
     {
         subtitle: "9.98% CZF burn on unstake.",
-        address: "0x624c896d2A3C0Da05C5D1fb144baDDb4c4003aF7",
-        wrapperAddress: "0xB9a86e381CFD3A113A18d01841087DD6d5aa7DAC",
+        address: "0xd6602f288d0285356f7ec76b3530491b3bd71b4b",
+        wrapperAddress: "0x97b12c962f64852d88ffd67bcf95ad6a239462e4",
         rewardAssetName: "LSDT",
         rewardAddress: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
         rewardDecimals: 18,
@@ -46,8 +46,8 @@ export const TRIBE_POOLS = [
     },
     {
         subtitle: "14.98% CZF burn on unstake.",
-        address: "0x98b5fc0C9045077e55f11Dc280fA47DaCF0CCAD9",
-        wrapperAddress: "0x529720f54c296d7554aa3d871c69b7064c2e6d7b",
+        address: "0x73e203e23785bcd6bd060a4a0a40de4c36ce20bb",
+        wrapperAddress: "0xd06217a2d18c2b26fae3e649cd2de133f573ab43",
         rewardAssetName: "DGOD",
         rewardAddress: "0x99F4cc2BAE97F82A823CA80DcAe52EF972B7F270",
         rewardDecimals: 18,
@@ -67,8 +67,8 @@ export const TRIBE_POOLS = [
     },
     {
         subtitle: "9.98% CZF burn on unstake.",
-        address: "0xfDc3C1D7C40fC31111B5F00992045973310913d5",
-        wrapperAddress: "0xed5c16ddb0e7b10c767fb1c50cf3a147158f5fdf",
+        address: "0x0f03a13620c9b87b5eee6ca99aa9c76bafd41a26",
+        wrapperAddress: "0x003cccc78ebe57c6dcd57e4c49b24d7dec074893",
         rewardAssetName: "DGOD",
         rewardAddress: "0x99F4cc2BAE97F82A823CA80DcAe52EF972B7F270",
         rewardDecimals: 18,
@@ -89,8 +89,8 @@ export const TRIBE_POOLS = [
     },
     {
         subtitle: "14.98% CZF burn on unstake.",
-        address: "0xc08cA92a59CE808537f473d14C2034584F90B6e8",
-        wrapperAddress: "0x816dd861daa6f6247be8adb63e666060aafedcca",
+        address: "0x7741f33db7f3a7322a167200a6f191f3cdfeb704",
+        wrapperAddress: "0x989d7c902c1c33af1a6018b6f2713c49c5052677",
         rewardAssetName: "GEM",
         rewardAddress: "0x701F1ed50Aa5e784B8Fb89d1Ba05cCCd627839a7",
         rewardDecimals: 18,
@@ -110,8 +110,8 @@ export const TRIBE_POOLS = [
     },
     {
         subtitle: "9.98% CZF burn on unstake.",
-        address: "0x34eD0289e4c72c9eeDC777dFbcc6Ea8760c6416A",
-        wrapperAddress: "0x49bcbe1bffd851b4d81cc2f10b5b63d927e0bd80",
+        address: "0x27dbaa53afdc7e6f0eff9c1fe07a8d01e5e93139",
+        wrapperAddress: "0xf24ee6519c14d60e8b97ef802f5fac53d323e7fc",
         rewardAssetName: "GEM",
         rewardAddress: "0x701F1ed50Aa5e784B8Fb89d1Ba05cCCd627839a7",
         rewardDecimals: 18,
