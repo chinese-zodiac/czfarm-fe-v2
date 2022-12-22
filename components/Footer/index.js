@@ -32,7 +32,7 @@ function Footer() {
       <p>
         <b>IMPORTANT: Do not expect profits from other's efforts.</b><br />
         <small>
-          Nothing on this site or on related channels should be considered a promise by anyone, including but not limited to the developers and promoters of this site, to perform work to generate profits for anyone including but not limited to the following: the users of this site; CZodiac community members; CZF holders; CZUSD holders; or anyone using any of the sites, smart contracts, social media channels, and any other media or tech related to CZF and CZodiac or any of the community members. Czodiac, CZF, cz.farm, and related technologies plus media are all experimental and must be used according to your personal financial situation and risk profile. There are no guarantees of profits.
+          Nothing on this site or on related channels should be considered a promise by anyone, including but not limited to the developers and promoters of this site, to perform work to generate profits for anyone including but not limited to the following: the users of this site; CZodiac community members; CZF holders; CZR holders; CZUSD holders; or anyone using any of the sites, smart contracts, social media channels, and any other media or tech related to CZF, CZR and CZodiac or any of the community members. Czodiac, CZF, CZR, cz.farm, and related technologies plus media are all experimental and must be used according to your personal financial situation and risk profile. There are no guarantees of profits.
         </small>
       </p>
       <br />
@@ -65,7 +65,7 @@ function Footer() {
         </small>
       </p>
     </div>
-    <p className='is-size-7 p-5'>v0.0.2005a(experimental)</p>
+    <p className='is-size-7 p-5'>v0.0.2006a(experimental)</p>
   </footer>);
 }
 
