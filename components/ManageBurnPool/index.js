@@ -49,7 +49,6 @@ export default function ManageBurnPool({ pool, currentEpoch, accountInfo, poolIn
       //TODO: still no reward price, check dexcreener.
     } else {
       const usdPerYear = weiToUsdWeiVal(poolInfo?.rewardPerSecond.mul(31557600), czrPrice);
-      console.log({ usdPerYear })
       if (usdBurned.lte(0)) {
         setApr("0.00");
         return;

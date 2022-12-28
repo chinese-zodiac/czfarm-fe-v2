@@ -52,14 +52,12 @@ export default function ManagePoolV1({ pool, rewardAddress, currentEpoch, accoun
     let rewardPrice = coingeckoRewardPrice;
     if (!rewardPrice) {
       //coingecko didnt work, check if we can use czf or czusd
-      console.log("pool.rewardAssetName", pool.rewardAssetName)
       if (pool.rewardAssetName == "CZF") {
         rewardPrice = czfPrice;
       } else if (pool.rewardAssetName == "CZUSD") {
         rewardPrice = czusdPrice;
       }
     }
-    console.log("rp2", rewardPrice);
     if (!rewardPrice) {
       //TODO: still no reward price, check dexcreener.
     } else {

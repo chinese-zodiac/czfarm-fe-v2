@@ -66,18 +66,14 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
       return;
     }
     const usdStaked = weiToUsdWeiVal(poolInfo.totalStaked, czrPrice);
-    console.log("usdStaked", formatEther(usdStaked));
-    console.log({ coingeckoRewardPrice })
 
     let usdPerYear;
 
     if (!!coingeckoRewardPrice) {
       usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), coingeckoRewardPrice);
     } else {
-      console.log("Using non coingecko")
       usdPerYear = weiTolpCzusdPricedWeiVal(lpInfos, pool?.rewardAssetName, poolInfo?.rewardPerSecond?.mul(31557600), czusdPrice);
     }
-    console.log("usdPerYear", formatEther(usdPerYear));
 
     if (usdStaked.lte(0) || usdPerYear.lte(0)) {
       setApr("0.00");

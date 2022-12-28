@@ -40,7 +40,7 @@ export const CZFarmProvider = ({ children }) => {
     poolsV1TvlWei,
     tribePoolsTvlWei,
     burnPoolsTvbWei
-  } = useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, burnPoolsInfo);
+  } = useTvlWei(czfPrice, czrPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, burnPoolsInfo);
 
   useEffect(() => {
     setCzrPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZR", parseEther("1"), czusdPrice)));

@@ -97,7 +97,6 @@ export default function ManageTribePoolNft({ czrPrice }) {
             const TribePoolNftContractConnected = TribePoolNftContract.connect(library);
             let newNftStakedIds = [];
             for (let i = 0; i < stakedBalResult[0].toNumber(); i++) {
-                console.log(account)
                 const nftId = await TribePoolNftContractConnected.getDepositedIdForAccountAtIndex(account, i);
                 newNftStakedIds = [...new Set([...newNftStakedIds, nftId])];
                 setNftStakedIds([...newNftStakedIds]);

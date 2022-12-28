@@ -112,7 +112,7 @@ function Home() {
     )
 
     setTribePoolAccountStakeWei(
-      tribePoolAccountInfo.reduce((prev, curr, index) => prev.add(weiToUsdWeiVal(curr?.stakedBal, czfPrice)), BigNumber.from(0))
+      tribePoolAccountInfo.reduce((prev, curr, index) => prev.add(weiToUsdWeiVal(curr?.stakedBal, czrPrice)), BigNumber.from(0))
     )
 
     setBurnPoolAccountTvb(
@@ -124,7 +124,7 @@ function Home() {
 
 
 
-  }, [account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, tribePoolAccountInfo, burnPoolAccountInfo, czfPrice, czusdPrice]);
+  }, [account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, tribePoolAccountInfo, burnPoolAccountInfo, czfPrice, czrPrice, czusdPrice]);
 
   return (<>
     <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{ minHeight: "100vh" }}>

@@ -11,7 +11,7 @@ import { BURN_POOLS } from "../constants/burnpools";
 import useDeepCompareEffect from '../utils/useDeepCompareEffect';
 
 
-function useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, burnPoolsInfo) {
+function useTvlWei(czfPrice, czrPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, burnPoolsInfo) {
   const [chronoTvlWei, setChronoTvlWei] = useState(BigNumber.from(0));
   const [exoticTvlWei, setExoticTvlWei] = useState(BigNumber.from(0));
   const [farmsV2TvlWei, setFarmsv2TvlWei] = useState(BigNumber.from(0));
@@ -20,7 +20,7 @@ function useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1Toke
   const [burnPoolsTvbWei, setBurnPoolsTvbWei] = useState(BigNumber.from(0));
 
   useDeepCompareEffect(() => {
-    if (!czfPrice || !czusdPrice || !chronoVestingsTotalVesting || !poolsV1TokenBalance || !v2FarmsLpBal || !lpInfos || !tribePoolsInfo) {
+    if (!czfPrice || !czusdPrice || !czrPrice || !chronoVestingsTotalVesting || !poolsV1TokenBalance || !v2FarmsLpBal || !lpInfos || !tribePoolsInfo) {
       setChronoTvlWei(BigNumber.from(0));
       setExoticTvlWei(BigNumber.from(0));
       setFarmsv2TvlWei(BigNumber.from(0));
@@ -48,7 +48,7 @@ function useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1Toke
     );
     setTribePoolsTvlWei(
       TRIBE_POOLS.reduce((prev, curr, index) => prev.add(
-        weiToUsdWeiVal(tribePoolsInfo?.[index]?.totalStaked, czfPrice)
+        weiToUsdWeiVal(tribePoolsInfo?.[index]?.totalStaked, czrPrice)
       ), BigNumber.from(0))
     );
     setBurnPoolsTvbWei(
@@ -56,7 +56,7 @@ function useTvlWei(czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1Toke
         weiToUsdWeiVal(burnPoolsInfo?.[index]?.burnedWad, curr.baseAssetName == "CZF" ? czfPrice : czusdPrice)
       ), BigNumber.from(0))
     );
-  }, [czfPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo])
+  }, [czfPrice, czusdPrice, czrPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo])
   return {
     chronoTvlWei,
     exoticTvlWei,

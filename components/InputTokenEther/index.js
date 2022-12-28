@@ -15,7 +15,6 @@ export default function InputTokenEther({setInputEther,inputEther,style,classNam
         if(!!minWadBn && (inputNum < minNum)) inputNum = minNum;
         let maxNum = !!maxWadBn ? Number(formatEther(maxWadBn)) : 100;
         if(!!maxWadBn && (inputNum > maxNum)) inputNum = maxNum;
-        console.log({precision})
         if(precision > 1) {
           inputNum = Math.floor(inputNum*precision/precision);
         } else {
