@@ -5,7 +5,7 @@ import { weiToShortString, weiToUsdWeiVal, weiTolpCzusdPricedWeiVal } from '../.
 import { czCashBuyLink } from '../../utils/dexBuyLink';
 import { BigNumber, Contract, utils } from 'ethers'
 import { PRICING_LP } from "../../constants/pricingLp";
-import { ADDRESS_CZF, ADDRESS_CZUSD } from "../../constants/addresses";
+import { ADDRESS_CZR, ADDRESS_CZUSD } from "../../constants/addresses";
 import styles from "./index.module.scss";
 import { getDailyAccountTokensWei, getTokensHarvestable, getCzrHarvestableBurnPools } from "../../utils/getAccountStats"
 const { formatEther, parseEther, Interface } = utils;
@@ -107,7 +107,7 @@ function WalletStatsBar({ czrPrice, czusdPrice, czrBal, czusdBal, account, tribe
       </div>
     </div>
     <div style={{ marginLeft: "auto", marginRight: "auto" }} >
-      <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZF)} target="_blank" >Buy CZF</a>
+      <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZR)} target="_blank" >Buy CZR</a>
       <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZUSD)} target="_blank" >Buy CZUSD</a>
       <br />
 
