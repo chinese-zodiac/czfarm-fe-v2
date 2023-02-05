@@ -3,12 +3,13 @@ import { Contract } from 'ethers';
 import { TRIBE_POOLS } from "../constants/tribepools";
 import { ADDRESS_OBR } from "../constants/addresses";
 import TribePool from "../abi/TribePool.json";
+import TribePoolStakeWrapperToken from "../abi/TribePoolStakeWrapperToken.json";
 
 
 function useTribePoolAccountInfo(provider, account) {
     const calls = TRIBE_POOLS.flatMap(pool => {
         let poolSc = new Contract(pool.address, TribePool, provider);
-        let poolWrapperSc = new Contract(pool.wrapperAddress, TribePool, provider);
+        let poolWrapperSc = new Contract(pool.wrapperAddress, TribePoolStakeWrapperToken, provider);
         return [
             {
                 contract: poolSc,
@@ -43,6 +44,7 @@ function useTribePoolAccountInfo(provider, account) {
         const totalRewardsReceivedIndex = stakedBalIndex + 1;
         const pendingRewardIndex = stakedBalIndex + 2;
         const getSlottedNftIndex = stakedBalIndex + 3;
+        console.log(pool.wrapperAddress, results?.[getSlottedNftIndex])
         return {
             address: pool.address,
             stakedBal: results?.[stakedBalIndex]?.value?.[0],
