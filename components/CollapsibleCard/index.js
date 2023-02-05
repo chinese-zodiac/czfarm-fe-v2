@@ -2,12 +2,12 @@ import React, { Component, useState } from 'react';
 import styles from "./index.module.scss";
 
 
-function CollapsibleCard ({children,title,className}) {
+function CollapsibleCard({ children, title, className }) {
 
-  const [isOpen,setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   return (<>
-    <div className={"has-text-white card "+styles.CollapsibleCard+" "+className}>
-      <a className="has-text-white card-header pl-3 pr-3" onClick={()=>{setIsOpen(!isOpen)}}>
+    <div className={"has-text-white card " + styles.CollapsibleCard + " " + className}>
+      <div className={"has-text-white card-header pl-3 pr-3 " + styles.CollapsibleCard_Header} onClick={() => { setIsOpen(!isOpen) }}>
         <div className="card-header-title p-0 pb-1">
           {title}
         </div>
@@ -20,8 +20,8 @@ function CollapsibleCard ({children,title,className}) {
             )}
           </span>
         </div>
-      </a>
-      <div className={"card-content p-2 has-text-white "+(isOpen ? "" : "is-hidden")}>
+      </div>
+      <div className={"card-content p-2 has-text-white " + (isOpen ? "" : "is-hidden")}>
         {isOpen && (children)}
       </div>
     </div>
