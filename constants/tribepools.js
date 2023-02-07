@@ -129,5 +129,48 @@ export const TRIBE_POOLS = [
         logo: "./images/tokens/GEM.png",
         feeBasis: 998,
         duty: "50 LRT"
+    },
+    {
+        subtitle: "14.98% CZR burn on unstake.",
+        address: "0x5f5f82503d54b70190afca003C4B4D81080117aD",
+        wrapperAddress: "0x770Ca266f6eFf94880e60D4276fE708FF498a61F",
+        rewardAssetName: "LSDT",
+        rewardAddress: "0xAa83Bb1Be2a74AaA8795a8887054919A0Ea96BFA",
+        rewardDecimals: 18,
+        lp: "0xa98F8B669790b1063c0dB3a03A9ECfE4ce602bEe",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0xAa83Bb1Be2a74AaA8795a8887054919A0Ea96BFA",
+                symbol: "LSDT"
+            }
+        ],
+        logo: "./images/tokens/LSDT.png",
+        feeBasis: 1498
+    },
+    {
+        subtitle: "9.98% CZR burn on unstake.",
+        address: "0x11509E61BA6069A2EF67A30BAA1878b9E7248375",
+        wrapperAddress: "0xBeFE5F7c282c9Cb5A333892E2e600b28d80699c7",
+        rewardAssetName: "LSDT",
+        rewardAddress: "0xAa83Bb1Be2a74AaA8795a8887054919A0Ea96BFA",
+        rewardDecimals: 18,
+        lp: "0xa98F8B669790b1063c0dB3a03A9ECfE4ce602bEe",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0xAa83Bb1Be2a74AaA8795a8887054919A0Ea96BFA",
+                symbol: "LSDT"
+            }
+        ],
+        logo: "./images/tokens/LSDT.png",
+        feeBasis: 998,
+        duty: "50 LRT"
     }
 ]
