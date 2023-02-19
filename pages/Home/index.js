@@ -1,50 +1,45 @@
 
-import React, { Component, useContext, useState } from 'react';
-import { useEthers, useCall, useEtherBalance, useTokenBalance } from '@usedapp/core';
-import { utils, Contract, BigNumber } from 'ethers'
-import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
-import CZFarmContext from '../../contexts/CZFarmContext';
-import { weiToShortString, weiToFixed, weiToUsdWeiVal } from '../../utils/bnDisplay';
-import useV2FarmsSettings from '../../hooks/useV2FarmsSettings';
-import useV2FarmsPoolInfo from '../../hooks/useV2FarmsPoolInfo';
-import useV2FarmsPendingCzf from '../../hooks/useV2FarmsPendingCzf';
-import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
-import useChronoPoolInfo from '../../hooks/useChronoPoolInfo';
-import useChronoPoolAccountInfo from '../../hooks/useChronoPoolAccountInfo';
-import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
-import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
-import usePoolsV1Info from '../../hooks/usePoolsV1Info';
-import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
-import useBurnPoolInfo from '../../hooks/useBurnPoolInfo';
-import useBurnPoolAccountInfo from '../../hooks/useBurnPoolAccountInfo';
-import useTribePoolInfo from '../../hooks/useTribePoolInfo';
-import useTribePoolAccountInfo from '../../hooks/useTribePoolAccountInfo';
-import useAccountLpBals from '../../hooks/useAccountLpBals';
-import useCurrentEpoch from '../../hooks/useCurrentEpoch';
-import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
-import CZFLogo from "../../public/static/assets/logo192.png"
-import { CHRONO_POOL } from "../../constants/chronoPool";
-import { EXOTIC_FARMS } from "../../constants/exoticFarms";
-import { FARM_V2 } from "../../constants/famsv2";
-import { POOLS_V1 } from "../../constants/poolsv1";
-import { LINK_TELEGRAM, LINK_OBR } from "../../constants/links";
-import { ADDRESS_CZF, ADDRESS_CZUSD, ADDRESS_CZR, ADDRESS_MASTERROUTER } from '../../constants/addresses';
-import WalletStatsBar from '../../components/WalletStatsBar';
-import styles from "./index.module.scss";
+import { useEthers, useTokenBalance } from '@usedapp/core';
+import { BigNumber, utils } from 'ethers';
+import React, { useContext, useState } from 'react';
 import CollapsibleCard from '../../components/CollapsibleCard';
-import InputTokenEther from '../../components/InputTokenEther';
-import ConnectOrLearn from '../../components/ConnectOrLearn';
+import ManageBurnPool from '../../components/ManageBurnPool';
 import ManageChronoPool from '../../components/ManageChronoPool';
-import { czCashAddLink } from '../../utils/dexBuyLink';
 import ManageExoticFarm from '../../components/ManageExoticFarm';
 import ManageFarmV2 from '../../components/ManageFarmV2';
 import ManagePoolV1 from '../../components/ManagePoolV1';
 import ManageTribePool from '../../components/ManageTribePool';
-import ManageBurnPool from '../../components/ManageBurnPool';
-import ManageCzusdGate from '../../components/ManageCzusdGate';
 import ManageTribePoolNft from '../../components/ManageTribePoolNft';
-import { TRIBE_POOLS } from '../../constants/tribepools';
+import WalletStatsBar from '../../components/WalletStatsBar';
+import { ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD } from '../../constants/addresses';
 import { BURN_POOLS } from '../../constants/burnpools';
+import { CHRONO_POOL } from "../../constants/chronoPool";
+import { EXOTIC_FARMS } from "../../constants/exoticFarms";
+import { FARM_V2 } from "../../constants/famsv2";
+import { POOLS_V1 } from "../../constants/poolsv1";
+import { TRIBE_POOLS } from '../../constants/tribepools';
+import CZFarmContext from '../../contexts/CZFarmContext';
+import useAccountLpBals from '../../hooks/useAccountLpBals';
+import useBurnPoolAccountInfo from '../../hooks/useBurnPoolAccountInfo';
+import useBurnPoolInfo from '../../hooks/useBurnPoolInfo';
+import useChronoPoolAccountInfo from '../../hooks/useChronoPoolAccountInfo';
+import useChronoPoolInfo from '../../hooks/useChronoPoolInfo';
+import useCurrentEpoch from '../../hooks/useCurrentEpoch';
+import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
+import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
+import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
+import usePoolsV1Info from '../../hooks/usePoolsV1Info';
+import useTribePoolAccountInfo from '../../hooks/useTribePoolAccountInfo';
+import useTribePoolInfo from '../../hooks/useTribePoolInfo';
+import useV2FarmsPendingCzf from '../../hooks/useV2FarmsPendingCzf';
+import useV2FarmsPoolInfo from '../../hooks/useV2FarmsPoolInfo';
+import useV2FarmsSettings from '../../hooks/useV2FarmsSettings';
+import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
+import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
+import { czCashAddLink } from '../../utils/dexBuyLink';
+import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
+import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
+import styles from "./index.module.scss";
 const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
@@ -170,7 +165,7 @@ function Home() {
         />
       </CollapsibleCard>
 
-      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+      {/*<CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/CzusdGate.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
         <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZUSD Gate<br />
           <span className='is-size-6' >Swap BUSD and CZUSD.</span>
@@ -180,7 +175,7 @@ function Home() {
         <ManageCzusdGate
           {...{ account, library, currentEpoch, czusdBal }}
         />
-      </CollapsibleCard>
+      </CollapsibleCard>*/}
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/BurnPool.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
