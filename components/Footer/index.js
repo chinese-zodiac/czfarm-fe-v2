@@ -1,5 +1,5 @@
 import React from 'react';
-import { LINK_TWITTER, LINK_TELEGRAM, LINK_GITHUB, LINK_DISCORD, LINK_MEDIUM, LINK_WHITEPAPER, LINK_TELEGRAM_ANN } from '../../constants/links';
+import { LINK_DISCORD, LINK_GITHUB, LINK_MEDIUM, LINK_TELEGRAM, LINK_TELEGRAM_ANN, LINK_TWITTER, LINK_WHITEPAPER } from '../../constants/links';
 
 function Footer() {
   return (<footer id="footer" className="footer p-5">
@@ -65,7 +65,7 @@ function Footer() {
         </small>
       </p>
     </div>
-    <p className='is-size-7 p-5'>v0.0.2008b(experimental)</p>
+    <p className='is-size-7 p-5'>v0.0.3000b(experimental)</p>
   </footer>);
 }
 

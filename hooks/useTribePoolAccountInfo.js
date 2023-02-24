@@ -44,7 +44,6 @@ function useTribePoolAccountInfo(provider, account) {
         const totalRewardsReceivedIndex = stakedBalIndex + 1;
         const pendingRewardIndex = stakedBalIndex + 2;
         const getSlottedNftIndex = stakedBalIndex + 3;
-        console.log(pool.wrapperAddress, results?.[getSlottedNftIndex])
         return {
             address: pool.address,
             stakedBal: results?.[stakedBalIndex]?.value?.[0],

@@ -1,8 +1,6 @@
 import { BigNumber } from 'ethers';
-import { FARM_V2 } from "../constants/famsv2";
-import { POOLS_V1 } from "../constants/poolsv1";
-import { TRIBE_POOLS } from "../constants/tribepools";
 import { BURN_POOLS } from "../constants/burnpools";
+import { TRIBE_POOLS } from "../constants/tribepools";
 
 
 export const getCzrHarvestableBurnPools = (burnPoolsAccountInfo) => {
@@ -130,6 +128,6 @@ export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, bu
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
     });*/
-  } catch (e) { console.log(e) }
+  } catch (e) { console.log("getDailyAccountTokensWei err") }
   return dailyTokensList;
 }

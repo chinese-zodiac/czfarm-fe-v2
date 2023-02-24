@@ -5,6 +5,7 @@ import React, { useContext, useState } from 'react';
 import CollapsibleCard from '../../components/CollapsibleCard';
 import ManageBurnPool from '../../components/ManageBurnPool';
 import ManageChronoPool from '../../components/ManageChronoPool';
+import ManageCzusdNotes from '../../components/ManageCzusdNotes';
 import ManageExoticFarm from '../../components/ManageExoticFarm';
 import ManageFarmV2 from '../../components/ManageFarmV2';
 import ManagePoolV1 from '../../components/ManagePoolV1';
@@ -151,6 +152,18 @@ function Home() {
         })}
         <p className="has-text-right pr-2">Your Tribe Pools Staked: ${weiToShortString(tribePoolAccountStakeWei, 2)}</p>
         <p className="has-text-right pr-2">Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}</p>
+      </CollapsibleCard>
+
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/CzusdNotes.jpg" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CzusdNotes<br />
+          <span className='is-size-6' >Maximize earnings with minimal risk on DeFi.</span>
+        </p>
+      </div>
+      )}>
+        <ManageCzusdNotes
+          {...{ account, library, currentEpoch, czusdBal }}
+        />
       </CollapsibleCard>
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
