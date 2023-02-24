@@ -5,7 +5,7 @@ import CzusdNotesAbi from "../../abi/CzusdNotes.json";
 import ConnectOrLearn from '../../components/ConnectOrLearn';
 import InputTokenEther from '../../components/InputTokenEther';
 import QuickInputEther from '../../components/QuickInputEther';
-import { ADDRESS_CZUSDNOTES, ADDRESS_ZERO } from '../../constants/addresses';
+import { ADDRESS_CZUSD, ADDRESS_CZUSDNOTES, ADDRESS_ZERO } from '../../constants/addresses';
 import { tokenAmtToShortString } from '../../utils/bnDisplay';
 import { czCashBuyLink } from '../../utils/dexBuyLink';
 
@@ -95,11 +95,11 @@ export default function ManageCzusdNotes({
         </>)}
         {!!account && (<>
             <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
-                {czusdBal?.lte(minNoteSize?.[0] ?? 0) ? (
+                {!czusdBal || czusdBal?.lte(minNoteSize?.[0] ?? 0) ? (
                     <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
                         <div className='mb-5'>
                             <h3 className="is-size-4">Mint CzusdNote</h3>
-                            <p className='mb-2'>To Mint CzusdNotes, you need at least {tokenAmtToShortString(minNoteSize, 18, 2)} CZUSD.<br />
+                            <p className='mb-2'>To Mint CzusdNotes, you need at least {tokenAmtToShortString(minNoteSize?.[0] ?? 0, 18, 2)} CZUSD.<br />
                                 <a className='button is-medium is-rounded is-outlined is-primary m-3' href={czCashBuyLink(ADDRESS_CZUSD)} target="_blank" >Buy CZUSD</a>
                             </p>
                         </div>
