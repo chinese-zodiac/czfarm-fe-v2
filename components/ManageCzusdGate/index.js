@@ -1,16 +1,13 @@
+import { useCall, useContractFunction, useTokenAllowance, useTokenBalance } from '@usedapp/core';
+import { BigNumber, constants, Contract, utils } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import InputTokenEther from '../../components/InputTokenEther';
-import ConnectOrLearn from '../../components/ConnectOrLearn';
-import CollapsibleCard from '../../components/CollapsibleCard';
-import QuickInputEther from '../../components/QuickInputEther';
-import CZUSDLogo from "../../public/static/assets/images/tokens/CZUSD.png";
-import { ADDRESS_CZUSDGATE, ADDRESS_ISBOOSTELIGIBLE, ADDRESS_BUSD, ADDRESS_CZUSD } from '../../constants/addresses';
 import CzusdGateAbi from "../../abi/CzusdGate.json";
 import IBoostEligibleAbi from "../../abi/IBoostEligible.json";
 import ierc20Abi from "../../abi/IERC20.json";
-import { utils, Contract, BigNumber, constants } from 'ethers'
-import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
-import { useContractFunction, useCall, useTokenBalance, useTokenAllowance } from '@usedapp/core';
+import ConnectOrLearn from '../../components/ConnectOrLearn';
+import InputTokenEther from '../../components/InputTokenEther';
+import QuickInputEther from '../../components/QuickInputEther';
+import { ADDRESS_BUSD, ADDRESS_CZUSDGATE, ADDRESS_ISBOOSTELIGIBLE } from '../../constants/addresses';
 
 
 const { parseEther } = utils;
