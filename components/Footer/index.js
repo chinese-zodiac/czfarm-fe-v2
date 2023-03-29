@@ -29,6 +29,8 @@ function Footer() {
       </div>
     </div>
     <div className='pt-6 pb-6' style={{ maxWidth: "960px", marginLeft: "auto", marginRight: "auto" }}>
+      <h1>Persons under US Jurisdiction must not use CZ.FARM or other CZODIAC dapps, tokens, or services.</h1>
+      <p>All persons under US jurisdiction must not use CZODIAC dapps, tokens, or services. It is your responsibility to determine if you are under US jurisdiction and remove yourself from the project as czodiac does not have the capability to do so.</p>
       <p>
         <b>IMPORTANT: Do not expect profits from other's efforts.</b><br />
         <small>
