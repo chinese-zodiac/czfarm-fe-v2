@@ -1,49 +1,6 @@
-import { utils } from 'ethers'
+import { utils } from 'ethers';
 const { parseEther } = utils;
 export const TRIBE_POOLS = [
-    {
-        subtitle: "14.98% CZR burn on unstake.",
-        address: "0x4c9e47a32fd569dc5bf8b3ba150e57b22b9bbd8b",
-        wrapperAddress: "0xaf4702983e124c575d1dd2d105c2e030a2caf47d",
-        rewardAssetName: "LSDT",
-        rewardAddress: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
-        rewardDecimals: 18,
-        lp: "0x1A067fFcE2aE6Ae395d6508891CAE339639F1c0A",
-        tokens: [
-            {
-                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
-                symbol: "CZUSD"
-            },
-            {
-                address: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
-                symbol: "LSDT"
-            }
-        ],
-        logo: "./images/tokens/LSDT.png",
-        feeBasis: 1498
-    },
-    {
-        subtitle: "9.98% CZR burn on unstake.",
-        address: "0xd6602f288d0285356f7ec76b3530491b3bd71b4b",
-        wrapperAddress: "0x97b12c962f64852d88ffd67bcf95ad6a239462e4",
-        rewardAssetName: "LSDT",
-        rewardAddress: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
-        rewardDecimals: 18,
-        lp: "0x1A067fFcE2aE6Ae395d6508891CAE339639F1c0A",
-        tokens: [
-            {
-                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
-                symbol: "CZUSD"
-            },
-            {
-                address: "0xD9A255F79d7970A3Ed4d81eef82b054B0a21eCF8",
-                symbol: "LSDT"
-            }
-        ],
-        logo: "./images/tokens/LSDT.png",
-        feeBasis: 998,
-        duty: "50 LRT"
-    },
     {
         subtitle: "14.98% CZR burn on unstake.",
         address: "0x73e203e23785bcd6bd060a4a0a40de4c36ce20bb",
@@ -170,6 +127,49 @@ export const TRIBE_POOLS = [
             }
         ],
         logo: "./images/tokens/LSDT.png",
+        feeBasis: 998,
+        duty: "50 LRT"
+    },
+    {
+        subtitle: "14.98% CZR burn on unstake.",
+        address: "0x84748681A294F2Eb49fF0BFac21cd82fcF646107",
+        wrapperAddress: "0x39e18C777A3FfC6B2Bc9B0485486E54DFBFEF165",
+        rewardAssetName: "BRAG",
+        rewardAddress: "0x48c2bc3d0c63174B811aD4fa09b45cC039578aDb",
+        rewardDecimals: 18,
+        lp: "0x2b8c51720d5e007163bf83f38c2a72e497f1fb48",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0x48c2bc3d0c63174B811aD4fa09b45cC039578aDb",
+                symbol: "BRAG"
+            }
+        ],
+        logo: "./images/tokens/BRAG.png",
+        feeBasis: 1498
+    },
+    {
+        subtitle: "9.98% CZR burn on unstake.",
+        address: "0xcE0Dac82B8FF4c3C9e5d5244f2DbC8791Ea63D7e",
+        wrapperAddress: "0x2cfc10F03570C05713bEF29006ec018Cd4de8E51",
+        rewardAssetName: "BRAG",
+        rewardAddress: "0x48c2bc3d0c63174B811aD4fa09b45cC039578aDb",
+        rewardDecimals: 18,
+        lp: "0x2b8c51720d5e007163bf83f38c2a72e497f1fb48",
+        tokens: [
+            {
+                address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0x48c2bc3d0c63174B811aD4fa09b45cC039578aDb",
+                symbol: "BRAG"
+            }
+        ],
+        logo: "./images/tokens/BRAG.png",
         feeBasis: 998,
         duty: "50 LRT"
     }
