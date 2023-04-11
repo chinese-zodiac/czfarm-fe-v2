@@ -37,12 +37,12 @@ export const FARM_V2 = [
     pid: 2,
     tokens: [
       {
-        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
-        symbol: "CZF"
-      },
-      {
         address: "0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70",
         symbol: "CZUSD"
+      },
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
       }
     ]
   },
@@ -58,21 +58,6 @@ export const FARM_V2 = [
       {
         address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
         symbol: "BUSD"
-      }
-    ]
-  },
-  {
-    lp: "0xE90AEbc91Df3b534F4e2D74b527FaA6f49d45a77", //czf/ghd -PCS
-    dex: DEX.PCS,
-    pid: 4,
-    tokens: [
-      {
-        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
-        symbol: "CZF"
-      },
-      {
-        address: "0xfDFD27aE39cebefDBaAc8615F18aa68DDD0F15f5",
-        symbol: "GHD"
       }
     ]
   },
@@ -152,21 +137,6 @@ export const FARM_V2 = [
     ]
   },
   {
-    lp: "0xd5654a515f1cec88d1e3011e6729a3bd023b7533", //CZF/AMPLE -AMPL
-    dex: DEX.AMPL,
-    pid: 10,
-    tokens: [
-      {
-        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
-        symbol: "CZF"
-      },
-      {
-        address: "0x335f6e0e804b70a96bf9eb8af31588942e9b2515",
-        symbol: "AMPLE"
-      }
-    ]
-  },
-  {
     lp: "0xaCC6AF9C62B482Cb89522e262F8b315d870208ab", //CZF/DEP -APE
     dex: DEX.APE,
     pid: 12,
@@ -208,21 +178,6 @@ export const FARM_V2 = [
       {
         address: "0x617724974218A18769020A70162165A539c07E8a",
         symbol: "OLIVE"
-      }
-    ]
-  },
-  {
-    lp: "0x6b080059Fdd75113CeE43fb57A8B8c900d527D81", //CZF/CWE -PCS
-    dex: DEX.PCS,
-    pid: 15,
-    tokens: [
-      {
-        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
-        symbol: "CZF"
-      },
-      {
-        address: "0x9c6b7221cDDA3b8136fbF9D27ac07AeeCC1087B5",
-        symbol: "CWE"
       }
     ]
   },

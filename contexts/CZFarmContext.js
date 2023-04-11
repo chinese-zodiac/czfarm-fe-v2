@@ -1,18 +1,16 @@
-import React, { createContext, useState, useEffect } from 'react';
 import { useCoingeckoPrice } from '@usedapp/coingecko';
-import { useEthers, useEtherBalance } from "@usedapp/core";
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import { useEthers } from "@usedapp/core";
+import { BigNumber, utils } from 'ethers';
+import React, { createContext, useEffect, useState } from 'react';
+import { PRICING_LP } from "../constants/pricingLp";
+import useBurnPoolInfo from '../hooks/useBurnPoolInfo';
+import useChronoVestingsTotalVesting from '../hooks/useChronoVestingsTotalVesting';
+import useLpInfo from '../hooks/useLpInfo';
+import usePoolsV1TokenBalance from '../hooks/usePoolsV1TokenBalance';
+import useTribePoolInfo from '../hooks/useTribePoolInfo';
 import useTvlWei from '../hooks/useTvlWei';
 import useV2FarmsLpBal from '../hooks/useV2FarmsLpBal';
-import usePoolsV1TokenBalance from '../hooks/usePoolsV1TokenBalance';
-import useLpInfo from '../hooks/useLpInfo'
-import useChronoVestingsTotalVesting from '../hooks/useChronoVestingsTotalVesting';
-import useTribePoolInfo from '../hooks/useTribePoolInfo';
-import { PRICING_LP } from "../constants/pricingLp";
 import { weiTolpCzusdPricedWeiVal } from '../utils/bnDisplay';
-import { BigNumber, utils } from 'ethers';
-import useBurnPoolInfo from '../hooks/useBurnPoolInfo';
 const { parseEther, formatEther } = utils;
 
 const CZFarmContext = createContext(0);
