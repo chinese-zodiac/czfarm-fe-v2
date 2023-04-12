@@ -210,5 +210,110 @@ export const FARM_V2 = [
         symbol: "DST"
       }
     ]
+  },
+  {
+    lp: "0x3b44D7C8170e9EA0070DB07347DACb3DE7a80085", //CZF/CZR -PCS
+    dex: DEX.PCS,
+    pid: 19,
+    tokens: [
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
+      },
+      {
+        address: "0x5cd0c2C744caF04cda258Efc6558A3Ed3defE97b",
+        symbol: "CZR"
+      }
+    ]
+  },
+  {
+    lp: "0xd74ce80C184E1Cee90dB4b260F7A8dA020a43B72", //CZF/CZB -PCS
+    dex: DEX.PCS,
+    pid: 20,
+    tokens: [
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
+      },
+      {
+        address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+        symbol: "CZB"
+      }
+    ]
+  },
+  {
+    lp: "0xfA6CF68D17F59ea26b5e386da0Cfc868dbf5C669", //CZF/LRT -PCS
+    dex: DEX.PCS,
+    pid: 21,
+    tokens: [
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
+      },
+      {
+        address: "0xE95412D2d374B957ca7f8d96ABe6b6c1148fA438",
+        symbol: "LRT"
+      }
+    ]
+  },
+  {
+    lp: "0xfEe41686cbcCD8B15C1dafE05dED169E396569bf", //CZF/LSDT -PCS
+    dex: DEX.PCS,
+    pid: 22,
+    tokens: [
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
+      },
+      {
+        address: "0xAa83Bb1Be2a74AaA8795a8887054919A0Ea96BFA",
+        symbol: "LSDT"
+      }
+    ]
+  },
+  {
+    lp: "0xb0beeD4967b29e447d5134837a679b2BF426C1d9", //CZF/GEM -PCS
+    dex: DEX.PCS,
+    pid: 23,
+    tokens: [
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
+      },
+      {
+        address: "0x701F1ed50Aa5e784B8Fb89d1Ba05cCCd627839a7",
+        symbol: "GEM"
+      }
+    ]
+  },
+  {
+    lp: "0xFbEda923c601bE0730617581DfFA23Fcd5a34587", //CZF/DGOD -PCS
+    dex: DEX.PCS,
+    pid: 24,
+    tokens: [
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
+      },
+      {
+        address: "0x99F4cc2BAE97F82A823CA80DcAe52EF972B7F270",
+        symbol: "DGOD"
+      }
+    ]
+  },
+  {
+    lp: "0x01F6BF04e4905b380a7e139bdEBc070937503b39", //CZF/BRAG -PCS
+    dex: DEX.PCS,
+    pid: 25,
+    tokens: [
+      {
+        address: "0x7c1608C004F20c3520f70b924E2BfeF092dA0043",
+        symbol: "CZF"
+      },
+      {
+        address: "0x48c2bc3d0c63174B811aD4fa09b45cC039578aDb",
+        symbol: "BRAG"
+      }
+    ]
   }
 ]
