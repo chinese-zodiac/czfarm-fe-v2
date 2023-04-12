@@ -15,6 +15,14 @@ export const getSingleV2FarmCzfPerSecondWei = (v2FarmsSettings, singleV2FarmsLpB
   return v2CzfPerSecondPerAllocPoint?.mul(singleV2FarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleV2FarmsUserInfo?.amount ?? BigNumber.from(0)).div(singleV2FarmsLpBal?.lpBal ?? BigNumber.from(1));
 }
 
+export const getSingleCzbFarmCzbPerSecondWei = (czbFarmsSettings, singleCzbFarmsLpBal, singleCzbFarmsPoolInfo, singleCzbFarmsUserInfo) => {
+  if (!singleCzbFarmsLpBal?.lpBal || singleCzbFarmsLpBal.lpBal.eq(0)) {
+    return BigNumber.from(0)
+  }
+  const czbPerSecondPerAllocPoint = czbFarmsSettings?.czbPerSecond?.div(czbFarmsSettings?.totalAllocPoint) ?? BigNumber.from(0);
+  return czbPerSecondPerAllocPoint?.mul(singleCzbFarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleCzbFarmsUserInfo?.amount ?? BigNumber.from(0)).div(singleCzbFarmsLpBal?.lpBal ?? BigNumber.from(1));
+}
+
 export const getTokensHarvestable = (tribePoolAccountInfo) => {
   let tokensHarvestableList = [];
   try {//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.

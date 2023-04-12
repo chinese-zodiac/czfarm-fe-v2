@@ -3,8 +3,9 @@ import { useEthers, useTokenBalance } from '@usedapp/core';
 import { BigNumber, utils } from 'ethers';
 import React, { useContext, useState } from 'react';
 import CollapsibleCard from '../../components/CollapsibleCard';
-import ManageBurnPool from '../../components/ManageBurnPool';
 import ManageChronoPool from '../../components/ManageChronoPool';
+import ManageCzbFarm from '../../components/ManageCzbFarm';
+import ManageCzbFarmSingle from '../../components/ManageCzbFarmSingle';
 import ManageCzusdNotes from '../../components/ManageCzusdNotes';
 import ManageExoticFarm from '../../components/ManageExoticFarm';
 import ManageFarmV2 from '../../components/ManageFarmV2';
@@ -12,9 +13,10 @@ import ManagePoolV1 from '../../components/ManagePoolV1';
 import ManageTribePool from '../../components/ManageTribePool';
 import ManageTribePoolNft from '../../components/ManageTribePoolNft';
 import WalletStatsBar from '../../components/WalletStatsBar';
-import { ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD } from '../../constants/addresses';
+import { ADDRESS_CZB, ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD } from '../../constants/addresses';
 import { BURN_POOLS } from '../../constants/burnpools';
 import { CHRONO_POOL } from "../../constants/chronoPool";
+import { CZB_FARMS, CZB_FARMS_SINGLES } from '../../constants/czbfarms';
 import { EXOTIC_FARMS } from "../../constants/exoticFarms";
 import { FARM_V2 } from "../../constants/famsv2";
 import { POOLS_V1 } from "../../constants/poolsv1";
@@ -26,6 +28,10 @@ import useBurnPoolInfo from '../../hooks/useBurnPoolInfo';
 import useChronoPoolAccountInfo from '../../hooks/useChronoPoolAccountInfo';
 import useChronoPoolInfo from '../../hooks/useChronoPoolInfo';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
+import useCzbFarmsPendingCzb from '../../hooks/useCzbFarmsPendingCzb';
+import useCzbFarmsPoolInfo from '../../hooks/useCzbFarmsPoolInfo';
+import useCzbFarmsSettings from '../../hooks/useCzbFarmsSettings';
+import useCzbFarmsUserInfo from '../../hooks/useCzbFarmsUserInfo';
 import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
@@ -45,17 +51,22 @@ const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
   const { account, library, chainId } = useEthers();
-  const { czfPrice, czusdPrice, czrPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei } = useContext(CZFarmContext);
+  const { czfPrice, czusdPrice, czrPrice, czbPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, czbFarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei } = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
   const czrBal = useTokenBalance(ADDRESS_CZR, account);
+  const czbBal = useTokenBalance(ADDRESS_CZB, account);
   const czusdBal = useTokenBalance(ADDRESS_CZUSD, account);
 
   const v2FarmsSettings = useV2FarmsSettings(library);
   const v2FarmsPoolInfo = useV2FarmsPoolInfo(library);
   const v2FarmsPendingCzf = useV2FarmsPendingCzf(library, account);
   const v2FarmsUserInfo = useV2FarmsUserInfo(library, account);
+  const czbFarmsSettings = useCzbFarmsSettings(library);
+  const czbFarmsPoolInfo = useCzbFarmsPoolInfo(library);
+  const czbFarmsPendingCzb = useCzbFarmsPendingCzb(library, account);
+  const czbFarmsUserInfo = useCzbFarmsUserInfo(library, account);
   const chronoPoolInfo = useChronoPoolInfo(library);
   const chronoPoolAccountInfo = useChronoPoolAccountInfo(library, account);
   const exoticFarmInfo = useExoticFarmInfo(library);
@@ -132,8 +143,41 @@ function Home() {
       }} />
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/BlueFarm.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Blue Farms<br />
+          <span className='is-size-6' >Stake LP, Get CZBLUE every second.</span>
+        </p>
+      </div>
+      )}>
+        {CZB_FARMS_SINGLES.map((farm, index) => (
+          <ManageCzbFarmSingle key={farm.pid}
+            {...{ account, library, farm, accountLpBals, czbPrice, czusdPrice, czbFarmsSettings }}
+            czbFarmsLpBal={czbFarmsLpBal?.[index]}
+            czbFarmsPoolInfo={czbFarmsPoolInfo?.[index]}
+            czbFarmsPendingCzb={czbFarmsPendingCzb?.[index]}
+            czbFarmsUserInfo={czbFarmsUserInfo?.[index]}
+            lpInfo={lpInfos?.[farm?.token]}
+            accountLpBal={accountLpBals?.[farm?.token]}
+          />
+        ))}
+        {CZB_FARMS.map((farm, index) => (
+          <ManageCzbFarm key={farm.pid}
+            {...{ account, library, farm, accountLpBals, czbPrice, czusdPrice, czbFarmsSettings }}
+            czbFarmsLpBal={czbFarmsLpBal?.[index + CZB_FARMS_SINGLES.length]}
+            czbFarmsPoolInfo={czbFarmsPoolInfo?.[index + CZB_FARMS_SINGLES.length]}
+            czbFarmsPendingCzb={czbFarmsPendingCzb?.[index + CZB_FARMS_SINGLES.length]}
+            czbFarmsUserInfo={czbFarmsUserInfo?.[index + CZB_FARMS_SINGLES.length]}
+            lpInfo={lpInfos?.[farm?.lp]}
+            accountLpBal={accountLpBals?.[farm?.lp]}
+          />
+        ))}
+        <p className="has-text-right pr-2">Your Blue Farms Staked: TBD{/*${weiToShortString(farmsV2AccountStakeWei, 2)}*/}</p>
+        <p className="has-text-right pr-2">Blue Farms TVL: TBD{/*${weiToShortString(farmsV2TvlWei, 2)}*/}</p>
+      </CollapsibleCard>
+
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Tribe.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
-        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>CZR Tribe Pools<br />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Red Pools<br />
           <span className='is-size-6' >Stake CZR, Get fairtribe tokens every second.</span>
         </p>
       </div>
@@ -152,6 +196,28 @@ function Home() {
         })}
         <p className="has-text-right pr-2">Your Tribe Pools Staked: ${weiToShortString(tribePoolAccountStakeWei, 2)}</p>
         <p className="has-text-right pr-2">Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}</p>
+      </CollapsibleCard>
+
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Farm.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Green Farms<br />
+          <span className='is-size-6' >Stake LP, Get CZF every second.</span>
+        </p>
+      </div>
+      )}>
+        {FARM_V2.map((farm, index) => (
+          <ManageFarmV2 key={farm.pid}
+            {...{ account, library, farm, accountLpBals, czfPrice, czusdPrice, v2FarmsSettings }}
+            v2FarmsLpBal={v2FarmsLpBal?.[index]}
+            v2FarmsPoolInfo={v2FarmsPoolInfo?.[index]}
+            v2FarmsPendingCzf={v2FarmsPendingCzf?.[index]}
+            v2FarmsUserInfo={v2FarmsUserInfo?.[index]}
+            lpInfo={lpInfos?.[farm?.lp]}
+            accountLpBal={accountLpBals?.[farm?.lp]}
+          />
+        ))}
+        <p className="has-text-right pr-2">Your Farms V2 Staked: ${weiToShortString(farmsV2AccountStakeWei, 2)}</p>
+        <p className="has-text-right pr-2">Farms V2 TVL: ${weiToShortString(farmsV2TvlWei, 2)}</p>
       </CollapsibleCard>
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
@@ -190,7 +256,7 @@ function Home() {
         />
       </CollapsibleCard>*/}
 
-      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+      {/*<CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/BurnPool.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
         <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Burn Pools<br />
           <span className='is-size-6' >Burn CZF or CZUSD, Get CZRed every second.</span>
@@ -238,7 +304,7 @@ function Home() {
         })}
         <p className="has-text-right pr-2">Your Total Burned: ${weiToShortString(burnPoolAccountTvb, 2)}</p >
         <p className="has-text-right pr-2">Burn Pools Total Value Burned (TVB): ${weiToShortString(burnPoolsTvbWei, 2)}</p>
-      </CollapsibleCard>
+      </CollapsibleCard>*/}
 
       <hr />
 
@@ -293,27 +359,7 @@ function Home() {
         <p className="has-text-right pr-2">Exotic Farms TVL: ${weiToShortString(exoticTvlWei, 2)}</p>
       </CollapsibleCard>
 
-      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
-        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Farm.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
-        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>Farms V2<br />
-          <span className='is-size-6' >Stake LP, Get CZF every second.</span>
-        </p>
-      </div>
-      )}>
-        {FARM_V2.map((farm, index) => (
-          <ManageFarmV2 key={farm.pid}
-            {...{ account, library, farm, accountLpBals, czfPrice, czusdPrice, v2FarmsSettings }}
-            v2FarmsLpBal={v2FarmsLpBal?.[index]}
-            v2FarmsPoolInfo={v2FarmsPoolInfo?.[index]}
-            v2FarmsPendingCzf={v2FarmsPendingCzf?.[index]}
-            v2FarmsUserInfo={v2FarmsUserInfo?.[index]}
-            lpInfo={lpInfos?.[farm?.lp]}
-            accountLpBal={accountLpBals?.[farm?.lp]}
-          />
-        ))}
-        <p className="has-text-right pr-2">Your Farms V2 Staked: ${weiToShortString(farmsV2AccountStakeWei, 2)}</p>
-        <p className="has-text-right pr-2">Farms V2 TVL: ${weiToShortString(farmsV2TvlWei, 2)}</p>
-      </CollapsibleCard>
+
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
         <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/Pools.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
