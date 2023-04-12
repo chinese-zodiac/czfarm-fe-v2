@@ -8,6 +8,9 @@ export const getCzrHarvestableBurnPools = (burnPoolsAccountInfo) => {
 }
 
 export const getSingleV2FarmCzfPerSecondWei = (v2FarmsSettings, singleV2FarmsLpBal, singleV2FarmsPoolInfo, singleV2FarmsUserInfo) => {
+  if (!singleV2FarmsLpBal?.lpBal || singleV2FarmsLpBal.lpBal.eq(0)) {
+    return BigNumber.from(0)
+  }
   const v2CzfPerSecondPerAllocPoint = v2FarmsSettings?.czfPerBlock?.div(3).div(v2FarmsSettings?.totalAllocPoint) ?? BigNumber.from(0); //3 seconds per block
   return v2CzfPerSecondPerAllocPoint?.mul(singleV2FarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleV2FarmsUserInfo?.amount ?? BigNumber.from(0)).div(singleV2FarmsLpBal?.lpBal ?? BigNumber.from(1));
 }

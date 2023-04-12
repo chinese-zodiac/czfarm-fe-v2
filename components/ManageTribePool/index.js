@@ -1,26 +1,18 @@
 
+import { useCoingeckoTokenPrice } from '@usedapp/coingecko';
+import { useContractFunction, useEthers } from '@usedapp/core';
+import { BigNumber, Contract, utils } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { useEthers } from '@usedapp/core';
-import Link from 'next/link';
-import fetchRetry from '../../utils/fetchRetry';
-import { useCoingeckoTokenPrice } from '@usedapp/coingecko'
-import InputTokenEther from '../InputTokenEther';
-import ConnectOrLearn from '../ConnectOrLearn';
-import CollapsibleCard from '../CollapsibleCard';
-import QuickInputEther from '../QuickInputEther';
-import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
-import { dexAddLink } from '../../utils/dexBuyLink';
-import { getIpfsJson, getIpfsUrl } from '../../utils/getIpfsJson';
 import tribePoolAbi from "../../abi/TribePool.json";
 import tribePoolStakeWrapperTokenAbi from "../../abi/TribePoolStakeWrapperToken.json";
-import tribePoolRescueCzfTokenAbi from "../../abi/TribePoolRescueCzf.json";
-import IERC721EnumerableAbi from "../../abi/IERC721Enumerable.json";
-import { utils, Contract, BigNumber } from 'ethers'
-import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString, weiTolpCzusdPricedWeiVal } from '../../utils/bnDisplay';
-import { deltaCountdown } from '../../utils/timeDisplay';
-import { useCall, useContractFunction } from '@usedapp/core';
-import { ADDRESS_OBR, ADDRESS_CZUSD, ADDRESS_TRIBEPOOLRESCUECZF } from "../../constants/addresses";
 import { PRICING_LP } from "../../constants/pricingLp";
+import { tokenAmtToShortString, weiToShortString, weiToUsdWeiVal, weiTolpCzusdPricedWeiVal } from '../../utils/bnDisplay';
+import { getIpfsJson, getIpfsUrl } from '../../utils/getIpfsJson';
+import CollapsibleCard from '../CollapsibleCard';
+import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
+import ConnectOrLearn from '../ConnectOrLearn';
+import InputTokenEther from '../InputTokenEther';
+import QuickInputEther from '../QuickInputEther';
 const { formatEther, parseEther, Interface } = utils;
 
 export default function ManageTribePool({ pool, rewardAddress, accountInfo, poolInfo, czrBal, czusdPrice, czrPrice, lpInfos }) {

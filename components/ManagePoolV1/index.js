@@ -1,23 +1,17 @@
 
+import { useCoingeckoTokenPrice } from '@usedapp/coingecko';
+import { useContractFunction, useEthers } from '@usedapp/core';
+import { BigNumber, Contract, utils } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { useEthers } from '@usedapp/core';
-import Link from 'next/link';
-import { useCoingeckoTokenPrice } from '@usedapp/coingecko'
-import InputTokenEther from '../InputTokenEther';
-import ConnectOrLearn from '../ConnectOrLearn';
-import CollapsibleCard from '../CollapsibleCard';
-import QuickInputEther from '../QuickInputEther';
-import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
-import CZFLogo from "../../public/static/assets/images/tokens/CZF.png";
-import { dexAddLink } from '../../utils/dexBuyLink';
-import { getIpfsJson, getIpfsUrl } from '../../utils/getIpfsJson';
 import czFarmPoolAbi from "../../abi/CZFarmPool.json";
-import IERC721EnumerableAbi from "../../abi/IERC721Enumerable.json";
-import { utils, Contract, BigNumber } from 'ethers'
-import { weiToShortString, weiToUsdWeiVal, tokenAmtToShortString } from '../../utils/bnDisplay';
+import { tokenAmtToShortString, weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
+import { getIpfsJson, getIpfsUrl } from '../../utils/getIpfsJson';
 import { deltaCountdown } from '../../utils/timeDisplay';
-import { useCall, useContractFunction } from '@usedapp/core';
-import { ADDRESS_OBR } from "../../constants/addresses";
+import CollapsibleCard from '../CollapsibleCard';
+import CollapsibleCardTitleItem from '../CollapsibleCardTitleItem';
+import ConnectOrLearn from '../ConnectOrLearn';
+import InputTokenEther from '../InputTokenEther';
+import QuickInputEther from '../QuickInputEther';
 const { formatEther, parseEther, Interface } = utils;
 
 export default function ManagePoolV1({ pool, rewardAddress, currentEpoch, accountInfo, poolInfo, poolTokenBalance, czfBal, czusdBal, czfPrice, czusdPrice, isExpired, isLaunching, isActive }) {
