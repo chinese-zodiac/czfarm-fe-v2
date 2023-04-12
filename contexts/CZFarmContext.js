@@ -17,7 +17,6 @@ const CZFarmContext = createContext(0);
 
 export const CZFarmProvider = ({ children }) => {
   const czusdPrice = useCoingeckoPrice("czusd");
-  const czfPrice = useCoingeckoPrice("czfarm");
   const bnbPrice = useCoingeckoPrice("binancecoin");
   const { library } = useEthers();
 
@@ -30,6 +29,7 @@ export const CZFarmProvider = ({ children }) => {
   const lpInfos = useLpInfo(library);
 
   const [czrPrice, setCzrPrice] = useState(BigNumber.from(0));
+  const [czfPrice, setCzfPrice] = useState(BigNumber.from(0));
 
   const {
     chronoTvlWei,
@@ -42,9 +42,11 @@ export const CZFarmProvider = ({ children }) => {
 
   useEffect(() => {
     setCzrPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZR", parseEther("1"), czusdPrice)));
+    setCzfPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZF", parseEther("1"), czusdPrice)));
   }, [lpInfos?.[PRICING_LP.CZR]?.tokens?.[0]])
 
   return (
+    
     <CZFarmContext.Provider value={{
       czusdPrice, czfPrice, bnbPrice, czrPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei,
       //React doesnt know how to properly check if bignumbers have changed, so use these to trigger refreshes
