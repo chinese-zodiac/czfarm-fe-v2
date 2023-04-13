@@ -89,13 +89,13 @@ export default function ManageCzbFarmSingle({ account, library, farm, czbFarmsSe
       {!account && (<>
         <ConnectOrLearn />
       </>)}
-      {(!!account && lpAllowance?.lte(tokenBalance ?? 0)) && (
+      {(!!account && lpAllowance?.lt(tokenBalance ?? 0)) && (
         <div>
           <p className='mb-2'>To use this single asset {farm?.tokenName} Blue Farm, you need to approve the Blue Farm Master address <code>{ADDRESS_CZBMASTER}</code> to use your {farm?.tokenName}  tokens. You can use the button below.</p>
           <button onClick={() => sendApprove(ADDRESS_CZBMASTER, MaxUint256)} className='button has-background-grey-lighter is-fullwidth'>Approve</button>
         </div>
       )}
-      {(!!account && lpAllowance?.gt(tokenBalance ?? 0)) && (<>
+      {(!!account && lpAllowance?.gte(tokenBalance ?? 0)) && (<>
         <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
           <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
             <h3 className="is-size-4">Stake {farm?.tokenName}  For CZB/Second</h3>

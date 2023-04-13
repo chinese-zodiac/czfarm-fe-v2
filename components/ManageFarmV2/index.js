@@ -93,13 +93,13 @@ export default function ManageFarmV2({ account, library, farm, v2FarmsSettings, 
       {!account && (<>
         <ConnectOrLearn />
       </>)}
-      {(!!account && lpAllowance?.lte(accountLpBal ?? 0)) && (
+      {(!!account && lpAllowance?.lt(accountLpBal ?? 0)) && (
         <div>
           <p className='mb-2'>To use this {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} Farms V2, you need to approve the Exotic Master address <code>{ADDRESS_FARMMASTERV2}</code> to use your {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP tokens. You can use the button below.</p>
           <button onClick={() => sendApprove(ADDRESS_FARMMASTERV2, MaxUint256)} className='button has-background-grey-lighter is-fullwidth'>Approve</button>
         </div>
       )}
-      {(!!account && lpAllowance?.gt(accountLpBal ?? 0)) && (<>
+      {(!!account && lpAllowance?.gte(accountLpBal ?? 0)) && (<>
         <div className="is-flex is-flex-direction-row is-flex-wrap-wrap">
           <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
             <h3 className="is-size-4">Stake {farm?.tokens?.[0]?.symbol}/{farm?.tokens?.[1]?.symbol} LP For CZF/Second</h3>
