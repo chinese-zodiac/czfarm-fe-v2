@@ -1,5 +1,5 @@
 import React from 'react';
-import { LINK_DISCORD, LINK_GITHUB, LINK_MEDIUM, LINK_TELEGRAM, LINK_TELEGRAM_ANN, LINK_TWITTER, LINK_WHITEPAPER } from '../../constants/links';
+import { LINK_DISCORD, LINK_GITHUB, LINK_MEDIUM, LINK_PRIVACY_POLICY, LINK_TELEGRAM, LINK_TELEGRAM_ANN, LINK_TERMS_OF_USE, LINK_TWITTER, LINK_WHITEPAPER } from '../../constants/links';
 
 function Footer() {
   return (<footer id="footer" className="footer p-5">
@@ -29,42 +29,65 @@ function Footer() {
       </div>
     </div>
     <div className='pt-6 pb-6' style={{ maxWidth: "960px", marginLeft: "auto", marginRight: "auto" }}>
-      <h1 style={{ fontSize: '36px', fontWeight: 'bold' }}>Persons under US Jurisdiction must not use CZ.FARM or other CZODIAC dapps, tokens, or services.</h1>
-      <p>All persons under US jurisdiction must not use CZODIAC dapps, tokens, or services. It is your responsibility to determine if you are under US jurisdiction and remove yourself from the project as czodiac does not have the capability to do so.</p>
-      <br /><br />
+
+      <h1 style={{ fontSize: "2em" }}>Terms of Use</h1>
       <p>
-        <b>IMPORTANT: Do not expect profits from other's efforts.</b><br />
-        <small>
-          Nothing on this site or on related channels should be considered a promise by anyone, including but not limited to the developers and promoters of this site, to perform work to generate profits for anyone including but not limited to the following: the users of this site; CZodiac community members; CZF holders; CZR holders; CZUSD holders; or anyone using any of the sites, smart contracts, social media channels, and any other media or tech related to CZF, CZR and CZodiac or any of the community members. Czodiac, CZF, CZR, cz.farm, and related technologies plus media are all experimental and must be used according to your personal financial situation and risk profile. There are no guarantees of profits.
-        </small>
+        By accessing any CZODIAC website, including but not limited to
+        CZODIAC's decentralized applications and services, and engaging
+        in any activities related to the CZODIAC ecosystem, including
+        buying, selling, trading, holding CZODIAC tokens, or
+        participating in the CZODIAC community, users acknowledge that
+        they have read, understood, and agreed to be bound by the terms
+        and conditions set forth in CZODIAC's Terms of Use. The Terms of
+        Use, available at{' '}
+        <a style={{ color: 'cyan' }} href={LINK_TERMS_OF_USE}>
+          {LINK_TERMS_OF_USE}
+        </a>
+        , constitute a legally binding agreement between users and
+        CZODIAC, and users should review them carefully before engaging
+        in any activities related to the CZODIAC ecosystem. If users do
+        not agree to the terms and conditions set forth in the Terms of
+        Use, they should not access or use CZODIAC's websites, dapps,
+        tokens, or other offerings. By using any CZODIAC website, users
+        represent and warrant that they have the legal capacity to enter
+        into a binding agreement with CZODIAC and that they comply with
+        all applicable laws and regulations.
+        <br />
+        <br />
+        <a style={{ color: 'cyan' }} href={LINK_TERMS_OF_USE}>
+          LINK TO TERMS OF USE
+        </a>
       </p>
       <br />
+      <h1 style={{ fontSize: "2em" }}>Privacy Policy</h1>
       <p>
-        <b>WARNING: You may incur a tax liability.</b><br />
-        <small>
-          Please consult your tax adviser before using CZ.FARM, CZodiac products, CZodiac tokens, other dapps linked by this site. Just like for every blockchain dapp, there may be complex taxation issues depending on your jurisdiction.
-        </small>
+        At CZODIAC, we are committed to protecting the privacy and
+        personal information of our users. We encourage you to read our
+        Privacy Policy, which can be found at{' '}
+        <a style={{ color: 'cyan' }} href={LINK_PRIVACY_POLICY}>
+          {LINK_PRIVACY_POLICY}
+        </a>
+        . This policy outlines the types of personal information that
+        CZODIAC may collect, the purposes for which this information is
+        used, and the steps taken to ensure the security and
+        confidentiality of your personal data. By using CZODIAC's
+        websites or services, you acknowledge that you have read and
+        understood our Privacy Policy and consent to the collection,
+        use, and disclosure of your personal information as described
+        therein. If you have any questions or concerns about our privacy
+        practices, please contact us at team@czodiac.com.
+        <br />
+        <br />
+        <a style={{ color: 'cyan' }} href={LINK_PRIVACY_POLICY}>
+          LINK TO PRIVACY POLICY
+        </a>
       </p>
-      <br />
-      <p>
-        <b>WARNING: You are using experimental technology.</b><br />
-        <small>
-          All CZodiac products are experimental technology which may fail in unexpected ways from causes such as hacks, tokenomic design, software errors, or other unexpected issues that can not be anticipated as with any other experimental technology. Do not trust CZodiac dapps or other products with more funds than you can afford to use. Use CZodiac at your own risk, just as you would with any other innovative blockchain dapp.
-        </small>
-      </p>
-      <br />
-      <p>
-        <b>DISCLAIMER: Use at your own risk.</b><br />
-        <small>
-          All information provided by CZ.FARM and other CZodiac products, tokens, and dapps has no guarantee of completeness, accuracy, timeliness or of the results obtained from the use of information and/or CZodiac products, and without warranty of any kind, express or implied, including but not limited to warranties of performance, merchantability and fitness for a particular purpose.<br />
-          CZodiac and its members, team, developers, affiliates, associates, token holders, or other individuals or organizations involved in CZodiac products, dapps, or other services will not be liable to you or anyone else for any decision made or action taken in reliance on the information given by CZ.FARM or other CZodiac dapps or services for any consequential, special or similar damages, even if advised of the possibility of such damages.
-        </small>
-      </p>
+
       <br />
       <p>
         <b>CONTACT</b><br />
         <small>
-          For questions about the above notices, warnings, and/or disclaimers you may contact via email "team @ czodiac . com".
+          team@czodiac.com
         </small>
       </p>
     </div>
