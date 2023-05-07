@@ -31,7 +31,8 @@ function useCzbFarmsPoolInfo(provider) {
       lpToken: result?.value?.lpToken,
       allocPoint: result?.value?.allocPoint,
       lastRewardBlock: result?.value?.lastRewardBlock,
-      accCzbPerShare: result?.value?.accCzfPerShare,
+      accCzbPerShare: result?.value?.accCzbPerShare,
+      totalDeposit: result?.value?.totalDeposit,
     }
   });
 }

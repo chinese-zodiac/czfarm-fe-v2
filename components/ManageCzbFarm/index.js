@@ -41,17 +41,17 @@ export default function ManageCzbFarm({ account, library, farm, czbFarmsSettings
     'approve');
 
   useEffect(() => {
-    if (!czbFarmsSettings?.czbPerSecond || !czbFarmsSettings?.totalAllocPoint || !lpInfo?.totalSupply || !lpInfo?.tokens[0] || !czbFarmsPoolInfo?.allocPoint || !czbFarmsLpBal?.lpBal || !czbPrice || !czusdPrice) {
+    if (!czbFarmsSettings?.czbPerSecond || !czbFarmsSettings?.totalAllocPoint || !lpInfo?.totalSupply || !lpInfo?.tokens[0] || !czbFarmsPoolInfo?.allocPoint || !czbFarmsPoolInfo?.totalDeposit || !czbPrice || !czusdPrice) {
       setApr("0.00");
       return;
     }
     let usdPerYear = weiToUsdWeiVal(czbFarmsSettings.czbPerSecond.mul(10519200).mul(czbFarmsPoolInfo.allocPoint).div(czbFarmsSettings.totalAllocPoint), czbPrice);
-    let usdStaked = getLpTokenValueUsdWad(farm.tokens[0].symbol, lpInfo, czbFarmsLpBal.lpBal, czbPrice, czusdPrice, isSwap);
+    let usdStaked = getLpTokenValueUsdWad(farm.tokens[0].symbol, lpInfo, czbFarmsPoolInfo?.totalDeposit, czbPrice, czusdPrice, isSwap);
     if (usdStaked.eq(0)) {
       usdStaked = BigNumber.from(1);
     }
     setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
-  }, [!czbFarmsSettings?.czbPerSecond || !czbFarmsSettings?.totalAllocPoint, lpInfo?.totalSupply, lpInfo?.tokens[0], czbFarmsPoolInfo?.allocPoint, czbFarmsLpBal?.lpBal, czbPrice, czusdPrice])
+  }, [!czbFarmsSettings?.czbPerSecond || !czbFarmsSettings?.totalAllocPoint, lpInfo?.totalSupply, lpInfo?.tokens[0], czbFarmsPoolInfo?.allocPoint, czbFarmsPoolInfo?.totalDeposit, czbPrice, czusdPrice])
 
   return (<>
     <CollapsibleCard className="mb-3"
@@ -78,13 +78,13 @@ export default function ManageCzbFarm({ account, library, farm, czbFarmsSettings
           <span className='is-size-6'>{(apr)}%</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="TVL" width="4.5em">
-          <span className='is-size-6'>${weiToShortString(getLpTokenValueUsdWad(farm?.tokens?.[0]?.symbol ?? "CZB", lpInfo, czbFarmsLpBal?.lpBal, czbPrice, czusdPrice, isSwap), 1)}</span>
+          <span className='is-size-6'>${weiToShortString(getLpTokenValueUsdWad(farm?.tokens?.[0]?.symbol ?? "CZB", lpInfo, czbFarmsPoolInfo?.totalDeposit, czbPrice, czusdPrice, isSwap), 1)}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="STAKE" width="4.5em">
           <span className='is-size-6'>${weiToShortString(getLpTokenValueUsdWad(farm?.tokens?.[0]?.symbol ?? "CZB", lpInfo, czbFarmsUserInfo?.amount, czbPrice, czusdPrice, isSwap), 1)}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="CZB/DAY" width="4em">
-          <span className='is-size-6'>{weiToShortString(getSingleCzbFarmCzbPerSecondWei(czbFarmsSettings, czbFarmsLpBal, czbFarmsPoolInfo, czbFarmsUserInfo).mul(86400), 1)}</span>
+          <span className='is-size-6'>{weiToShortString(getSingleCzbFarmCzbPerSecondWei(czbFarmsSettings, czbFarmsPoolInfo?.totalDeposit, czbFarmsPoolInfo, czbFarmsUserInfo).mul(86400), 1)}</span>
         </CollapsibleCardTitleItem>
         <CollapsibleCardTitleItem title="EST CLAIM" width="4em">
           <span className='is-size-6'>{weiToShortString(czbFarmsPendingCzb?.pendingCzb, 2)}</span>
