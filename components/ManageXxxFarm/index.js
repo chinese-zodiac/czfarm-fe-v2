@@ -21,9 +21,8 @@ export default function ManageXxxFarm({ account, library, farm, xxxFarmsSettings
   const [inputEther, setInputEther] = useState(0);
   const [outputEther, setOutputEther] = useState(0);
 
-  const isSwap = farm?.tokens?.[0]?.symbol == "CZB" ? (
-    (farm?.tokens?.[1]?.symbol == "CZF") ? true : false
-  ) : farm?.tokens?.[1]?.symbol == "CZB"
+  const isSwap = (farm?.tokens?.[0]?.symbol == "CZB" && farm?.tokens?.[1]?.symbol == "CZF") ||
+    (farm?.tokens?.[0]?.symbol == "BANDIT" && farm?.tokens?.[1]?.symbol == "CZB")
 
 
   const { state: stateClaim, send: sendClaim } = useContractFunction(
