@@ -1,4 +1,5 @@
 
+import { formatEther } from '@ethersproject/units';
 import { useContractFunction, useTokenAllowance, useTokenBalance } from '@usedapp/core';
 import { BigNumber, Contract, constants, utils } from 'ethers';
 import React, { useEffect, useState } from 'react';
@@ -43,11 +44,17 @@ export default function ManageXxxFarmSingle({ account, library, farm, xxxFarmsSe
       return;
     }
     let usdPerYear = weiToUsdWeiVal(xxxFarmsSettings.xxxPerSecond.mul(31557600).mul(xxxFarmsPoolInfo.allocPoint).div(xxxFarmsSettings.totalAllocPoint), xxxPrice);
+    console.log(farm.tokenName);
+    console.log(xxx_Symbol);
+    console.log(xxxPrice);
+    console.log(czusdPrice);
+    console.log(formatEther(xxxFarmsPoolInfo.totalDeposit));
     let usdStaked = weiToUsdWeiVal(xxxFarmsPoolInfo.totalDeposit, farm.tokenName == xxx_Symbol ? xxxPrice : czusdPrice);
+    console.log('usdStaked', usdStaked);
     if (usdStaked.eq(0)) {
       usdStaked = BigNumber.from(1);
     }
-    
+
     setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
   }, [!xxxFarmsSettings?.xxxPerSecond || !xxxFarmsSettings?.totalAllocPoint, xxxFarmsPoolInfo?.allocPoint, xxxFarmsPoolInfo?.totalDeposit, xxxPrice, czusdPrice])
 
