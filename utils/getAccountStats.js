@@ -16,12 +16,19 @@ export const getSingleV2FarmCzfPerSecondWei = (v2FarmsSettings, singleV2FarmsLpB
 }
 
 export const getSingleCzbFarmCzbPerSecondWei = (czbFarmsSettings, totalDeposit, singleCzbFarmsPoolInfo, singleCzbFarmsUserInfo) => {
-  console.log(totalDeposit)
   if (!totalDeposit || (!!totalDeposit && totalDeposit?.eq(0))) {
     return BigNumber.from(0)
   }
   const czbPerSecondPerAllocPoint = czbFarmsSettings?.czbPerSecond?.div(czbFarmsSettings?.totalAllocPoint) ?? BigNumber.from(0);
   return czbPerSecondPerAllocPoint?.mul(singleCzbFarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleCzbFarmsUserInfo?.amount ?? BigNumber.from(0)).div(totalDeposit ?? BigNumber.from(1));
+}
+
+export const getSingleXxxFarmXxxPerSecondWei = (xxxFarmsSettings, totalDeposit, singleXxxFarmsPoolInfo, singleXxxFarmsUserInfo) => {
+  if (!totalDeposit || (!!totalDeposit && totalDeposit?.eq(0))) {
+    return BigNumber.from(0)
+  }
+  const xxxPerSecondPerAllocPoint = xxxFarmsSettings?.czbPerSecond?.div(xxxFarmsSettings?.totalAllocPoint) ?? BigNumber.from(0);
+  return xxxPerSecondPerAllocPoint?.mul(singleXxxFarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleXxxFarmsUserInfo?.amount ?? BigNumber.from(0)).div(totalDeposit ?? BigNumber.from(1));
 }
 
 export const getTokensHarvestable = (tribePoolAccountInfo) => {

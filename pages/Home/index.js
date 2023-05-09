@@ -4,16 +4,17 @@ import { BigNumber, utils } from 'ethers';
 import React, { useContext, useState } from 'react';
 import CollapsibleCard from '../../components/CollapsibleCard';
 import ManageChronoPool from '../../components/ManageChronoPool';
-import ManageCzbFarm from '../../components/ManageCzbFarm';
-import ManageCzbFarmSingle from '../../components/ManageCzbFarmSingle';
 import ManageCzusdNotes from '../../components/ManageCzusdNotes';
 import ManageExoticFarm from '../../components/ManageExoticFarm';
 import ManageFarmV2 from '../../components/ManageFarmV2';
 import ManagePoolV1 from '../../components/ManagePoolV1';
 import ManageTribePool from '../../components/ManageTribePool';
 import ManageTribePoolNft from '../../components/ManageTribePoolNft';
+import ManageXxxFarm from '../../components/ManageXxxFarm';
+import ManageXxxFarmSingle from '../../components/ManageXxxFarmSingle';
 import WalletStatsBar from '../../components/WalletStatsBar';
-import { ADDRESS_CZB, ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD } from '../../constants/addresses';
+import { ADDRESS_BANDITMASTER, ADDRESS_CZB, ADDRESS_CZBMASTER, ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD } from '../../constants/addresses';
+import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../../constants/banditfarms';
 import { BURN_POOLS } from '../../constants/burnpools';
 import { CHRONO_POOL } from "../../constants/chronoPool";
 import { CZB_FARMS, CZB_FARMS_SINGLES } from '../../constants/czbfarms';
@@ -28,10 +29,7 @@ import useBurnPoolInfo from '../../hooks/useBurnPoolInfo';
 import useChronoPoolAccountInfo from '../../hooks/useChronoPoolAccountInfo';
 import useChronoPoolInfo from '../../hooks/useChronoPoolInfo';
 import useCurrentEpoch from '../../hooks/useCurrentEpoch';
-import useCzbFarmsPendingCzb from '../../hooks/useCzbFarmsPendingCzb';
 import useCzbFarmsPoolInfo from '../../hooks/useCzbFarmsPoolInfo';
-import useCzbFarmsSettings from '../../hooks/useCzbFarmsSettings';
-import useCzbFarmsUserInfo from '../../hooks/useCzbFarmsUserInfo';
 import useExoticFarmAccountInfo from '../../hooks/useExoticFarmAccountInfo';
 import useExoticFarmInfo from '../../hooks/useExoticFarmInfo';
 import usePoolsV1AccountInfo from '../../hooks/usePoolsV1AccountInfo';
@@ -42,6 +40,9 @@ import useV2FarmsPendingCzf from '../../hooks/useV2FarmsPendingCzf';
 import useV2FarmsPoolInfo from '../../hooks/useV2FarmsPoolInfo';
 import useV2FarmsSettings from '../../hooks/useV2FarmsSettings';
 import useV2FarmsUserInfo from '../../hooks/useV2FarmsUserInfo';
+import useXxxFarmsPendingXxx from '../../hooks/useXxxFarmsPendingXxx';
+import useXxxFarmsSettings from "../../hooks/useXxxFarmsSettings";
+import useXxxFarmsUserInfo from '../../hooks/useXxxFarmsUserInfo';
 import { weiToShortString, weiToUsdWeiVal } from '../../utils/bnDisplay';
 import { czCashAddLink } from '../../utils/dexBuyLink';
 import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
@@ -51,7 +52,7 @@ const { formatEther, parseEther, Interface } = utils;
 
 function Home() {
   const { account, library, chainId } = useEthers();
-  const { czfPrice, czusdPrice, czrPrice, czbPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, czbFarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei } = useContext(CZFarmContext);
+  const { czfPrice, czusdPrice, czrPrice, czbPrice, banditPrice, bnbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, czbFarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei } = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
@@ -63,10 +64,14 @@ function Home() {
   const v2FarmsPoolInfo = useV2FarmsPoolInfo(library);
   const v2FarmsPendingCzf = useV2FarmsPendingCzf(library, account);
   const v2FarmsUserInfo = useV2FarmsUserInfo(library, account);
-  const czbFarmsSettings = useCzbFarmsSettings(library);
+  const czbFarmsSettings = useXxxFarmsSettings(library, ADDRESS_CZBMASTER, 'czbPerSecond');
   const czbFarmsPoolInfo = useCzbFarmsPoolInfo(library);
-  const czbFarmsPendingCzb = useCzbFarmsPendingCzb(library, account);
-  const czbFarmsUserInfo = useCzbFarmsUserInfo(library, account);
+  const czbFarmsPendingCzb = useXxxFarmsPendingXxx(library, account, ADDRESS_CZBMASTER, CZB_FARMS_SINGLES, CZB_FARMS, 'pendingCzb');
+  const czbFarmsUserInfo = useXxxFarmsUserInfo(library, account, ADDRESS_CZBMASTER, CZB_FARMS_SINGLES, CZB_FARMS);
+  const banditFarmsSettings = useXxxFarmsSettings(library, ADDRESS_BANDITMASTER, 'banditPerSecond');
+  const banditFarmsPoolInfo = useCzbFarmsPoolInfo(library);
+  const banditFarmsPendingBandit = useXxxFarmsPendingXxx(library, account, ADDRESS_BANDITMASTER, BANDIT_FARMS_SINGLES, BANDIT_FARMS, 'pendingBandit');
+  const banditFarmsUserInfo = useXxxFarmsUserInfo(library, account, ADDRESS_BANDITMASTER, BANDIT_FARMS_SINGLES, BANDIT_FARMS);
   const chronoPoolInfo = useChronoPoolInfo(library);
   const chronoPoolAccountInfo = useChronoPoolAccountInfo(library, account);
   const exoticFarmInfo = useExoticFarmInfo(library);
@@ -150,29 +155,75 @@ function Home() {
       </div>
       )}>
         {CZB_FARMS_SINGLES.map((farm, index) => (
-          <ManageCzbFarmSingle key={farm.pid}
-            {...{ account, library, farm, accountLpBals, czbPrice, czusdPrice, czbFarmsSettings }}
-            czbFarmsLpBal={czbFarmsLpBal?.[index]}
-            czbFarmsPoolInfo={czbFarmsPoolInfo?.[index]}
-            czbFarmsPendingCzb={czbFarmsPendingCzb?.[index]}
-            czbFarmsUserInfo={czbFarmsUserInfo?.[index]}
-            lpInfo={lpInfos?.[farm?.token]}
-            accountLpBal={accountLpBals?.[farm?.token]}
+          <ManageXxxFarmSingle key={farm.pid}
+            {...{ account, library, farm, accountLpBals, czusdPrice }}
+            xxxFarmsSettings={czbFarmsSettings}
+            xxxFarmsPoolInfo={czbFarmsPoolInfo?.[index]}
+            xxxFarmsPendingXxx={czbFarmsPendingCzb?.[index]}
+            xxxFarmsUserInfo={czbFarmsUserInfo?.[index]}
+            xxxPrice={czbPrice}
+            address_xxx_master={ADDRESS_CZBMASTER}
+            xxx_Symbol="CZB"
+            xxxLogo="./static/assets/images/tokens/CZB.png"
           />
         ))}
         {CZB_FARMS.map((farm, index) => (
-          <ManageCzbFarm key={farm.pid}
-            {...{ account, library, farm, accountLpBals, czbPrice, czusdPrice, czbFarmsSettings }}
-            czbFarmsLpBal={czbFarmsLpBal?.[index + CZB_FARMS_SINGLES.length]}
-            czbFarmsPoolInfo={czbFarmsPoolInfo?.[index + CZB_FARMS_SINGLES.length]}
-            czbFarmsPendingCzb={czbFarmsPendingCzb?.[index + CZB_FARMS_SINGLES.length]}
-            czbFarmsUserInfo={czbFarmsUserInfo?.[index + CZB_FARMS_SINGLES.length]}
+          <ManageXxxFarm key={farm.pid}
+            {...{ account, library, farm, czusdPrice }}
+            xxxFarmsSettings={czbFarmsSettings}
+            xxxFarmsPoolInfo={czbFarmsPoolInfo?.[index + CZB_FARMS_SINGLES.length]}
+            xxxFarmsPendingXxx={czbFarmsPendingCzb?.[index + CZB_FARMS_SINGLES.length]}
+            xxxFarmsUserInfo={czbFarmsUserInfo?.[index + CZB_FARMS_SINGLES.length]}
+            xxxPrice={czbPrice}
+            address_xxx_master={ADDRESS_CZBMASTER}
+            xxx_Symbol="CZB"
+            xxxLogo="./static/assets/images/tokens/CZB.png"
             lpInfo={lpInfos?.[farm?.lp]}
             accountLpBal={accountLpBals?.[farm?.lp]}
           />
         ))}
         <p className="has-text-right pr-2">Your Blue Farms Staked: TBD{/*${weiToShortString(farmsV2AccountStakeWei, 2)}*/}</p>
         <p className="has-text-right pr-2">Blue Farms TVL: TBD{/*${weiToShortString(farmsV2TvlWei, 2)}*/}</p>
+      </CollapsibleCard>
+
+
+      <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
+        <img className="column is-3 m-2 ml-3" src="./static/assets/images/sections/BanditFarm.png" style={{ objectFit: "contain", background: "#1b142b", padding: "0px 0.5em", borderRadius: "0.5em" }} />
+        <p className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2" style={{ lineHeight: "1em" }}>🎭🔫💰🏴‍☠️👤 Farms<br />
+          <span className='is-size-6' >Stake LP, Get 🎭🔫💰🏴‍☠️👤 every second.</span>
+        </p>
+      </div>
+      )}>
+        {BANDIT_FARMS_SINGLES.map((farm, index) => (
+          <ManageXxxFarmSingle key={farm.pid}
+            {...{ account, library, farm, accountLpBals, czusdPrice }}
+            xxxFarmsSettings={banditFarmsSettings}
+            xxxFarmsPoolInfo={banditFarmsPoolInfo?.[index]}
+            xxxFarmsPendingXxx={banditFarmsPendingBandit?.[index]}
+            xxxFarmsUserInfo={banditFarmsUserInfo?.[index]}
+            xxxPrice={banditPrice}
+            address_xxx_master={ADDRESS_BANDITMASTER}
+            xxx_Symbol="BANDIT"
+            xxxLogo="./static/assets/images/tokens/BANDIT.png"
+          />
+        ))}
+        {BANDIT_FARMS.map((farm, index) => (
+          <ManageXxxFarm key={farm.pid}
+            {...{ account, library, farm, czusdPrice }}
+            xxxFarmsSettings={banditFarmsSettings}
+            xxxFarmsPoolInfo={banditFarmsPoolInfo?.[index + BANDIT_FARMS_SINGLES.length]}
+            xxxFarmsPendingXxx={banditFarmsPendingBandit?.[index + BANDIT_FARMS_SINGLES.length]}
+            xxxFarmsUserInfo={banditFarmsUserInfo?.[index + BANDIT_FARMS_SINGLES.length]}
+            xxxPrice={banditPrice}
+            address_xxx_master={ADDRESS_BANDITMASTER}
+            xxx_Symbol="BANDIT"
+            xxxLogo="./static/assets/images/tokens/BANDIT.png"
+            lpInfo={lpInfos?.[farm?.lp]}
+            accountLpBal={accountLpBals?.[farm?.lp]}
+          />
+        ))}
+        <p className="has-text-right pr-2">Your Bandit Farms Staked: TBD{/*${weiToShortString(farmsV2AccountStakeWei, 2)}*/}</p>
+        <p className="has-text-right pr-2">Bandit Farms TVL: TBD{/*${weiToShortString(farmsV2TvlWei, 2)}*/}</p>
       </CollapsibleCard>
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>

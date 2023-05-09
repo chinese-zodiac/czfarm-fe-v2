@@ -2,7 +2,7 @@ import { useCalls } from "@usedapp/core";
 import { Contract } from 'ethers';
 import CZBFarmMaster from "../abi/CZBFarmMaster.json";
 
-function useXxxFarmsSettings(provider, address_xxx, address_xxx_master, xxxPerSecondMethodName) {
+function useXxxFarmsSettings(provider, address_xxx_master, xxxPerSecondMethodName) {
   const xxxMasterContract = new Contract(address_xxx_master, CZBFarmMaster, provider);
   const calls = [
     {

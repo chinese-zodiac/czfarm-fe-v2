@@ -3,7 +3,7 @@ import { Contract } from 'ethers';
 import CZBFarmMaster from "../abi/CZBFarmMaster.json";
 
 
-function useCzbFarmsUserInfo(provider, account, address_xxx_master, xxx_singles, xxx_farms) {
+function useXxxFarmsUserInfo(provider, account, address_xxx_master, xxx_singles, xxx_farms) {
   const xxxMasterContract = new Contract(address_xxx_master, CZBFarmMaster, provider);
   const calls = [
     ...xxx_singles.map(farm => ({
@@ -33,4 +33,4 @@ function useCzbFarmsUserInfo(provider, account, address_xxx_master, xxx_singles,
 }
 
 
-export default useCzbFarmsUserInfo;
+export default useXxxFarmsUserInfo;

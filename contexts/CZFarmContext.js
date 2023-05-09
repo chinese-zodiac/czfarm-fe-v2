@@ -33,6 +33,7 @@ export const CZFarmProvider = ({ children }) => {
   const [czrPrice, setCzrPrice] = useState(BigNumber.from(0));
   const [czfPrice, setCzfPrice] = useState(BigNumber.from(0));
   const [czbPrice, setCzbPrice] = useState(BigNumber.from(0));
+  const [banditPrice, setBanditPrice] = useState(BigNumber.from(0));
 
   const {
     chronoTvlWei,
@@ -47,12 +48,13 @@ export const CZFarmProvider = ({ children }) => {
     setCzrPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZR", parseEther("1"), czusdPrice)));
     setCzfPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZF", parseEther("1"), czusdPrice)));
     setCzbPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "CZB", parseEther("1"), czusdPrice)));
+    setBanditPrice(formatEther(weiTolpCzusdPricedWeiVal(lpInfos, "BANDIT", parseEther("1"), czusdPrice)));
   }, [lpInfos?.[PRICING_LP.CZR]?.tokens?.[0]])
 
   return (
 
     <CZFarmContext.Provider value={{
-      czusdPrice, czfPrice, bnbPrice, czrPrice, czbPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei,
+      czusdPrice, czfPrice, bnbPrice, czrPrice, czbPrice, banditPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei, burnPoolsTvbWei,
       czbFarmsLpBal,
       //React doesnt know how to properly check if bignumbers have changed, so use these to trigger refreshes
       updateCheckerViaStringChronoTvlWei: chronoTvlWei?.toString(),

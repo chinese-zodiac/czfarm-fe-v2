@@ -1,13 +1,14 @@
 import { useCalls } from "@usedapp/core";
 import { Contract } from 'ethers';
 import IERC20 from "../abi/IERC20.json";
+import { BANDIT_FARMS } from "../constants/banditfarms";
 import { CZB_FARMS } from "../constants/czbfarms";
 import { EXOTIC_FARMS } from "../constants/exoticFarms";
 import { FARM_V2 } from "../constants/famsv2";
 
 function useAccountLpBals(provider, account) {
   const lpAddresses = [
-    ...new Set([...FARM_V2.map(farm => farm.lp), ...EXOTIC_FARMS.map(farm => farm.lp), ...CZB_FARMS.map(farm => farm.lp)])
+    ...new Set([...FARM_V2.map(farm => farm.lp), ...EXOTIC_FARMS.map(farm => farm.lp), ...CZB_FARMS.map(farm => farm.lp), ...BANDIT_FARMS.map(farm => farm.lp)])
   ];
   const calls = lpAddresses.map(lpAddress => ({
     contract: new Contract(lpAddress, IERC20, provider),

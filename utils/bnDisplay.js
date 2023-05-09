@@ -1,6 +1,5 @@
-import { utils, BigNumber } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { PRICING_LP } from "../constants/pricingLp";
-import { ADDRESS_CZUSD, ADDRESS_CZF } from "../constants/addresses";
 const { formatEther, parseEther } = utils;
 
 export function weiToFixed(bn, decimals) {

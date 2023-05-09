@@ -1,3 +1,5 @@
+import { DEX } from "./dex";
+
 export const BANDIT_FARMS = [
     {
         lp: "0xda416fEbFBEFb7a938480553961D4BDF8f50E7eb",
