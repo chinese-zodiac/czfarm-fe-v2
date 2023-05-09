@@ -122,6 +122,21 @@ export const CZB_FARMS = [
                 symbol: "CZR"
             }
         ]
+    },
+    {
+        lp: "0x8dF44016C66A93D32A60ACCD30126df38F07718b",
+        dex: DEX.PCS,
+        pid: 10,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x2a10CFe2300e5DF9417F7bEe99ef1e81228F0Ac7",
+                symbol: "BANDIT"
+            }
+        ]
     }
 ]
 
