@@ -4,7 +4,8 @@ import { TRIBE_POOLS } from "../constants/tribepools";
 
 
 export const getCzrHarvestableBurnPools = (burnPoolsAccountInfo) => {
-  return burnPoolsAccountInfo.reduce((acc, curr) => acc.add(curr?.pendingReward ?? BigNumber.from(0)), BigNumber.from(0)) ?? BigNumber.from(0);
+  return BigNumber.from(0);
+  //return burnPoolsAccountInfo.reduce((acc, curr) => acc.add(curr?.pendingReward ?? BigNumber.from(0)), BigNumber.from(0)) ?? BigNumber.from(0);
 }
 
 export const getSingleV2FarmCzfPerSecondWei = (v2FarmsSettings, singleV2FarmsLpBal, singleV2FarmsPoolInfo, singleV2FarmsUserInfo) => {
@@ -15,21 +16,11 @@ export const getSingleV2FarmCzfPerSecondWei = (v2FarmsSettings, singleV2FarmsLpB
   return v2CzfPerSecondPerAllocPoint?.mul(singleV2FarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleV2FarmsUserInfo?.amount ?? BigNumber.from(0)).div(singleV2FarmsLpBal?.lpBal ?? BigNumber.from(1));
 }
 
-export const getSingleCzbFarmCzbPerSecondWei = (czbFarmsSettings, totalDeposit, singleCzbFarmsPoolInfo, singleCzbFarmsUserInfo) => {
-  if (!totalDeposit || (!!totalDeposit && totalDeposit?.eq(0))) {
-    return BigNumber.from(0)
-  }
-  const czbPerSecondPerAllocPoint = czbFarmsSettings?.czbPerSecond?.div(czbFarmsSettings?.totalAllocPoint) ?? BigNumber.from(0);
-  return czbPerSecondPerAllocPoint?.mul(singleCzbFarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleCzbFarmsUserInfo?.amount ?? BigNumber.from(0)).div(totalDeposit ?? BigNumber.from(1));
-}
-
 export const getSingleXxxFarmXxxPerSecondWei = (xxxFarmsSettings, totalDeposit, singleXxxFarmsPoolInfo, singleXxxFarmsUserInfo) => {
   if (!totalDeposit || (!!totalDeposit && totalDeposit?.eq(0))) {
     return BigNumber.from(0)
   }
   const xxxPerSecondPerAllocPoint = xxxFarmsSettings?.xxxPerSecond?.div(xxxFarmsSettings?.totalAllocPoint) ?? BigNumber.from(0);
-  console.log('xxxPerSecondPerAllocPoint', xxxPerSecondPerAllocPoint);
-  console.log('singleXxxFarmsPoolInfo?.allocPoint', singleXxxFarmsPoolInfo?.allocPoint);
   return xxxPerSecondPerAllocPoint?.mul(singleXxxFarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleXxxFarmsUserInfo?.amount ?? BigNumber.from(0)).div(totalDeposit ?? BigNumber.from(1));
 }
 

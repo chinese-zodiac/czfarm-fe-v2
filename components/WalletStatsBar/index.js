@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
-import { useContractFunction, useCall } from '@usedapp/core';
+import { utils } from 'ethers';
+import React, { useState } from 'react';
+import { ADDRESS_CZR, ADDRESS_CZUSD } from "../../constants/addresses";
+import { PRICING_LP } from "../../constants/pricingLp";
 import { weiToShortString, weiToUsdWeiVal, weiTolpCzusdPricedWeiVal } from '../../utils/bnDisplay';
 import { czCashBuyLink } from '../../utils/dexBuyLink';
-import { BigNumber, Contract, utils } from 'ethers'
-import { PRICING_LP } from "../../constants/pricingLp";
-import { ADDRESS_CZR, ADDRESS_CZUSD } from "../../constants/addresses";
+import { getDailyAccountTokensWei, getTokensHarvestable } from "../../utils/getAccountStats";
+import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
 import styles from "./index.module.scss";
-import { getDailyAccountTokensWei, getTokensHarvestable, getCzrHarvestableBurnPools } from "../../utils/getAccountStats"
 const { formatEther, parseEther, Interface } = utils;
 
-function WalletStatsBar({ czrPrice, czusdPrice, czrBal, czusdBal, account, tribePoolInfo, tribePoolAccountInfo, tribePoolAccountStakeWei, lpInfos, burnPoolInfo, burnPoolAccountInfo }) {
+function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice, czrBal, czusdBal, banditBal, czbBal, czfBal, account, tribePoolInfo, tribePoolAccountInfo, tribePoolAccountStakeWei, lpInfos, burnPoolInfo, burnPoolAccountInfo,
+}) {
 
   const [dailyAccountTokensWei, setDailyAccountTokensWei] = useState([]);
   const [tokensHarvestable, setTokensHarvestable] = useState([]);
-
-  const [czrHarvestableBurnPools, setCzrHarvestableBurnPools] = useState(BigNumber.from(0));
 
   useDeepCompareEffect(() => {
     if (!account) {
       setDailyAccountTokensWei([]);
       setTokensHarvestable([]);
-      setCzrHarvestableBurnPools(BigNumber.from(0));
       return
     }
     setDailyAccountTokensWei(getDailyAccountTokensWei(tribePoolInfo, tribePoolAccountInfo, burnPoolInfo, burnPoolAccountInfo));
-    setCzrHarvestableBurnPools(getCzrHarvestableBurnPools(burnPoolAccountInfo));
     setTokensHarvestable(getTokensHarvestable(tribePoolAccountInfo));
   }, [account, tribePoolInfo, tribePoolAccountInfo, burnPoolInfo, burnPoolAccountInfo]);
 
@@ -34,12 +30,18 @@ function WalletStatsBar({ czrPrice, czusdPrice, czrBal, czusdBal, account, tribe
       <div className={"column p-5 pb-5 m-3 " + styles.UserTotalItem}>
         <div className="columns is-mobile m-0">
           <div className="column has-text-right m-0 p-1">
-            <p className='is-size-5 m-0'>CZRED:</p>
             <p className='is-size-5 m-0'>CZUSD:</p>
+            {!!czrBal && czrBal?.gt(0) && <p className='is-size-5 m-0'>CZR:</p>}
+            {!!czfBal && czfBal?.gt(0) && <p className='is-size-5 m-0'>CZF:</p>}
+            {!!banditBal && banditBal?.gt(0) && <p className='is-size-5 m-0'>🎭🔫:</p>}
+            {!!czbBal && czbBal?.gt(0) && <p className='is-size-5 m-0'>CZB:</p>}
           </div>
           <div className="column has-text-left m-0 p-1">
-            <p className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(czrBal, 2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czrBal, czrPrice), 2)})</span></p>
             <p className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(czusdBal, 2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czusdBal, czusdPrice), 2)})</span></p>
+            {!!czrBal && czrBal?.gt(0) && <p className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(czrBal, 2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czrBal, czrPrice), 2)})</span></p>}
+            {!!czfBal && czfBal?.gt(0) && <p className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(czfBal, 2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czfBal, czfPrice), 2)})</span></p>}
+            {!!banditBal && banditBal?.gt(0) && <p className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(banditBal, 2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(banditBal, banditPrice), 2)})</span></p>}
+            {!!czbBal && czbBal?.gt(0) && <p className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(czbBal, 2)} <span className="is-size-7">(${weiToShortString(weiToUsdWeiVal(czbBal, czbPrice), 2)})</span></p>}
           </div>
         </div>
         <h2 className='is-size-6 m-0' style={{ fontWeight: "300" }}>In Your Wallet</h2>
@@ -72,18 +74,14 @@ function WalletStatsBar({ czrPrice, czusdPrice, czrBal, czusdBal, account, tribe
       <div className={"column p-5 m-3 " + styles.UserTotalItem}>
         <div className="columns is-mobile m-0">
           <div className="column has-text-right m-0 p-1">
-            <p className='is-size-5 m-0'>CZR:</p>
             {tokensHarvestable.map(tokenWei => (
               <p key={tokenWei.name} className='is-size-5 m-0'>{tokenWei.name}:</p>
             ))}
           </div>
           <div className="column has-text-left m-0 p-1">
-            <p className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>
-              {weiToShortString(czrHarvestableBurnPools, 2)}
-              <span className="is-size-7 ml-1">(${weiToShortString(weiToUsdWeiVal(czrHarvestableBurnPools, czrPrice), 2)})</span>
-            </p>
             {tokensHarvestable.map(tokenWei => (
-              <p key={tokenWei.name} className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(tokenWei.tokenHarvestable, 2)}
+              <p key={tokenWei.name} className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>
+                {weiToShortString(tokenWei.tokenHarvestable, 2)}
                 <span className="is-size-7 ml-1">($
                   {tokenWei.name == "CZUSD" ?
                     weiToShortString(weiToUsdWeiVal(tokenWei?.tokenHarvestable, czusdPrice), 2) :

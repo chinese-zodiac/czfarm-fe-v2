@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
 import { BigNumber } from 'ethers';
-import { weiToUsdWeiVal } from '../utils/bnDisplay';
-import { getLpTokenValueUsdWad } from '../utils/getLpTokenValueUsdWad';
+import { useState } from 'react';
+import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../constants/banditfarms';
 import { CHRONO_POOL } from "../constants/chronoPool";
+import { CZB_FARMS, CZB_FARMS_SINGLES } from '../constants/czbfarms';
 import { EXOTIC_FARMS } from "../constants/exoticFarms";
 import { FARM_V2 } from "../constants/famsv2";
 import { POOLS_V1 } from "../constants/poolsv1";
 import { TRIBE_POOLS } from "../constants/tribepools";
-import { BURN_POOLS } from "../constants/burnpools";
+import { weiToUsdWeiVal } from '../utils/bnDisplay';
+import { getLpTokenValueUsdWad } from '../utils/getLpTokenValueUsdWad';
 import useDeepCompareEffect from '../utils/useDeepCompareEffect';
 
 
-function useTvlWei(czfPrice, czrPrice, czusdPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, burnPoolsInfo) {
+function useTvlWei(czfPrice, czrPrice, czusdPrice, czbPrice, banditPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo,
+  czbFarmsPoolInfo, banditFarmsPoolInfo) {
   const [chronoTvlWei, setChronoTvlWei] = useState(BigNumber.from(0));
   const [exoticTvlWei, setExoticTvlWei] = useState(BigNumber.from(0));
   const [farmsV2TvlWei, setFarmsv2TvlWei] = useState(BigNumber.from(0));
   const [poolsV1TvlWei, setPoolsV1TvlWei] = useState(BigNumber.from(0));
   const [tribePoolsTvlWei, setTribePoolsTvlWei] = useState(BigNumber.from(0));
-  const [burnPoolsTvbWei, setBurnPoolsTvbWei] = useState(BigNumber.from(0));
+
+  const [czbFarmsTvlWei, setCzbFarmsTvlWei] = useState(BigNumber.from(0));
+  const [banditFarmsTvlWei, setBanditFarmsTvlWei] = useState(BigNumber.from(0));
+  const [czusdNotesTvlWei, setCzusdNotesTvlWei] = useState(BigNumber.from(0));
 
   useDeepCompareEffect(() => {
     if (!czfPrice || !czusdPrice || !czrPrice || !chronoVestingsTotalVesting || !poolsV1TokenBalance || !v2FarmsLpBal || !lpInfos || !tribePoolsInfo) {
@@ -26,7 +31,6 @@ function useTvlWei(czfPrice, czrPrice, czusdPrice, chronoVestingsTotalVesting, p
       setFarmsv2TvlWei(BigNumber.from(0));
       setPoolsV1TvlWei(BigNumber.from(0));
       setTribePoolsTvlWei(BigNumber.from(0));
-      setBurnPoolsTvbWei(BigNumber.from(0));
       return;
     }
 
@@ -51,19 +55,39 @@ function useTvlWei(czfPrice, czrPrice, czusdPrice, chronoVestingsTotalVesting, p
         weiToUsdWeiVal(tribePoolsInfo?.[index]?.totalStaked, czrPrice)
       ), BigNumber.from(0))
     );
-    setBurnPoolsTvbWei(
-      BURN_POOLS.reduce((prev, curr, index) => prev.add(
-        weiToUsdWeiVal(burnPoolsInfo?.[index]?.burnedWad, curr.baseAssetName == "CZF" ? czfPrice : czusdPrice)
+
+    setCzbFarmsTvlWei(CZB_FARMS.reduce((prev, curr, index) => prev.add(
+      getLpTokenValueUsdWad(curr.tokens[0].symbol, lpInfos?.[curr.lp], czbFarmsPoolInfo?.[index + CZB_FARMS_SINGLES.length]?.totalDeposit, czbPrice, czusdPrice, (
+        curr.tokens[1].symbol == "CZF"
+      ))
+    ), BigNumber.from(0)).add(
+      CZB_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
+        weiToUsdWeiVal(czbFarmsPoolInfo?.[index]?.totalDeposit, curr.tokenName == "CZUSD" ? czusdPrice : czbPrice)
       ), BigNumber.from(0))
-    );
-  }, [czfPrice, czusdPrice, czrPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo])
+    ));
+
+
+    setBanditFarmsTvlWei(BANDIT_FARMS.reduce((prev, curr, index) => prev.add(
+      getLpTokenValueUsdWad(curr.tokens[0].symbol, lpInfos?.[curr.lp], banditFarmsPoolInfo?.[index + BANDIT_FARMS_SINGLES.length]?.totalDeposit, banditPrice, czusdPrice, (
+        curr.tokens[1].symbol == "CZB"
+      ))
+    ), BigNumber.from(0)).add(
+      BANDIT_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
+        weiToUsdWeiVal(banditFarmsPoolInfo?.[index]?.totalDeposit, banditPrice)
+      ), BigNumber.from(0))
+    ));
+
+  }, [czfPrice, czusdPrice, czrPrice, czbPrice, banditPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, czbFarmsPoolInfo, banditFarmsPoolInfo])
+
   return {
     chronoTvlWei,
     exoticTvlWei,
     farmsV2TvlWei,
     poolsV1TvlWei,
     tribePoolsTvlWei,
-    burnPoolsTvbWei
+    czbFarmsTvlWei,
+    banditFarmsTvlWei,
+    czusdNotesTvlWei
   }
 }
 
