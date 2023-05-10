@@ -50,7 +50,7 @@ function Home() {
   const { account, library, chainId } = useEthers();
   const { czbFarmsPoolInfo, banditFarmsPoolInfo,
     czfPrice, czusdPrice, czrPrice, czbPrice, banditPrice, bnbPrice,
-    czbFarmsTvlWei, banditFarmsTvlWei,
+    czbFarmsTvlWei, banditFarmsTvlWei, czusdNotesTvlWei,
     chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, accountEtherBalance, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei } = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
@@ -267,6 +267,8 @@ function Home() {
         <ManageCzusdNotes
           {...{ account, library, currentEpoch, czusdBal }}
         />
+        <p className="has-text-right pr-2">Your CzusdNotes Staked: TBD{/*${weiToShortString(farmsV2AccountStakeWei, 2)}*/}</p>
+        <p className="has-text-right pr-2">CzusdNotes TVL: ${weiToShortString(czusdNotesTvlWei, 2)}</p>
       </CollapsibleCard>
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
