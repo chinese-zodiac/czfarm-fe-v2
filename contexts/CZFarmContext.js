@@ -46,6 +46,7 @@ export const CZFarmProvider = ({ children }) => {
     tribePoolsTvlWei,
     banditFarmsTvlWei,
     czbFarmsTvlWei,
+    czusdNotesTvlWei
   } = useTvlWei(czfPrice, czrPrice, czusdPrice, czbPrice, banditPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo,
     czbFarmsPoolInfo, banditFarmsPoolInfo);
 
@@ -60,7 +61,7 @@ export const CZFarmProvider = ({ children }) => {
 
     <CZFarmContext.Provider value={{
       czusdPrice, czfPrice, bnbPrice, czrPrice, czbPrice, banditPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, chronoTvlWei, exoticTvlWei, farmsV2TvlWei, poolsV1TvlWei, tribePoolsTvlWei,
-      czbFarmsTvlWei, banditFarmsTvlWei,
+      czbFarmsTvlWei, banditFarmsTvlWei, czusdNotesTvlWei,
       czbFarmsPoolInfo, banditFarmsPoolInfo,
       //React doesnt know how to properly check if bignumbers have changed, so use these to trigger refreshes
       updateCheckerViaStringChronoTvlWei: chronoTvlWei?.toString(),

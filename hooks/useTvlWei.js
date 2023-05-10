@@ -1,5 +1,8 @@
-import { BigNumber } from 'ethers';
+import { useCall } from '@usedapp/core';
+import { BigNumber, Contract } from 'ethers';
 import { useState } from 'react';
+import CzusdNotesAbi from "../abi/CzusdNotes.json";
+import { ADDRESS_CZUSDNOTES } from '../constants/addresses';
 import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../constants/banditfarms';
 import { CHRONO_POOL } from "../constants/chronoPool";
 import { CZB_FARMS, CZB_FARMS_SINGLES } from '../constants/czbfarms';
@@ -24,6 +27,12 @@ function useTvlWei(czfPrice, czrPrice, czusdPrice, czbPrice, banditPrice, chrono
   const [banditFarmsTvlWei, setBanditFarmsTvlWei] = useState(BigNumber.from(0));
   const [czusdNotesTvlWei, setCzusdNotesTvlWei] = useState(BigNumber.from(0));
 
+  const { value: outstandingPrinciple, error: outstandingPrincipleError } = useCall({
+    contract: new Contract(ADDRESS_CZUSDNOTES, CzusdNotesAbi),
+    method: 'outstandingPrinciple',
+    args: []
+  }) ?? {}
+
   useDeepCompareEffect(() => {
     if (!czfPrice || !czusdPrice || !czrPrice || !chronoVestingsTotalVesting || !poolsV1TokenBalance || !v2FarmsLpBal || !lpInfos || !tribePoolsInfo) {
       setChronoTvlWei(BigNumber.from(0));
@@ -31,6 +40,7 @@ function useTvlWei(czfPrice, czrPrice, czusdPrice, czbPrice, banditPrice, chrono
       setFarmsv2TvlWei(BigNumber.from(0));
       setPoolsV1TvlWei(BigNumber.from(0));
       setTribePoolsTvlWei(BigNumber.from(0));
+      setCzusdNotesTvlWei(BigNumber.from(0));
       return;
     }
 
@@ -77,7 +87,10 @@ function useTvlWei(czfPrice, czrPrice, czusdPrice, czbPrice, banditPrice, chrono
       ), BigNumber.from(0))
     ));
 
-  }, [czfPrice, czusdPrice, czrPrice, czbPrice, banditPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, czbFarmsPoolInfo, banditFarmsPoolInfo])
+    //TODO: refactor so outstanding principle is handled in context to avoid multiple calls
+    setCzusdNotesTvlWei(outstandingPrinciple?.[0] ?? BigNumber.from(0))
+
+  }, [czfPrice, czusdPrice, czrPrice, czbPrice, banditPrice, chronoVestingsTotalVesting, poolsV1TokenBalance, v2FarmsLpBal, lpInfos, tribePoolsInfo, czbFarmsPoolInfo, banditFarmsPoolInfo, outstandingPrinciple?.[0].toString()])
 
   return {
     chronoTvlWei,
