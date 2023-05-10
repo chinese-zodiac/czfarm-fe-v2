@@ -27,7 +27,9 @@ export const getSingleXxxFarmXxxPerSecondWei = (xxxFarmsSettings, totalDeposit, 
   if (!totalDeposit || (!!totalDeposit && totalDeposit?.eq(0))) {
     return BigNumber.from(0)
   }
-  const xxxPerSecondPerAllocPoint = xxxFarmsSettings?.czbPerSecond?.div(xxxFarmsSettings?.totalAllocPoint) ?? BigNumber.from(0);
+  const xxxPerSecondPerAllocPoint = xxxFarmsSettings?.xxxPerSecond?.div(xxxFarmsSettings?.totalAllocPoint) ?? BigNumber.from(0);
+  console.log('xxxPerSecondPerAllocPoint', xxxPerSecondPerAllocPoint);
+  console.log('singleXxxFarmsPoolInfo?.allocPoint', singleXxxFarmsPoolInfo?.allocPoint);
   return xxxPerSecondPerAllocPoint?.mul(singleXxxFarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleXxxFarmsUserInfo?.amount ?? BigNumber.from(0)).div(totalDeposit ?? BigNumber.from(1));
 }
 
