@@ -149,7 +149,7 @@ export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, cz
       //Token not in array yet
       dailyTokensList.push({
         name: "CZF",
-        rewardPerDay: v2FarmsRps
+        rewardPerDay: v2FarmsRps.mul(86400)
       });
     } else {
       dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(v2FarmsRps);
