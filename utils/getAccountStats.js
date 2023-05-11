@@ -1,8 +1,7 @@
-import { formatEther } from '@ethersproject/units';
 import { BigNumber } from 'ethers';
+import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../constants/banditfarms';
 import { CZB_FARMS, CZB_FARMS_SINGLES } from '../constants/czbfarms';
 import { TRIBE_POOLS } from "../constants/tribepools";
-import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../constants/banditfarms';
 
 
 export const getCzrHarvestableBurnPools = (burnPoolsAccountInfo) => {
@@ -71,7 +70,8 @@ export const getTokensHarvestable = (tribePoolAccountInfo) => {
 }
 
 export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
-  czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo) => {
+  czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo,
+  v2FarmsUserInfo, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, nftPoolCzrPerSecond) => {
   let dailyTokensList = []
   const currentEpoch = Math.floor(Date.now() / 1000);
   try {//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
@@ -79,6 +79,12 @@ export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, cz
       dailyTokensList.push({
         name: "CZUSD",
         rewardPerDay: czusdNotesAccountInfo.currYieldPerSecond_.mul(86400)
+      });
+    }
+    if (nftPoolCzrPerSecond.gt(0)) {
+      dailyTokensList.push({
+        name: "CZR",
+        rewardPerDay: nftPoolCzrPerSecond.mul(86400)
       });
     }
   } catch (e) { console.log("getDailyAccountTokensWei err") }
@@ -134,6 +140,20 @@ export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, cz
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
     })
+
+    const v2FarmsRps = v2FarmsUserInfo.reduce(
+      (acc, curr, index) => getSingleV2FarmCzfPerSecondWei(v2FarmsSettings, v2FarmsLpBal?.[index], v2FarmsPoolInfo?.[index], curr).add(acc)
+      , BigNumber.from(0)) ?? BigNumber.from(0);
+    const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == 'CZF');
+    if (tokenIndex == -1) {
+      //Token not in array yet
+      dailyTokensList.push({
+        name: "CZF",
+        rewardPerDay: v2FarmsRps
+      });
+    } else {
+      dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(v2FarmsRps);
+    }
 
   } catch (e) { console.log("getDailyAccountTokensWei err") }
 

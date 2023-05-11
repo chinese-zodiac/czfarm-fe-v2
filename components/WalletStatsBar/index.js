@@ -12,7 +12,9 @@ const { formatEther, parseEther, Interface } = utils;
 function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice, czrBal, czusdBal, banditBal, czbBal, czfBal, account, tribePoolInfo, tribePoolAccountInfo, tribePoolAccountStakeWei, lpInfos,
   czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
   czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
-  czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo
+  czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo,
+  v2FarmsUserInfo, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo,
+  nftPoolCzrPerSecond
 
 }) {
 
@@ -26,7 +28,8 @@ function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice,
       return
     }
     setDailyAccountTokensWei(getDailyAccountTokensWei(tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
-      czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo));
+      czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo,
+      v2FarmsUserInfo, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, nftPoolCzrPerSecond));
     setTokensHarvestable(getTokensHarvestable(tribePoolAccountInfo));
   }, [account, tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo]);
 

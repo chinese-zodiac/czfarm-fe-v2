@@ -3,6 +3,8 @@ import { useCall, useEthers, useTokenBalance } from '@usedapp/core';
 import { BigNumber, Contract, utils } from 'ethers';
 import React, { useContext, useState } from 'react';
 import CzusdNotesAbi from "../../abi/CzusdNotes.json";
+import IERC721EnumerableAbi from "../../abi/IERC721Enumerable.json";
+import tribePoolNftAbi from "../../abi/TribePoolNft.json";
 import CollapsibleCard from '../../components/CollapsibleCard';
 import ManageChronoPool from '../../components/ManageChronoPool';
 import ManageCzusdNotes from '../../components/ManageCzusdNotes';
@@ -14,7 +16,7 @@ import ManageTribePoolNft from '../../components/ManageTribePoolNft';
 import ManageXxxFarm from '../../components/ManageXxxFarm';
 import ManageXxxFarmSingle from '../../components/ManageXxxFarmSingle';
 import WalletStatsBar from '../../components/WalletStatsBar';
-import { ADDRESS_BANDIT, ADDRESS_BANDITMASTER, ADDRESS_CZB, ADDRESS_CZBMASTER, ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD, ADDRESS_CZUSDNOTES, ADDRESS_ZERO } from '../../constants/addresses';
+import { ADDRESS_BANDIT, ADDRESS_BANDITMASTER, ADDRESS_CZB, ADDRESS_CZBMASTER, ADDRESS_CZF, ADDRESS_CZODIACNFT, ADDRESS_CZR, ADDRESS_CZUSD, ADDRESS_CZUSDNOTES, ADDRESS_TRIBEPOOLNFT, ADDRESS_ZERO } from '../../constants/addresses';
 import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../../constants/banditfarms';
 import { CHRONO_POOL } from "../../constants/chronoPool";
 import { CZB_FARMS, CZB_FARMS_SINGLES } from '../../constants/czbfarms';
@@ -46,6 +48,9 @@ import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
 import styles from "./index.module.scss";
 const { formatEther, parseEther, Interface } = utils;
+
+const CzodiacNftContract = new Contract(ADDRESS_CZODIACNFT, IERC721EnumerableAbi);
+const TribePoolNftContract = new Contract(ADDRESS_TRIBEPOOLNFT, tribePoolNftAbi);
 
 function Home() {
   const { account, library, chainId } = useEthers();
@@ -94,11 +99,34 @@ function Home() {
 
 
 
+  //refactor to context both here and in manage component
   const { value: czusdNotesAccountInfo } = useCall({
     contract: new Contract(ADDRESS_CZUSDNOTES, CzusdNotesAbi),
     method: 'getAccount',
     args: [account ?? ADDRESS_ZERO]
   }) ?? {}
+
+  const { value: nftPoolCzrRps } = useCall(ADDRESS_TRIBEPOOLNFT && {
+    contract: TribePoolNftContract,
+    method: 'rewardPerSecond',
+    args: []
+  }) ?? {}
+
+  const { value: nftPoolUserBal } = useCall(ADDRESS_TRIBEPOOLNFT && {
+    contract: TribePoolNftContract,
+    method: 'stakedBal',
+    args: [account]
+  }) ?? {}
+
+  const { value: nftPoolTotalStaked } = useCall(ADDRESS_TRIBEPOOLNFT && {
+    contract: TribePoolNftContract,
+    method: 'totalStaked',
+    args: []
+  }) ?? {}
+
+  const nftPoolCzrPerSecond = ((!!nftPoolTotalStaked?.[0] && !!nftPoolTotalStaked?.[0]?.gt(0)) ?
+    nftPoolUserBal?.[0].mul(nftPoolCzrRps?.[0] ?? BigNumber.from(0)).div(nftPoolTotalStaked?.[0]) ?? BigNumber.from(0)
+    : BigNumber.from(0));
 
   useDeepCompareEffect(() => {
     if (!account || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !lpInfos || !v2FarmsUserInfo || !tribePoolAccountInfo) {
@@ -166,8 +194,6 @@ function Home() {
       )
     );
 
-
-
   }, [account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, tribePoolAccountInfo, czfPrice, czrPrice, czusdPrice,
     czusdNotesAccountInfo]);
 
@@ -178,7 +204,8 @@ function Home() {
         czfPrice, czrPrice, czusdPrice, banditPrice, czbPrice, czfBal, czusdBal, czrBal, banditBal, czbBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
         chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei,
         czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
-        czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo, czbFarmsPoolInfo, czbFarmsPoolInfo, czbFarmsSettings, banditFarmsSettings, banditFarmsPoolInfo
+        czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo, czbFarmsPoolInfo, czbFarmsPoolInfo, czbFarmsSettings, banditFarmsSettings, banditFarmsPoolInfo,
+        nftPoolCzrPerSecond
       }} />
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
