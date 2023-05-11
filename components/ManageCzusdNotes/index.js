@@ -1,5 +1,5 @@
 import { useCall, useContractFunction } from '@usedapp/core';
-import { BigNumber, constants, Contract, utils } from 'ethers';
+import { BigNumber, Contract, constants, utils } from 'ethers';
 import React, { useState } from 'react';
 import CzusdNotesAbi from "../../abi/CzusdNotes.json";
 import ConnectOrLearn from '../../components/ConnectOrLearn';
@@ -179,30 +179,6 @@ export default function ManageCzusdNotes({
                             ({(getYieldAtPeriod?.[0]?.toNumber() * inputLockDurationDays / 40555).toPrecision(4)}% ROI).{' '}
                             You will earn total interest of <b>{tokenAmtToShortString(getYieldAtPeriod?.[0]?.mul(inputLockDurationDays).mul(parseEther(inputEtherCzusd?.toString() ?? "0")).div("4055555"), 18, 4)} CZUSD</b>.{' '}
                         </p>
-                        <br />
-                        <p css={{ cursor: "pointer" }} onClick={() => setIsDebugOpen(!isDebugOpen)} >{!isDebugOpen ? "▲" : "▼"} Debug Info Panel</p>
-                        <code className={isDebugOpen ? "" : "is-hidden"}>
-                            <br />
-                            inputEtherCzusd: {inputEtherCzusd} CZUSD <br />
-                            period: {inputLockDurationDays} Days <br />
-                            getYieldAtPeriod: {getYieldAtPeriod?.[0]?.toNumber() / 100} % APR <br />
-                            cashbackInterestFee: 10% <br />
-                            minLock: {minLock?.[0]?.toNumber() ?? 0} Days <br />
-                            maxLock: {maxLock?.[0]?.toNumber() ?? 0} Days <br />
-                            minNoteSize: {tokenAmtToShortString(minNoteSize?.[0], 18, 3)} CZUSD<br />
-                            maxNoteSize: {tokenAmtToShortString(maxNoteSize?.[0], 18, 3)} CZUSD<br />
-                            outstandingPrinciple: {tokenAmtToShortString(outstandingPrinciple?.[0], 18, 3)} CZUSD<br />
-                            maxOutstandingPrinciple: {tokenAmtToShortString(maxOutstandingPrinciple?.[0], 18, 3)} CZUSD<br />
-                            overnightRateBasis: {overnightRateBasis?.[0]?.toNumber() / 100} % APR <br />
-                            maximumRateBasis: {maximumRateBasis?.[0]?.toNumber() / 100} % APR <br />
-                            getAccount.lastUpdateEpoch_: {getAccount?.lastUpdateEpoch_?.toNumber()} <br />
-                            getAccount.currYieldPerSecond_: {tokenAmtToShortString(getAccount?.currYieldPerSecond_, 18, 3)} <br />
-                            getAccount.totalYield_: {tokenAmtToShortString(getAccount?.totalYield_, 18, 3)} <br />
-                            getAccount.totalPrinciple_: {tokenAmtToShortString(getAccount?.totalPrinciple_, 18, 3)} <br />
-                            getAccount.accYield_: {tokenAmtToShortString(getAccount?.accYield_, 18, 3)} <br />
-                            getAccount.accPrinciple_: {tokenAmtToShortString(getAccount?.accPrinciple_, 18, 3)} <br />
-                            getAccount.totalNotes_: {getAccount?.totalNotes_?.toNumber()}
-                        </code>
 
                     </div>
                 </>)
@@ -221,6 +197,30 @@ export default function ManageCzusdNotes({
                 </div>
             </div>
         </>)}
+        <br />
+        <p css={{ cursor: "pointer" }} onClick={() => setIsDebugOpen(!isDebugOpen)} >{!isDebugOpen ? "▲" : "▼"} Debug Info Panel</p>
+        <code className={isDebugOpen ? "" : "is-hidden"}>
+            <br />
+            inputEtherCzusd: {inputEtherCzusd} CZUSD <br />
+            period: {inputLockDurationDays} Days <br />
+            getYieldAtPeriod: {getYieldAtPeriod?.[0]?.toNumber() / 100} % APR <br />
+            cashbackInterestFee: 10% <br />
+            minLock: {minLock?.[0]?.toNumber() ?? 0} Days <br />
+            maxLock: {maxLock?.[0]?.toNumber() ?? 0} Days <br />
+            minNoteSize: {tokenAmtToShortString(minNoteSize?.[0], 18, 3)} CZUSD<br />
+            maxNoteSize: {tokenAmtToShortString(maxNoteSize?.[0], 18, 3)} CZUSD<br />
+            outstandingPrinciple: {tokenAmtToShortString(outstandingPrinciple?.[0], 18, 3)} CZUSD<br />
+            maxOutstandingPrinciple: {tokenAmtToShortString(maxOutstandingPrinciple?.[0], 18, 3)} CZUSD<br />
+            overnightRateBasis: {overnightRateBasis?.[0]?.toNumber() / 100} % APR <br />
+            maximumRateBasis: {maximumRateBasis?.[0]?.toNumber() / 100} % APR <br />
+            getAccount.lastUpdateEpoch_: {getAccount?.lastUpdateEpoch_?.toNumber()} <br />
+            getAccount.currYieldPerSecond_: {tokenAmtToShortString(getAccount?.currYieldPerSecond_, 18, 3)} <br />
+            getAccount.totalYield_: {tokenAmtToShortString(getAccount?.totalYield_, 18, 3)} <br />
+            getAccount.totalPrinciple_: {tokenAmtToShortString(getAccount?.totalPrinciple_, 18, 3)} <br />
+            getAccount.accYield_: {tokenAmtToShortString(getAccount?.accYield_, 18, 3)} <br />
+            getAccount.accPrinciple_: {tokenAmtToShortString(getAccount?.accPrinciple_, 18, 3)} <br />
+            getAccount.totalNotes_: {getAccount?.totalNotes_?.toNumber()}
+        </code>
 
 
 

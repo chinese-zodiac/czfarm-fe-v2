@@ -10,6 +10,7 @@ import styles from "./index.module.scss";
 const { formatEther, parseEther, Interface } = utils;
 
 function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice, czrBal, czusdBal, banditBal, czbBal, czfBal, account, tribePoolInfo, tribePoolAccountInfo, tribePoolAccountStakeWei, lpInfos, burnPoolInfo, burnPoolAccountInfo,
+  czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei
 }) {
 
   const [dailyAccountTokensWei, setDailyAccountTokensWei] = useState([]);
@@ -100,7 +101,7 @@ function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice,
         <h2 className='is-size-6 m-0' style={{ fontWeight: "300" }}>Your Estimated Harvestable</h2>
       </div>
       <div className={"column p-5 pb-5 m-3 " + styles.UserTotalItem}>
-        <p className='is-size-3 m-0'>${weiToShortString(tribePoolAccountStakeWei, 2)}</p>
+        <p className='is-size-3 m-0'>${weiToShortString(tribePoolAccountStakeWei.add(czusdNotesAccountStakeWei).add(czbFarmsAccountStakeWei).add(banditFarmsAccountStakeWei).add(farmsV2AccountStakeWei), 2)}</p>
         <h2 className='is-size-6 m-0' style={{ fontWeight: "300" }}>Your TVL</h2>
       </div>
     </div>

@@ -1,7 +1,8 @@
 
-import { useEthers, useTokenBalance } from '@usedapp/core';
-import { BigNumber, utils } from 'ethers';
+import { useCall, useEthers, useTokenBalance } from '@usedapp/core';
+import { BigNumber, Contract, utils } from 'ethers';
 import React, { useContext, useState } from 'react';
+import CzusdNotesAbi from "../../abi/CzusdNotes.json";
 import CollapsibleCard from '../../components/CollapsibleCard';
 import ManageChronoPool from '../../components/ManageChronoPool';
 import ManageCzusdNotes from '../../components/ManageCzusdNotes';
@@ -13,7 +14,7 @@ import ManageTribePoolNft from '../../components/ManageTribePoolNft';
 import ManageXxxFarm from '../../components/ManageXxxFarm';
 import ManageXxxFarmSingle from '../../components/ManageXxxFarmSingle';
 import WalletStatsBar from '../../components/WalletStatsBar';
-import { ADDRESS_BANDIT, ADDRESS_BANDITMASTER, ADDRESS_CZB, ADDRESS_CZBMASTER, ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD } from '../../constants/addresses';
+import { ADDRESS_BANDIT, ADDRESS_BANDITMASTER, ADDRESS_CZB, ADDRESS_CZBMASTER, ADDRESS_CZF, ADDRESS_CZR, ADDRESS_CZUSD, ADDRESS_CZUSDNOTES, ADDRESS_ZERO } from '../../constants/addresses';
 import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../../constants/banditfarms';
 import { CHRONO_POOL } from "../../constants/chronoPool";
 import { CZB_FARMS, CZB_FARMS_SINGLES } from '../../constants/czbfarms';
@@ -85,6 +86,19 @@ function Home() {
   const [farmsV2AccountStakeWei, setFarmsv2AccountStakeWei] = useState(BigNumber.from(0));
   const [poolsV1AccountStakeWei, setPoolsV1AccountStakeWei] = useState(BigNumber.from(0));
   const [tribePoolAccountStakeWei, setTribePoolAccountStakeWei] = useState(BigNumber.from(0));
+  const [czusdNotesAccountStakeWei, setCzusdNotesAccountStakeWei] = useState(BigNumber.from(0));
+
+
+  const [czbFarmsAccountStakeWei, setCzbFarmsAccountStakeWei] = useState(BigNumber.from(0));
+  const [banditFarmsAccountStakeWei, setBanditFarmsAccountStakeWei] = useState(BigNumber.from(0));
+
+
+
+  const { value: czusdNotesAccountInfo } = useCall({
+    contract: new Contract(ADDRESS_CZUSDNOTES, CzusdNotesAbi),
+    method: 'getAccount',
+    args: [account ?? ADDRESS_ZERO]
+  }) ?? {}
 
   useDeepCompareEffect(() => {
     if (!account || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !lpInfos || !v2FarmsUserInfo || !tribePoolAccountInfo) {
@@ -93,6 +107,9 @@ function Home() {
       setFarmsv2AccountStakeWei(BigNumber.from(0));
       setPoolsV1AccountStakeWei(BigNumber.from(0));
       setTribePoolAccountStakeWei(BigNumber.from(0));
+      setCzusdNotesAccountStakeWei(BigNumber.from(0));
+      setCzbFarmsAccountStakeWei(BigNumber.from(0));
+      setBanditFarmsAccountStakeWei(BigNumber.from(0));
       return;
     }
 
@@ -121,16 +138,46 @@ function Home() {
       tribePoolAccountInfo.reduce((prev, curr, index) => prev.add(weiToUsdWeiVal(curr?.stakedBal, czrPrice)), BigNumber.from(0))
     )
 
+    setCzusdNotesAccountStakeWei(czusdNotesAccountInfo?.totalPrinciple_ ?? BigNumber.from(0))
 
 
-  }, [account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, tribePoolAccountInfo, czfPrice, czrPrice, czusdPrice]);
+
+    setCzbFarmsAccountStakeWei(
+      CZB_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
+        weiToUsdWeiVal(czbFarmsUserInfo?.[index]?.amount ?? BigNumber.from(0), curr.tokenName == "CZB" ? czbPrice : czusdPrice)
+      ), BigNumber.from(0)).add(
+        CZB_FARMS.reduce((prev, curr, index) => prev.add(
+          getLpTokenValueUsdWad(curr?.tokens?.[0]?.symbol ?? "CZB", lpInfos?.[curr.lp], czbFarmsUserInfo?.[index + CZB_FARMS_SINGLES.length]?.amount, czbPrice, czusdPrice, curr?.tokens?.[1]?.symbol == "CZF")
+        ), BigNumber.from(0)
+        )
+      )
+    );
+
+
+
+    setBanditFarmsAccountStakeWei(
+      BANDIT_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
+        weiToUsdWeiVal(banditFarmsUserInfo?.[index]?.amount ?? BigNumber.from(0), curr.tokenName == "BANDIT" ? banditPrice : czusdPrice)
+      ), BigNumber.from(0)).add(
+        BANDIT_FARMS.reduce((prev, curr, index) => prev.add(
+          getLpTokenValueUsdWad(curr?.tokens?.[0]?.symbol ?? "BANDIT", lpInfos?.[curr.lp], banditFarmsUserInfo?.[index + BANDIT_FARMS_SINGLES.length]?.amount, banditPrice, czusdPrice, curr?.tokens?.[1]?.symbol == "CZB")
+        ), BigNumber.from(0)
+        )
+      )
+    );
+
+
+
+  }, [account, chronoPoolAccountInfo, exoticFarmAccountInfo, lpInfos, v2FarmsUserInfo, poolsV1AccountInfo, tribePoolAccountInfo, czfPrice, czrPrice, czusdPrice,
+    czusdNotesAccountInfo]);
 
   return (<>
     <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{ minHeight: "100vh" }}>
 
       <WalletStatsBar {...{
         czfPrice, czrPrice, czusdPrice, banditPrice, czbPrice, czfBal, czusdBal, czrBal, banditBal, czbBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
-        chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei
+        chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei,
+        czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei
       }} />
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
@@ -168,7 +215,7 @@ function Home() {
             accountLpBal={accountLpBals?.[farm?.lp]}
           />
         ))}
-        <p className="has-text-right pr-2">Your Blue Farms Staked: TBD{/*${weiToShortString(farmsV2AccountStakeWei, 2)}*/}</p>
+        <p className="has-text-right pr-2">Your Blue Farms Staked: ${weiToShortString(czbFarmsAccountStakeWei, 2)}</p>
         <p className="has-text-right pr-2">Blue Farms TVL: ${weiToShortString(czbFarmsTvlWei, 2)}</p>
       </CollapsibleCard>
 
@@ -208,7 +255,7 @@ function Home() {
             accountLpBal={accountLpBals?.[farm?.lp]}
           />
         ))}
-        <p className="has-text-right pr-2">Your Bandit Farms Staked: TBD{/*${weiToShortString(farmsV2AccountStakeWei, 2)}*/}</p>
+        <p className="has-text-right pr-2">Your Bandit Farms Staked: ${weiToShortString(banditFarmsAccountStakeWei, 2)}</p>
         <p className="has-text-right pr-2">Bandit Farms TVL: ${weiToShortString(banditFarmsTvlWei, 2)}</p>
       </CollapsibleCard>
 
@@ -267,7 +314,7 @@ function Home() {
         <ManageCzusdNotes
           {...{ account, library, currentEpoch, czusdBal }}
         />
-        <p className="has-text-right pr-2">Your CzusdNotes Staked: TBD{/*${weiToShortString(farmsV2AccountStakeWei, 2)}*/}</p>
+        <p className="has-text-right pr-2">Your CzusdNotes Staked: ${weiToShortString(czusdNotesAccountStakeWei, 2)}</p>
         <p className="has-text-right pr-2">CzusdNotes TVL: ${weiToShortString(czusdNotesTvlWei, 2)}</p>
       </CollapsibleCard>
 
