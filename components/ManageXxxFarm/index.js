@@ -1,4 +1,5 @@
 
+import { formatEther } from '@ethersproject/units';
 import { useContractFunction, useTokenAllowance } from '@usedapp/core';
 import { BigNumber, Contract, constants, utils } from 'ethers';
 import React, { useEffect, useState } from 'react';
@@ -22,8 +23,7 @@ export default function ManageXxxFarm({ account, library, farm, xxxFarmsSettings
   const [outputEther, setOutputEther] = useState(0);
 
   const isSwap = (farm?.tokens?.[0]?.symbol == "CZB" && farm?.tokens?.[1]?.symbol == "CZF") ||
-    (farm?.tokens?.[0]?.symbol == "BANDIT" && farm?.tokens?.[1]?.symbol == "CZB") ||
-    (farm?.tokens?.[0]?.symbol == "BANDIT" && farm?.tokens?.[1]?.symbol == "CZUSD")
+    (farm?.tokens?.[0]?.symbol == "BANDIT" && farm?.tokens?.[1]?.symbol == "CZB")
 
 
   const { state: stateClaim, send: sendClaim } = useContractFunction(
@@ -46,10 +46,16 @@ export default function ManageXxxFarm({ account, library, farm, xxxFarmsSettings
       setApr("0.00");
       return;
     }
-    let usdPerYear = weiToUsdWeiVal(xxxFarmsSettings.xxxPerSecond.mul(10519200).mul(xxxFarmsPoolInfo.allocPoint).div(xxxFarmsSettings.totalAllocPoint), xxxPrice);
+    let usdPerYear = weiToUsdWeiVal(xxxFarmsSettings.xxxPerSecond.mul(31536000).mul(xxxFarmsPoolInfo.allocPoint).div(xxxFarmsSettings.totalAllocPoint), xxxPrice);
     let usdStaked = getLpTokenValueUsdWad(farm.tokens[0].symbol, lpInfo, xxxFarmsPoolInfo?.totalDeposit, xxxPrice, czusdPrice, isSwap);
     if (usdStaked.eq(0)) {
       usdStaked = BigNumber.from(1);
+    }
+    if (farm?.tokens?.[0]?.symbol == "BANDIT" && farm?.tokens?.[1]?.symbol == "CZUSD") {
+      console.log("Processing bandit/czusd")
+      console.log(formatEther(usdPerYear))
+      console.log(formatEther(usdStaked))
+      console.log(xxxPrice)
     }
     setApr(tokenAmtToShortString(BigNumber.from(1000000).mul(usdPerYear).div(usdStaked), 4, 2));
   }, [!xxxFarmsSettings?.xxxPerSecond || !xxxFarmsSettings?.totalAllocPoint, lpInfo?.totalSupply, lpInfo?.tokens[0], xxxFarmsPoolInfo?.allocPoint, xxxFarmsPoolInfo?.totalDeposit, xxxPrice, czusdPrice])
