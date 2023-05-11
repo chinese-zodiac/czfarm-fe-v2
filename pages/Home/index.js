@@ -177,7 +177,8 @@ function Home() {
       <WalletStatsBar {...{
         czfPrice, czrPrice, czusdPrice, banditPrice, czbPrice, czfBal, czusdBal, czrBal, banditBal, czbBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
         chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei,
-        czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei
+        czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
+        czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo, czbFarmsPoolInfo, czbFarmsPoolInfo, czbFarmsSettings, banditFarmsSettings, banditFarmsPoolInfo
       }} />
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>

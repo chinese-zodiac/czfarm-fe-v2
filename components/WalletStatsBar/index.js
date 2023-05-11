@@ -9,8 +9,11 @@ import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
 import styles from "./index.module.scss";
 const { formatEther, parseEther, Interface } = utils;
 
-function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice, czrBal, czusdBal, banditBal, czbBal, czfBal, account, tribePoolInfo, tribePoolAccountInfo, tribePoolAccountStakeWei, lpInfos, burnPoolInfo, burnPoolAccountInfo,
-  czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei
+function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice, czrBal, czusdBal, banditBal, czbBal, czfBal, account, tribePoolInfo, tribePoolAccountInfo, tribePoolAccountStakeWei, lpInfos,
+  czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
+  czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
+  czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo
+
 }) {
 
   const [dailyAccountTokensWei, setDailyAccountTokensWei] = useState([]);
@@ -22,9 +25,10 @@ function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice,
       setTokensHarvestable([]);
       return
     }
-    setDailyAccountTokensWei(getDailyAccountTokensWei(tribePoolInfo, tribePoolAccountInfo, burnPoolInfo, burnPoolAccountInfo));
+    setDailyAccountTokensWei(getDailyAccountTokensWei(tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
+      czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo));
     setTokensHarvestable(getTokensHarvestable(tribePoolAccountInfo));
-  }, [account, tribePoolInfo, tribePoolAccountInfo, burnPoolInfo, burnPoolAccountInfo]);
+  }, [account, tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo]);
 
   return (<>
     <div className='columns is-3 is-variable'>
@@ -59,10 +63,12 @@ function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice,
               <p key={tokenWei.name} className='is-size-5 m-0' style={{ whiteSpace: "nowrap" }}>{weiToShortString(tokenWei.rewardPerDay, 2)}<span className="is-size-7 ml-1">($
                 {tokenWei.name == "CZUSD" ?
                   weiToShortString(weiToUsdWeiVal(tokenWei.rewardPerDay, czusdPrice), 2) :
-                  (!!PRICING_LP[tokenWei.name] &&
+                  (!!PRICING_LP[tokenWei.name] ?
                     weiToShortString(
                       weiTolpCzusdPricedWeiVal(lpInfos, tokenWei?.name, tokenWei?.rewardPerDay, czusdPrice)
-                      , 2)
+                      , 2) : (tokenWei.name == "🎭🔫") && weiToShortString(
+                        weiTolpCzusdPricedWeiVal(lpInfos, 'BANDIT', tokenWei?.rewardPerDay, czusdPrice)
+                        , 2)
                   )
                 }
                 )

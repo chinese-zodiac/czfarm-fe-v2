@@ -1,6 +1,8 @@
+import { formatEther } from '@ethersproject/units';
 import { BigNumber } from 'ethers';
-import { BURN_POOLS } from "../constants/burnpools";
+import { CZB_FARMS, CZB_FARMS_SINGLES } from '../constants/czbfarms';
 import { TRIBE_POOLS } from "../constants/tribepools";
+import { BANDIT_FARMS, BANDIT_FARMS_SINGLES } from '../constants/banditfarms';
 
 
 export const getCzrHarvestableBurnPools = (burnPoolsAccountInfo) => {
@@ -68,10 +70,20 @@ export const getTokensHarvestable = (tribePoolAccountInfo) => {
   return tokensHarvestableList;
 }
 
-export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, burnPoolInfo, burnPoolAccountInfo) => {
+export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
+  czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo) => {
   let dailyTokensList = []
   const currentEpoch = Math.floor(Date.now() / 1000);
   try {//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
+    if (czusdNotesAccountInfo.currYieldPerSecond_.gt(0)) {
+      dailyTokensList.push({
+        name: "CZUSD",
+        rewardPerDay: czusdNotesAccountInfo.currYieldPerSecond_.mul(86400)
+      });
+    }
+  } catch (e) { console.log("getDailyAccountTokensWei err") }
+  try {//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
+
     tribePoolAccountInfo.forEach((pool, index) => {
       const poolInfo = tribePoolInfo?.[index];
       const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == TRIBE_POOLS?.[index].rewardAssetName);
@@ -85,61 +97,46 @@ export const getDailyAccountTokensWei = (tribePoolInfo, tribePoolAccountInfo, bu
           name: TRIBE_POOLS?.[index].rewardAssetName,
           rewardPerDay: rewardPerDay
         }
-        if (TRIBE_POOLS?.[index].rewardAssetName == "CZR") { //CZR must be first
-          dailyTokensList.unshift(tokenWei);
-        } else {
-          dailyTokensList.push(tokenWei);
-        }
+        dailyTokensList.push(tokenWei);
       } else {
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
     });
-    burnPoolAccountInfo.forEach((poolAccountInfo, index) => {
-      const poolInfo = burnPoolInfo?.[index];
-      const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == BURN_POOLS?.[index].rewardAssetName);
-      const totalShares = burnPoolInfo?.[index]?.totalShares ?? BigNumber.from(0);
-      if (burnPoolInfo?.timestampStart > currentEpoch || burnPoolInfo?.timestampEnd < currentEpoch || totalShares.eq(0)) return; //inactive
-      const rewardPerSecond = poolAccountInfo?.shares?.mul(burnPoolInfo?.[index]?.rewardPerSecond ?? 0)?.div(totalShares) ?? BigNumber.from(0);
-      if (rewardPerSecond?.eq(0)) return; //No earnings
-      const rewardPerDay = rewardPerSecond.mul(86400);
+
+    [...CZB_FARMS_SINGLES, ...CZB_FARMS].forEach((farm, index) => {
+      const rewardPerDay = getSingleXxxFarmXxxPerSecondWei(czbFarmsSettings, czbFarmsPoolInfo?.[index]?.totalDeposit, czbFarmsPoolInfo?.[index], czbFarmsUserInfo?.[index]).mul(86400);
+
+      if (rewardPerDay.eq(0)) return; //No earnings
+      const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == 'CZB');
       if (tokenIndex == -1) {
         //Token not in array yet
-        let tokenWei = {
-          name: BURN_POOLS?.[index].rewardAssetName,
+        dailyTokensList.push({
+          name: "CZB",
           rewardPerDay: rewardPerDay
-        }
-        if (BURN_POOLS?.[index].rewardAssetName == "CZR") { //CZR must be first
-          dailyTokensList.unshift(tokenWei);
-        } else {
-          dailyTokensList.push(tokenWei);
-        }
+        });
+      } else {
+        dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
+      }
+    });
+
+    [...BANDIT_FARMS_SINGLES, ...BANDIT_FARMS].forEach((farm, index) => {
+      const rewardPerDay = getSingleXxxFarmXxxPerSecondWei(banditFarmsSettings, banditFarmsPoolInfo?.[index]?.totalDeposit, banditFarmsPoolInfo?.[index], banditFarmsUserInfo?.[index]).mul(86400);
+
+      if (rewardPerDay.eq(0)) return; //No earnings
+      const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == '🎭🔫');
+      if (tokenIndex == -1) {
+        //Token not in array yet
+        dailyTokensList.push({
+          name: "🎭🔫",
+          rewardPerDay: rewardPerDay
+        });
       } else {
         dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
       }
     })
-    /*tribePoolAccountInfo.forEach((pool, index) => {
-      if (TRIBE_POOLS?.[index].rewardAssetName == "CZF") return; //dont need CZF
-      const tokenIndex = dailyTokensList.findIndex((elem) => elem.name == TRIBE_POOLS?.[index].rewardAssetName);
-      const poolInfo = tribePoolInfo?.[index];
-      const totalStaked = poolInfo?.totalStaked ?? BigNumber.from(0);
-      const rewardPerSecond = pool?.stakedBal?.mul(poolInfo?.rewardPerSecond).div(totalStaked) ?? BigNumber.from(0);
-      if (rewardPerSecond.eq(0)) return; //No earnings
-      const rewardPerDay = rewardPerSecond.mul(86400);
-      if (tokenIndex == -1) {
-        //Token not in array yet
-        let tokenWei = {
-          name: TRIBE_POOLS?.[index].rewardAssetName,
-          rewardPerDay: rewardPerDay
-        }
-        if (TRIBE_POOLS?.[index].rewardAssetName == "CZUSD") { //CZUSD must be first
-          dailyTokensList.unshift(tokenWei);
-        } else {
-          dailyTokensList.push(tokenWei);
-        }
-      } else {
-        dailyTokensList[tokenIndex].rewardPerDay = dailyTokensList[tokenIndex].rewardPerDay.add(rewardPerDay);
-      }
-    });*/
+
   } catch (e) { console.log("getDailyAccountTokensWei err") }
+
+
   return dailyTokensList;
 }
