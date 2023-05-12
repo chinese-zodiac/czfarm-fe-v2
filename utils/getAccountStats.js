@@ -25,8 +25,60 @@ export const getSingleXxxFarmXxxPerSecondWei = (xxxFarmsSettings, totalDeposit, 
   return xxxPerSecondPerAllocPoint?.mul(singleXxxFarmsPoolInfo?.allocPoint ?? BigNumber.from(0)).mul(singleXxxFarmsUserInfo?.amount ?? BigNumber.from(0)).div(totalDeposit ?? BigNumber.from(1));
 }
 
-export const getTokensHarvestable = (tribePoolAccountInfo) => {
+export const getTokensHarvestable = (tribePoolAccountInfo, czusdNotesAccountInfo, nftPoolPendingCzr, czbFarmsPendingCzb, banditFarmsPendingBandit, v2FarmsPendingCzf) => {
   let tokensHarvestableList = [];
+  try {
+    if (czusdNotesAccountInfo.accYield_.gt(0)) {
+      tokensHarvestableList.push({
+        name: "CZUSD",
+        tokenHarvestable: czusdNotesAccountInfo.accYield_
+      });
+    }
+
+  } catch (e) { }
+  try {
+    if (nftPoolPendingCzr.gt(0)) {
+      tokensHarvestableList.push({
+        name: "CZR",
+        tokenHarvestable: nftPoolPendingCzr
+      });
+    }
+
+  } catch (e) { }
+  try {
+    banditFarmsPendingBandit.forEach((pendingBandit, index) => {
+      const tokenIndex = tokensHarvestableList.findIndex((elem) => elem.name == "🎭🔫");
+      if (!pendingBandit?.pendingXxx || !pendingBandit.pendingXxx.gt(0)) {
+        return; // no rewards
+      }
+      if (tokenIndex == -1) {
+        //Token not in array yet
+        tokensHarvestableList.push({
+          name: "🎭🔫",
+          tokenHarvestable: pendingBandit.pendingXxx
+        });
+      } else {
+        tokensHarvestableList[tokenIndex].tokenHarvestable = tokensHarvestableList[tokenIndex].tokenHarvestable.add(pendingBandit.pendingXxx);
+      }
+    })
+  } catch (e) { }
+  try {
+    czbFarmsPendingCzb.forEach((pendingCzb, index) => {
+      const tokenIndex = tokensHarvestableList.findIndex((elem) => elem.name == "CZB");
+      if (!pendingCzb?.pendingXxx || !pendingCzb.pendingXxx.gt(0)) {
+        return; // no rewards
+      }
+      if (tokenIndex == -1) {
+        //Token not in array yet
+        tokensHarvestableList.push({
+          name: "CZB",
+          tokenHarvestable: pendingCzb.pendingXxx
+        });
+      } else {
+        tokensHarvestableList[tokenIndex].tokenHarvestable = tokensHarvestableList[tokenIndex].tokenHarvestable.add(pendingCzb.pendingXxx);
+      }
+    })
+  } catch (e) { }
   try {//Since bignumbers from contracts are often undefined, the shortest way to handle all cases is to return 0 if below code crashes. WARNING! This may cause errors to fail silently here.
     tribePoolAccountInfo.forEach((pool, index) => {
       const tokenIndex = tokensHarvestableList.findIndex((elem) => elem.name == TRIBE_POOLS?.[index].rewardAssetName);
@@ -44,27 +96,23 @@ export const getTokensHarvestable = (tribePoolAccountInfo) => {
       }
 
     });
-    /*tribePoolAccountInfo.forEach((pool, index) => {
-      if (TRIBE_POOLS?.[index].rewardAssetName == "CZF") return; //dont need CZF
-      const tokenIndex = tokensHarvestableList.findIndex((elem) => elem.name == TRIBE_POOLS?.[index].rewardAssetName);
-      const tokenHarvestable = pool?.pendingReward ?? BigNumber.from(0);
-      if (tokenHarvestable.eq(0)) return; //No harvest
+  } catch (e) { }
+  try {
+    v2FarmsPendingCzf.forEach((pendingCzf, index) => {
+      const tokenIndex = tokensHarvestableList.findIndex((elem) => elem.name == "CZF");
+      if (!pendingCzf?.pendingCzf || !pendingCzf.pendingCzf.gt(0)) {
+        return; // no rewards
+      }
       if (tokenIndex == -1) {
         //Token not in array yet
-        let tokenWei = {
-          name: TRIBE_POOLS?.[index].rewardAssetName,
-          tokenHarvestable: tokenHarvestable
-        }
-        if (TRIBE_POOLS?.[index].rewardAssetName == "CZUSD") { //CZUSD must be first
-          tokensHarvestableList.unshift(tokenWei);
-        } else {
-          tokensHarvestableList.push(tokenWei);
-        }
+        tokensHarvestableList.push({
+          name: "CZF",
+          tokenHarvestable: pendingCzf.pendingCzf
+        });
       } else {
-        tokensHarvestableList[tokenIndex].tokenHarvestable = tokensHarvestableList[tokenIndex].tokenHarvestable.add(tokenHarvestable);
+        tokensHarvestableList[tokenIndex].tokenHarvestable = tokensHarvestableList[tokenIndex].tokenHarvestable.add(pendingCzf.pendingCzf);
       }
-
-    });*/
+    })
   } catch (e) { }
   return tokensHarvestableList;
 }

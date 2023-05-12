@@ -45,7 +45,7 @@ export default function ManageXxxFarm({ account, library, farm, xxxFarmsSettings
       setApr("0.00");
       return;
     }
-    let usdPerYear = weiToUsdWeiVal(xxxFarmsSettings.xxxPerSecond.mul(31536000).mul(xxxFarmsPoolInfo.allocPoint).div(xxxFarmsSettings.totalAllocPoint), xxxPrice);
+    let usdPerYear = weiToUsdWeiVal(xxxFarmsSettings.xxxPerSecond.mul(31557601).mul(xxxFarmsPoolInfo.allocPoint).div(xxxFarmsSettings.totalAllocPoint), xxxPrice);
     let usdStaked = getLpTokenValueUsdWad(farm.tokens[0].symbol, lpInfo, xxxFarmsPoolInfo?.totalDeposit, xxxPrice, czusdPrice, isSwap);
     if (usdStaked.eq(0)) {
       usdStaked = BigNumber.from(1);

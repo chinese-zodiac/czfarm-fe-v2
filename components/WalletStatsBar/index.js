@@ -14,7 +14,7 @@ function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice,
   czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
   czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo,
   v2FarmsUserInfo, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo,
-  nftPoolCzrPerSecond
+  nftPoolCzrPerSecond, nftPoolPendingCzr, czbFarmsPendingCzb, banditFarmsPendingBandit, v2FarmsPendingCzf
 
 }) {
 
@@ -30,7 +30,7 @@ function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice,
     setDailyAccountTokensWei(getDailyAccountTokensWei(tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo,
       czbFarmsSettings, czbFarmsPoolInfo, banditFarmsSettings, banditFarmsPoolInfo,
       v2FarmsUserInfo, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, nftPoolCzrPerSecond));
-    setTokensHarvestable(getTokensHarvestable(tribePoolAccountInfo));
+    setTokensHarvestable(getTokensHarvestable(tribePoolAccountInfo, czusdNotesAccountInfo, nftPoolPendingCzr, czbFarmsPendingCzb, banditFarmsPendingBandit, v2FarmsPendingCzf));
   }, [account, tribePoolInfo, tribePoolAccountInfo, czusdNotesAccountInfo]);
 
   return (<>
@@ -95,10 +95,12 @@ function WalletStatsBar({ czrPrice, czusdPrice, czbPrice, banditPrice, czfPrice,
                 <span className="is-size-7 ml-1">($
                   {tokenWei.name == "CZUSD" ?
                     weiToShortString(weiToUsdWeiVal(tokenWei?.tokenHarvestable, czusdPrice), 2) :
-                    (!!PRICING_LP[tokenWei.name] &&
+                    (!!PRICING_LP[tokenWei.name] ?
                       weiToShortString(
                         weiTolpCzusdPricedWeiVal(lpInfos, tokenWei?.name, tokenWei?.tokenHarvestable, czusdPrice)
-                        , 2)
+                        , 2) : (tokenWei.name == "🎭🔫") && weiToShortString(
+                          weiTolpCzusdPricedWeiVal(lpInfos, 'BANDIT', tokenWei?.tokenHarvestable, czusdPrice)
+                          , 2)
                     )
                   }
                   )

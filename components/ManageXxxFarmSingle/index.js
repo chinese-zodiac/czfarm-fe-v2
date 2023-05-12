@@ -42,7 +42,7 @@ export default function ManageXxxFarmSingle({ account, library, farm, xxxFarmsSe
       setApr("0.00");
       return;
     }
-    let usdPerYear = weiToUsdWeiVal(xxxFarmsSettings.xxxPerSecond.mul(31536000).mul(xxxFarmsPoolInfo.allocPoint).div(xxxFarmsSettings.totalAllocPoint), xxxPrice);
+    let usdPerYear = weiToUsdWeiVal(xxxFarmsSettings.xxxPerSecond.mul(31557601).mul(xxxFarmsPoolInfo.allocPoint).div(xxxFarmsSettings.totalAllocPoint), xxxPrice);
     let usdStaked = weiToUsdWeiVal(xxxFarmsPoolInfo.totalDeposit, farm.tokenName == xxx_Symbol ? xxxPrice : czusdPrice);
     if (usdStaked.eq(0)) {
       usdStaked = BigNumber.from(1);

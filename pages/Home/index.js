@@ -128,6 +128,16 @@ function Home() {
     nftPoolUserBal?.[0].mul(nftPoolCzrRps?.[0] ?? BigNumber.from(0)).div(nftPoolTotalStaked?.[0]) ?? BigNumber.from(0)
     : BigNumber.from(0));
 
+
+    const { value: nftPoolpendingCzrResult } = useCall(ADDRESS_TRIBEPOOLNFT && {
+      contract: TribePoolNftContract,
+      method: 'pendingReward',
+      args: [account]
+  }) ?? {}
+
+  const nftPoolPendingCzr = (!!nftPoolpendingCzrResult?.[0] && !!nftPoolpendingCzrResult?.[0]?.gt(0)) ?
+  nftPoolpendingCzrResult?.[0] : BigNumber.from(0);
+
   useDeepCompareEffect(() => {
     if (!account || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !lpInfos || !v2FarmsUserInfo || !tribePoolAccountInfo) {
       setChronoAccountStakeWei(BigNumber.from(0));
@@ -201,11 +211,11 @@ function Home() {
     <main id="main" className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start " style={{ minHeight: "100vh" }}>
 
       <WalletStatsBar {...{
-        czfPrice, czrPrice, czusdPrice, banditPrice, czbPrice, czfBal, czusdBal, czrBal, banditBal, czbBal, account, library, v2FarmsPendingCzf, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
+        czfPrice, czrPrice, czusdPrice, banditPrice, czbPrice, czfBal, czusdBal, czrBal, banditBal, czbBal, account, library, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
         chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei,
-        czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
+        czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, czbFarmsPendingCzb,banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
         czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo, czbFarmsPoolInfo, czbFarmsPoolInfo, czbFarmsSettings, banditFarmsSettings, banditFarmsPoolInfo,
-        nftPoolCzrPerSecond
+        nftPoolCzrPerSecond, nftPoolPendingCzr, czbFarmsPendingCzb, banditFarmsPendingBandit, v2FarmsPendingCzf
       }} />
 
       <CollapsibleCard className={"mt-3 mb-3 has-text-left " + styles.StakingSection} title={(<div className="columns pb-3 pt-4 mr-2" style={{ width: "100%" }}>
