@@ -22,6 +22,7 @@ import { CHRONO_POOL } from "../../constants/chronoPool";
 import { CZB_FARMS, CZB_FARMS_SINGLES } from '../../constants/czbfarms';
 import { EXOTIC_FARMS } from "../../constants/exoticFarms";
 import { FARM_V2 } from "../../constants/famsv2";
+import { LINK_OPENOCEAN_WIDGET } from '../../constants/links';
 import { POOLS_V1 } from "../../constants/poolsv1";
 import { TRIBE_POOLS } from '../../constants/tribepools';
 import CZFarmContext from '../../contexts/CZFarmContext';
@@ -433,9 +434,10 @@ function Home() {
       <hr />
       <h2 style={{ color: "#888", fontSize: "3em", borderTop: "solid 4px" }} className="mt-5 pt-2">GET CZUSD</h2>
       <subtitle style={{ color: "#888" }}>Buy CZUSD with multirouter swap with minimized slippage.</subtitle>
+      <a href={LINK_OPENOCEAN_WIDGET} target="_blank">direct link</a>
       <iframe
         allowtransparency="true"
-        src="https://widget-openocean.cz.cash?p=JTIzMDAwNTFBJTI0KiUyNCUyMzBCMTIyRSUyNColMjQlMjMwMDA1MUElMjQqJTI0JTIzMUUyMTNCJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjNBMUExQTIlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjM3NzdFREQlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyMzBBRDk5NyUyNColMjQlMjNGODJCNTAlMjQqJTI0Q1pTd2FwJTI0KiUyNFJvYm90byUyNColMjQlMjQqJTI0Q1pPRElBQyUyNColMjQweDcwZTFjQjc1OTk5NmExNTI3ZUQxODAxQjE2OTYyMUMxOGE5ZjM4RjklMjQqJTI0MC41JTI0KiUyNGJzYyUyNColMjRCTkIlMjQqJTI0Q1pVU0QlMjQqJTI0MHhlNjhiNzllNTFiZjgyNjUzNGZmMzdhYTljZWU3MWEzODQyZWU5Yzcw"
+        src={LINK_OPENOCEAN_WIDGET}
         style={{
           height: 600,
           width: 420,
