@@ -433,7 +433,7 @@ function Home() {
 
       <hr />
       <h2 style={{ color: "#888", fontSize: "3em", borderTop: "solid 4px" }} className="mt-5 pt-2">GET CZUSD</h2>
-      <subtitle style={{ color: "#888" }}>Buy CZUSD with multirouter swap with minimized slippage.</subtitle>
+      <subtitle style={{ color: "#888" }}>Buy CZUSD via multirouter swap for minimized slippage.</subtitle>
       <a href={LINK_OPENOCEAN_WIDGET} target="_blank">direct link</a>
       <iframe
         allowtransparency="true"
