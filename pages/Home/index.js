@@ -129,14 +129,14 @@ function Home() {
     : BigNumber.from(0));
 
 
-    const { value: nftPoolpendingCzrResult } = useCall(ADDRESS_TRIBEPOOLNFT && {
-      contract: TribePoolNftContract,
-      method: 'pendingReward',
-      args: [account]
+  const { value: nftPoolpendingCzrResult } = useCall(ADDRESS_TRIBEPOOLNFT && {
+    contract: TribePoolNftContract,
+    method: 'pendingReward',
+    args: [account]
   }) ?? {}
 
   const nftPoolPendingCzr = (!!nftPoolpendingCzrResult?.[0] && !!nftPoolpendingCzrResult?.[0]?.gt(0)) ?
-  nftPoolpendingCzrResult?.[0] : BigNumber.from(0);
+    nftPoolpendingCzrResult?.[0] : BigNumber.from(0);
 
   useDeepCompareEffect(() => {
     if (!account || !chronoPoolAccountInfo || !exoticFarmAccountInfo || !lpInfos || !v2FarmsUserInfo || !tribePoolAccountInfo) {
@@ -213,7 +213,7 @@ function Home() {
       <WalletStatsBar {...{
         czfPrice, czrPrice, czusdPrice, banditPrice, czbPrice, czfBal, czusdBal, czrBal, banditBal, czbBal, account, library, v2FarmsSettings, v2FarmsLpBal, v2FarmsPoolInfo, v2FarmsUserInfo, chronoPoolAccountInfo, exoticFarmAccountInfo, poolsV1Info, poolsV1TokenBalance, poolsV1AccountInfo, tribePoolInfo, tribePoolAccountInfo, lpInfos, currentEpoch,
         chronoAccountStakeWei, exoticAccountStakeWei, farmsV2AccountStakeWei, poolsV1AccountStakeWei, tribePoolAccountStakeWei,
-        czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, czbFarmsPendingCzb,banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
+        czusdNotesAccountStakeWei, czbFarmsAccountStakeWei, czbFarmsPendingCzb, banditFarmsAccountStakeWei, farmsV2AccountStakeWei,
         czusdNotesAccountInfo, czbFarmsUserInfo, banditFarmsUserInfo, czbFarmsPoolInfo, czbFarmsPoolInfo, czbFarmsSettings, banditFarmsSettings, banditFarmsPoolInfo,
         nftPoolCzrPerSecond, nftPoolPendingCzr, czbFarmsPendingCzb, banditFarmsPendingBandit, v2FarmsPendingCzf
       }} />
@@ -431,6 +431,22 @@ function Home() {
       </CollapsibleCard>*/}
 
       <hr />
+      <h2 style={{ color: "#888", fontSize: "3em", borderTop: "solid 4px" }} className="mt-5 pt-2">GET CZUSD</h2>
+      <subtitle style={{ color: "#888" }}>Buy CZUSD with multirouter swap with minimized slippage.</subtitle>
+      <iframe
+        allowtransparency="true"
+        src="https://widget-openocean.cz.cash?p=JTIzMDAwNTFBJTI0KiUyNCUyMzBCMTIyRSUyNColMjQlMjMwMDA1MUElMjQqJTI0JTIzMUUyMTNCJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjNBMUExQTIlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjM3NzdFREQlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyMzBBRDk5NyUyNColMjQlMjNGODJCNTAlMjQqJTI0Q1pTd2FwJTI0KiUyNFJvYm90byUyNColMjQlMjQqJTI0Q1pPRElBQyUyNColMjQweDcwZTFjQjc1OTk5NmExNTI3ZUQxODAxQjE2OTYyMUMxOGE5ZjM4RjklMjQqJTI0MC41JTI0KiUyNGJzYyUyNColMjRCTkIlMjQqJTI0Q1pVU0QlMjQqJTI0MHhlNjhiNzllNTFiZjgyNjUzNGZmMzdhYTljZWU3MWEzODQyZWU5Yzcw"
+        style={{
+          height: 600,
+          width: 420,
+          border: 'none',
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}
+      />
+
+      <hr />
+
 
       <h2 style={{ color: "#888", fontSize: "3em", borderTop: "solid 4px" }} className="mt-5 pt-2">LEGACY</h2>
       <subtitle style={{ color: "#888" }}>Deprecated defi tools for CZF</subtitle>
