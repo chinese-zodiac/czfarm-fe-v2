@@ -11,9 +11,7 @@ export const LINK_CZCASH = "https://cz.cash";
 export const LINK_CZODIAC = "https://czodiac.com";
 export const LINK_NUMIS = "https://numis.cz.cash";
 export const LINK_OBR = "https://bad.rabbitcatch.com";
-
-export const LINK_OPENOCEAN_WIDGET = "https://widget-openocean.cz.cash?p=JTIzMDAwNTFBJTI0KiUyNCUyMzBCMTIyRSUyNColMjQlMjMwMDA1MUElMjQqJTI0JTIzMUUyMTNCJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjNBMUExQTIlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjM3NzdFREQlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyMzBBRDk5NyUyNColMjQlMjNGODJCNTAlMjQqJTI0Q1pTd2FwJTI0KiUyNFJvYm90byUyNColMjQlMjQqJTI0Q1pPRElBQyUyNColMjQweDcwZTFjQjc1OTk5NmExNTI3ZUQxODAxQjE2OTYyMUMxOGE5ZjM4RjklMjQqJTI0MC41JTI0KiUyNGJzYyUyNColMjRCTkIlMjQqJTI0Q1pVU0QlMjQqJTI0MHhlNjhiNzllNTFiZjgyNjUzNGZmMzdhYTljZWU3MWEzODQyZWU5Yzcw";
-
+export const LINK_OPENOCEAN_WIDGET = "https://widget-openocean.cz.cash?p=JTIzMDAwNTFBJTI0KiUyNCUyMzBCMTIyRSUyNColMjQlMjMwMDA1MUElMjQqJTI0JTIzMUUyMTNCJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjNBMUExQTIlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjM3NzdFREQlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyMzBBRDk5NyUyNColMjQlMjNGODJCNTAlMjQqJTI0T3Blbk9jZWFuJTI0KiUyNFJvYm90byUyNColMjQlMjQqJTI0JTI0KiUyNCUyNColMjQlMjQqJTI0ZXRoJTI0KiUyNEVUSCUyNColMjRVU0RUJTI0KiUyNA==";
 
 export const LINK_TERMS_OF_USE = "https://czodiac.gitbook.io/czodiac-litepaper/terms-of-use";
 export const LINK_PRIVACY_POLICY = "https://czodiac.gitbook.io/czodiac-litepaper/privacy-policy";
