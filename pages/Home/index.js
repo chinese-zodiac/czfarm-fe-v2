@@ -22,7 +22,7 @@ import { CHRONO_POOL } from "../../constants/chronoPool";
 import { CZB_FARMS, CZB_FARMS_SINGLES } from '../../constants/czbfarms';
 import { EXOTIC_FARMS } from "../../constants/exoticFarms";
 import { FARM_V2 } from "../../constants/famsv2";
-import { LINK_OPENOCEAN_WIDGET } from '../../constants/links';
+import { LINK_OPENOCEAN_SWAP, LINK_OPENOCEAN_WIDGET } from '../../constants/links';
 import { POOLS_V1 } from "../../constants/poolsv1";
 import { TRIBE_POOLS } from '../../constants/tribepools';
 import CZFarmContext from '../../contexts/CZFarmContext';
@@ -434,7 +434,7 @@ function Home() {
       <hr />
       <h2 style={{ color: "#888", fontSize: "3em", borderTop: "solid 4px" }} className="mt-5 pt-2">GET CZUSD</h2>
       <subtitle style={{ color: "#888" }}>Buy CZUSD via multirouter swap for minimized slippage.</subtitle>
-      <a href={LINK_OPENOCEAN_WIDGET} target="_blank">direct link</a>
+      <a href={LINK_OPENOCEAN_SWAP} target="_blank">direct link</a>
       <iframe
         allowtransparency="true"
         src={LINK_OPENOCEAN_WIDGET}
