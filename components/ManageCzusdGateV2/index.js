@@ -74,7 +74,7 @@ export default function ManageCzusdGateV2({
                     </div>
                 </>)
                 }
-                <div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
+                {/*<div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
                     <h3 className="is-size-4">CZUSD to USDT</h3>
                     <p>Swap your CZUSD and receive USDT. {(sellFeeBasisResult?.[0].toNumber() / 100).toFixed(2)}% fee.</p>
                     <InputTokenEther className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
@@ -90,7 +90,7 @@ export default function ManageCzusdGateV2({
                     <button onClick={() => sendUsdtOut(parseEther(inputEtherCzusd.toString()), account)} className='button has-background-grey-lighter is-fullwidth'>Swap</button>
                     <p>You will get {(BigNumber.from(inputEtherCzusd ?? 0).mul(BigNumber.from(10000).sub(sellFeeBasisResult?.[0] ?? 10000)).div(100).toNumber() / 100).toFixed(2)} USDT immediately.</p>
 
-                </div>
+                </div>*/}
 
             </div>
         </>)}
