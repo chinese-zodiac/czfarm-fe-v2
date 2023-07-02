@@ -45,6 +45,21 @@ export const BANDIT_FARMS = [
                 symbol: "CZB"
             }
         ]
+    },
+    {
+        lp: "0xa98F8B669790b1063c0dB3a03A9ECfE4ce602bEe",
+        dex: DEX.PCS,
+        pid: 4,
+        tokens: [
+            {
+                address: "0xe68b79e51bf826534ff37aa9cee71a3842ee9c70",
+                symbol: "CZUSD"
+            },
+            {
+                address: "0xaa83bb1be2a74aaa8795a8887054919a0ea96bfa",
+                symbol: "LSDT"
+            }
+        ]
     }
 ]
 
