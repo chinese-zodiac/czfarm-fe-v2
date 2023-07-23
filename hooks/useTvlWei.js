@@ -66,22 +66,32 @@ function useTvlWei(czfPrice, czrPrice, czusdPrice, czbPrice, banditPrice, chrono
       ), BigNumber.from(0))
     );
 
-    setCzbFarmsTvlWei(CZB_FARMS.reduce((prev, curr, index) => prev.add(
-      getLpTokenValueUsdWad(curr.tokens[0].symbol, lpInfos?.[curr.lp], czbFarmsPoolInfo?.[index + CZB_FARMS_SINGLES.length]?.totalDeposit, czbPrice, czusdPrice, (
-        curr.tokens[1].symbol == "CZF"
-      ))
-    ), BigNumber.from(0)).add(
+    setCzbFarmsTvlWei(CZB_FARMS.reduce((prev, curr, index) => {
+      const isSwap = (curr?.tokens?.[0]?.symbol == "CZB" && curr?.tokens?.[1]?.symbol == "CZF") ||
+        (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZB") ||
+        (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZUSD");
+      return prev.add(
+        getLpTokenValueUsdWad(curr.tokens[0].symbol, lpInfos?.[curr.lp], czbFarmsPoolInfo?.[index + CZB_FARMS_SINGLES.length]?.totalDeposit, czbPrice, czusdPrice, (
+          curr.tokens[1].symbol == "CZF"
+        ))
+      );
+    }, BigNumber.from(0)).add(
       CZB_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
         weiToUsdWeiVal(czbFarmsPoolInfo?.[index]?.totalDeposit, curr.tokenName == "CZUSD" ? czusdPrice : czbPrice)
       ), BigNumber.from(0))
     ));
 
 
-    setBanditFarmsTvlWei(BANDIT_FARMS.reduce((prev, curr, index) => prev.add(
-      getLpTokenValueUsdWad(curr.tokens[0].symbol, lpInfos?.[curr.lp], banditFarmsPoolInfo?.[index + BANDIT_FARMS_SINGLES.length]?.totalDeposit, banditPrice, czusdPrice, (
-        curr.tokens[1].symbol == "CZB"
-      ))
-    ), BigNumber.from(0)).add(
+    setBanditFarmsTvlWei(BANDIT_FARMS.reduce((prev, curr, index) => {
+      const isSwap = (curr?.tokens?.[0]?.symbol == "CZB" && curr?.tokens?.[1]?.symbol == "CZF") ||
+        (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZB") ||
+        (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZUSD");
+      return prev.add(
+        getLpTokenValueUsdWad(curr.tokens[0].symbol, lpInfos?.[curr.lp], banditFarmsPoolInfo?.[index + BANDIT_FARMS_SINGLES.length]?.totalDeposit, banditPrice, czusdPrice, (
+          isSwap
+        ))
+      );
+    }, BigNumber.from(0)).add(
       BANDIT_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
         weiToUsdWeiVal(banditFarmsPoolInfo?.[index]?.totalDeposit, banditPrice)
       ), BigNumber.from(0))

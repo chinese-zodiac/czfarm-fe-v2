@@ -186,9 +186,14 @@ function Home() {
       CZB_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
         weiToUsdWeiVal(czbFarmsUserInfo?.[index]?.amount ?? BigNumber.from(0), curr.tokenName == "CZB" ? czbPrice : czusdPrice)
       ), BigNumber.from(0)).add(
-        CZB_FARMS.reduce((prev, curr, index) => prev.add(
-          getLpTokenValueUsdWad(curr?.tokens?.[0]?.symbol ?? "CZB", lpInfos?.[curr.lp], czbFarmsUserInfo?.[index + CZB_FARMS_SINGLES.length]?.amount, czbPrice, czusdPrice, curr?.tokens?.[1]?.symbol == "CZF")
-        ), BigNumber.from(0)
+        CZB_FARMS.reduce((prev, curr, index) => {
+          const isSwap = (curr?.tokens?.[0]?.symbol == "CZB" && curr?.tokens?.[1]?.symbol == "CZF") ||
+            (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZB") ||
+            (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZUSD");
+          return prev.add(
+            getLpTokenValueUsdWad(curr?.tokens?.[0]?.symbol ?? "CZB", lpInfos?.[curr.lp], czbFarmsUserInfo?.[index + CZB_FARMS_SINGLES.length]?.amount, czbPrice, czusdPrice, isSwap)
+          );
+        }, BigNumber.from(0)
         )
       )
     );
@@ -199,9 +204,14 @@ function Home() {
       BANDIT_FARMS_SINGLES.reduce((prev, curr, index) => prev.add(
         weiToUsdWeiVal(banditFarmsUserInfo?.[index]?.amount ?? BigNumber.from(0), curr.tokenName == "BANDIT" ? banditPrice : czusdPrice)
       ), BigNumber.from(0)).add(
-        BANDIT_FARMS.reduce((prev, curr, index) => prev.add(
-          getLpTokenValueUsdWad(curr?.tokens?.[0]?.symbol ?? "BANDIT", lpInfos?.[curr.lp], banditFarmsUserInfo?.[index + BANDIT_FARMS_SINGLES.length]?.amount, banditPrice, czusdPrice, curr?.tokens?.[1]?.symbol == "CZB")
-        ), BigNumber.from(0)
+        BANDIT_FARMS.reduce((prev, curr, index) => {
+          const isSwap = (curr?.tokens?.[0]?.symbol == "CZB" && curr?.tokens?.[1]?.symbol == "CZF") ||
+            (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZB") ||
+            (curr?.tokens?.[0]?.symbol == "BANDIT" && curr?.tokens?.[1]?.symbol == "CZUSD")
+          return prev.add(
+            getLpTokenValueUsdWad(curr?.tokens?.[0]?.symbol ?? "BANDIT", lpInfos?.[curr.lp], banditFarmsUserInfo?.[index + BANDIT_FARMS_SINGLES.length]?.amount, banditPrice, czusdPrice, isSwap)
+          );
+        }, BigNumber.from(0)
         )
       )
     );
