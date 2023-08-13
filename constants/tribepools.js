@@ -129,7 +129,7 @@ export const TRIBE_POOLS = [
         logo: "./images/tokens/LSDT.png",
         feeBasis: 998,
         duty: "50 LRT"
-    },
+    },/*
     {
         subtitle: "14.98% CZR burn on unstake.",
         address: "0x84748681A294F2Eb49fF0BFac21cd82fcF646107",
@@ -172,5 +172,5 @@ export const TRIBE_POOLS = [
         logo: "./images/tokens/BRAG.png",
         feeBasis: 998,
         duty: "50 LRT"
-    }
+    }*/
 ]
