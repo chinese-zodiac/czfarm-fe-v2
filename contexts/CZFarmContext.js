@@ -19,7 +19,7 @@ const { parseEther, formatEther } = utils;
 const CZFarmContext = createContext(0);
 
 export const CZFarmProvider = ({ children }) => {
-  const czusdPrice = useCoingeckoPrice("czusd");
+  const czusdPrice = useCoingeckoPrice("czusd") ?? "1.00";
   const bnbPrice = useCoingeckoPrice("binancecoin");
   const { library } = useEthers();
 
