@@ -60,7 +60,6 @@ export default function ManageTribePool({ pool, rewardAddress, accountInfo, pool
     const usdStaked = weiToUsdWeiVal(poolInfo.totalStaked, czrPrice);
 
     let usdPerYear;
-
     if (!!coingeckoRewardPrice) {
       usdPerYear = weiToUsdWeiVal(poolInfo.rewardPerSecond.mul(31557600), coingeckoRewardPrice);
     } else {

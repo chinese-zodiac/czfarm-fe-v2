@@ -13,7 +13,7 @@ export const LINK_NUMIS = "https://numis.cz.cash";
 export const LINK_OBR = "https://bad.rabbitcatch.com";
 
 export const LINK_OPENOCEAN_SWAP = "https://app.openocean.finance/CLASSIC#/BSC/BNB/CZUSD"
-export const LINK_OPENOCEAN_WIDGET = "https://widget-openocean.cz.cash?p=JTIzMDAwNTFBJTI0KiUyNCUyMzBCMTIyRSUyNColMjQlMjMwMDA1MUElMjQqJTI0JTIzMUUyMTNCJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjNBMUExQTIlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyM0ZGRkZGRiUyNColMjQlMjM3NzdFREQlMjQqJTI0JTIzMzIzRUYwJTI0KiUyNCUyMzBBRDk5NyUyNColMjQlMjNGODJCNTAlMjQqJTI0T3Blbk9jZWFuJTI0KiUyNFJvYm90byUyNColMjQlMjQqJTI0JTI0KiUyNCUyNColMjQlMjQqJTI0ZXRoJTI0KiUyNEVUSCUyNColMjRVU0RUJTI0KiUyNA==";
+export const LINK_OPENOCEAN_WIDGET = "https://widget-openocean.cz.cash/?chain=bsc&wallet=MetaMask&fromSymbol=BNB&toSymbol=CZUSD";
 
 export const LINK_TERMS_OF_USE = "https://czodiac.gitbook.io/czodiac-litepaper/terms-of-use";
 export const LINK_PRIVACY_POLICY = "https://czodiac.gitbook.io/czodiac-litepaper/privacy-policy";
