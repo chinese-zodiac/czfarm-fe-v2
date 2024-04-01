@@ -104,7 +104,7 @@ export default function ManageCzusdGateV2Bnb({
   const { state: stateSellCzusdForWbnb, send: sendSellCzusdForWbnb } =
     useContractFunction(
       new Contract(ADDRESS_CZUSDGATE_V2_BNB, CzusdGateAbi, library),
-      'sellCzusdWithBnb'
+      'sellCzusdForWbnb'
     );
 
   const { state: stateApproveWbnb, send: sendApproveWbnb } =
@@ -204,23 +204,78 @@ export default function ManageCzusdGateV2Bnb({
                 </div>
               </>
             )}
-            {/*<div className="is-inline-block p-3 m-3 is-align-self-flex-start " style={{ border: "solid 1px #dbdbdb", maxWidth: "25em" }}>
-                    <h3 className="is-size-4">CZUSD to USDT</h3>
-                    <p>Swap your CZUSD and receive USDT. {(sellFeeBasisResult?.[0].toNumber() / 100).toFixed(2)}% fee.</p>
-                    <InputTokenEther className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
-                        style={{ maxWidth: "10em", width: "100%" }}
-                        step="1"
-                        precision={1}
-                        label="CZUSD"
-                        minWadBn={BigNumber.from(0)} maxWadBn={czusdBal}
-                        setInputEther={setInputEtherCzusd}
-                        inputEther={inputEtherCzusd}
-                    />
-                    <QuickInputEther setInputEther={setInputEtherCzusd} maxTokenWad={czusdBal} />
-                    <button onClick={() => sendUsdtOut(parseEther(inputEtherCzusd.toString()), account)} className='button has-background-grey-lighter is-fullwidth'>Swap</button>
-                    <p>You will get {(BigNumber.from(inputEtherCzusd ?? 0).mul(BigNumber.from(10000).sub(sellFeeBasisResult?.[0] ?? 10000)).div(100).toNumber() / 100).toFixed(2)} USDT immediately.</p>
-
-                </div>*/}
+            {czusdAllowance?.lt(czusdBal ?? 0) ? (
+              <div
+                className="is-inline-block p-3 m-3 is-align-self-flex-start "
+                style={{ border: 'solid 1px #dbdbdb', maxWidth: '25em' }}
+              >
+                <div className="mb-5">
+                  <h3 className="is-size-4">CZUSD to WBNB</h3>
+                  <p className="mb-2">
+                    To use the CZUSD to WBNB portion of CzusdGate, you need to
+                    approve the CzusdGate address{' '}
+                    <code>{ADDRESS_CZUSDGATE_V2_BNB}</code> to use your CZUSD.
+                    You can use the button below.
+                  </p>
+                  <button
+                    onClick={() =>
+                      sendApproveCzusd(ADDRESS_CZUSDGATE_V2_BNB, MaxUint256)
+                    }
+                    className="button has-background-grey-lighter is-fullwidth"
+                  >
+                    Approve
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div
+                  className="is-inline-block p-3 m-3 is-align-self-flex-start "
+                  style={{ border: 'solid 1px #dbdbdb', maxWidth: '25em' }}
+                >
+                  <h3 className="is-size-4">CZUSD to WBNB</h3>
+                  <p>
+                    Swap your CZUSD and receive WBNB. No daily limit or maximum.
+                    Slippage adjusts based on gate volume and assets. You can
+                    swap WBNB to BNB for zero slippage on cz.cash.
+                    <br />
+                    Your CZUSD: {weiToShortString(czusdBal, 3)}
+                    <br />
+                    Your WBNB: {weiToShortString(wbnbBal, 3)}
+                  </p>
+                  <InputTokenEther
+                    className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
+                    style={{ maxWidth: '10em', width: '100%' }}
+                    step="1"
+                    precision={0}
+                    label="CZUSD"
+                    minWadBn={BigNumber.from(0)}
+                    maxWadBn={czusdBal}
+                    setInputEther={setInputEtherCzusd}
+                    inputEther={inputEtherCzusd}
+                  />
+                  <QuickInputEther
+                    setInputEther={setInputEtherCzusd}
+                    maxTokenWad={czusdBal}
+                  />
+                  <button
+                    onClick={() =>
+                      sendSellCzusdForWbnb(
+                        parseEther(inputEtherCzusd.toString()),
+                        account
+                      )
+                    }
+                    className="button has-background-grey-lighter is-fullwidth"
+                  >
+                    Swap
+                  </button>
+                  <p>
+                    You will get {weiToShortString(getBnbOutResult?.[0], 3)}{' '}
+                    WBNB immediately.
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </>
       )}
