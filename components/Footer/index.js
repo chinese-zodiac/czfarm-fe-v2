@@ -116,7 +116,7 @@ function Footer() {
           <small>team@czodiac.com</small>
         </p>
       </div>
-      <p className="is-size-7 p-5">v0.0.3008a(experimental)</p>
+      <p className="is-size-7 p-5">v0.0.3008b(experimental)</p>
     </footer>
   );
 }
