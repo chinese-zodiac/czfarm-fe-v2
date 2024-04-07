@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useEthers } from '@usedapp/core'
-import Web3Modal from 'web3modal'
-import WalletConnectProvider from '@walletconnect/web3-provider'
+import { BSC, useEthers } from '@usedapp/core'
+import LOGO_WCV2 from "../../public/static/assets/images/wcv2.svg";
 
 const Web3ModalButton = () => {
-  const { account, activate, deactivate, chainId } = useEthers();
+  const { account, activateBrowserWallet, deactivate, chainId } = useEthers();
 
   const { error } = useEthers();
   useEffect(() => {
@@ -14,36 +13,11 @@ const Web3ModalButton = () => {
     }
   }, [error])
 
-  const activateProvider = async () => {
-    const providerOptions = {
-      injected: {
-        display: {
-          name: 'Metamask',
-          description: 'Connect with the provider in your Browser',
-        },
-        package: null,
-      },
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          bridge: 'https://bridge.walletconnect.org',
-          infuraId: 'd8df2cb7844e4a54ab0a782f608749dd',
-          rpc: {
-            56: "https://rpc.ankr.com/bsc"
-          }
-        },
-      },
-    }
-
-    const web3Modal = new Web3Modal({
-      providerOptions,
-    })
-    try {
-      const provider = await web3Modal.connect()
-      await activate(provider)
-      //setActivateError('')
-    } catch (error: any) {
-      //setActivateError(error.message)
+  const activateProvider = async (activationType) => {
+    if(!!activationType){
+      activateBrowserWallet({ type: activationType });
+    }else{
+      activateBrowserWallet();
     }
   }
 
@@ -61,7 +35,10 @@ const Web3ModalButton = () => {
         <button className="button is-inline-block m-1 is-dark is-rounded" onClick={() => deactivate()}>Disconnect</button>
         </>
       ) : (<>
-        <button className="button is-inline-block m-1 is-dark is-rounded has-background-primary" onClick={activateProvider}>Connect</button>
+        <button className="button is-inline-block m-1 is-dark is-rounded has-background-primary" onClick={()=>activateProvider('')}>CONNECT</button>
+        <button className="button is-inline-block m-1 is-dark is-rounded has-background-primary" onClick={()=>activateProvider('walletConnectV2')}><span className="icon"><figure className="image is-16x16" >
+            <img src={LOGO_WCV2} />
+          </figure></span></button>
       </>)}
     </>
   )
