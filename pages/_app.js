@@ -42,6 +42,15 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" type="image/png" href={Favicon} />
 
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=AW-16657419279"
+        ></script>
+        <script>
+          {
+            "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'AW-16657419279');"
+          }
+        </script>
         <meta
           property="og:title"
           content="CZ.Farm | Stablecoin Yield And High Yield Farms And Pools"
