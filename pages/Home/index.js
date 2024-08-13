@@ -26,6 +26,8 @@ import {
   ADDRESS_CZR,
   ADDRESS_CZUSD,
   ADDRESS_CZUSDNOTES,
+  ADDRESS_LRT,
+  ADDRESS_TCU29LP,
   ADDRESS_TRIBEPOOLNFT,
   ADDRESS_ZERO,
 } from '../../constants/addresses';
@@ -67,6 +69,12 @@ import { getLpTokenValueUsdWad } from '../../utils/getLpTokenValueUsdWad';
 import useDeepCompareEffect from '../../utils/useDeepCompareEffect';
 import styles from './index.module.scss';
 import ManageCzusdGateV2Bnb from '../../components/ManageCzusdGateV2Bnb';
+import useCopperPoolInfo from '../../hooks/useCopperPoolInfo';
+import useCopperPoolAccountInfo from '../../hooks/useCopperPoolAccountInfo';
+import { COPPER_POOLS } from '../../constants/copperpools';
+import useLpInfo from '../../hooks/useLpInfo';
+import { PRICING_LP } from '../../constants/pricingLp';
+import ManageCopperPool from '../../components/ManageCopperPool';
 const { formatEther, parseEther, Interface } = utils;
 
 const CzodiacNftContract = new Contract(
@@ -105,9 +113,23 @@ function Home() {
   } = useContext(CZFarmContext);
   const currentEpoch = useCurrentEpoch();
 
+  const tcu29Price = '1.20';
+  const tcu29LpBal = useTokenBalance(ADDRESS_TCU29LP, account);
+  const tcu29LpPrice = formatEther(
+    getLpTokenValueUsdWad(
+      'CZUSD',
+      lpInfos?.[PRICING_LP.TCu29],
+      parseEther('1'),
+      tcu29Price,
+      czusdPrice,
+      false
+    )
+  );
+
   const czfBal = useTokenBalance(ADDRESS_CZF, account);
   const czrBal = useTokenBalance(ADDRESS_CZR, account);
   const czbBal = useTokenBalance(ADDRESS_CZB, account);
+  const lrtBal = useTokenBalance(ADDRESS_LRT, account);
   const czusdBal = useTokenBalance(ADDRESS_CZUSD, account);
   const banditBal = useTokenBalance(ADDRESS_BANDIT, account);
 
@@ -163,6 +185,8 @@ function Home() {
   const poolsV1AccountInfo = usePoolsV1AccountInfo(library, account);
   const tribePoolInfo = useTribePoolInfo(library);
   const tribePoolAccountInfo = useTribePoolAccountInfo(library, account);
+  const copperPoolInfo = useCopperPoolInfo(library);
+  const copperPoolAccountInfo = useCopperPoolAccountInfo(library, account);
   const accountLpBals = useAccountLpBals(library, account);
 
   const [chronoAccountStakeWei, setChronoAccountStakeWei] = useState(
@@ -178,6 +202,9 @@ function Home() {
     BigNumber.from(0)
   );
   const [tribePoolAccountStakeWei, setTribePoolAccountStakeWei] = useState(
+    BigNumber.from(0)
+  );
+  const [copperPoolAccountStakeWei, setCopperPoolAccountStakeWei] = useState(
     BigNumber.from(0)
   );
   const [czusdNotesAccountStakeWei, setCzusdNotesAccountStakeWei] = useState(
@@ -254,13 +281,15 @@ function Home() {
       !exoticFarmAccountInfo ||
       !lpInfos ||
       !v2FarmsUserInfo ||
-      !tribePoolAccountInfo
+      !tribePoolAccountInfo ||
+      !copperPoolAccountInfo
     ) {
       setChronoAccountStakeWei(BigNumber.from(0));
       setExoticAccountStakeWei(BigNumber.from(0));
       setFarmsv2AccountStakeWei(BigNumber.from(0));
       setPoolsV1AccountStakeWei(BigNumber.from(0));
       setTribePoolAccountStakeWei(BigNumber.from(0));
+      setCopperPoolAccountStakeWei(BigNumber.from(0));
       setCzusdNotesAccountStakeWei(BigNumber.from(0));
       setCzbFarmsAccountStakeWei(BigNumber.from(0));
       setBanditFarmsAccountStakeWei(BigNumber.from(0));
@@ -316,6 +345,14 @@ function Home() {
       tribePoolAccountInfo.reduce(
         (prev, curr, index) =>
           prev.add(weiToUsdWeiVal(curr?.stakedBal, czrPrice)),
+        BigNumber.from(0)
+      )
+    );
+
+    setCopperPoolAccountStakeWei(
+      copperPoolAccountInfo.reduce(
+        (prev, curr, index) =>
+          prev.add(weiToUsdWeiVal(curr?.stakedBal, tcu29LpPrice)),
         BigNumber.from(0)
       )
     );
@@ -398,6 +435,7 @@ function Home() {
     v2FarmsUserInfo,
     poolsV1AccountInfo,
     tribePoolAccountInfo,
+    copperPoolAccountInfo,
     czfPrice,
     czrPrice,
     czusdPrice,
@@ -411,6 +449,27 @@ function Home() {
         className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start "
         style={{ minHeight: '100vh' }}
       >
+        <div className="TopBanner">
+          Create your Blockchain Product with{' '}
+          <a href="https://tenx.cz.cash">TENX.CZ.CASH</a> in seconds.
+          <div
+            className="has-text-left is-centered"
+            style={{ maxWidth: '380px' }}
+          >
+            🤩 Automatic cz.cash listing.
+            <br />
+            🥵 CZ.Farm farms after your token 2x.
+            <br />
+            🤑 Free $10,000 Pancakeswap LP grant.
+          </div>
+          <a
+            className="button is-medium is-rounded is-outlined m-3"
+            href="https://tenx.cz.cash"
+            target="_blank"
+          >
+            Learn More About TenX
+          </a>
+        </div>
         <WalletStatsBar
           {...{
             czfPrice,
@@ -647,7 +706,7 @@ function Home() {
             return (
               <ManageTribePool
                 key={pool.address}
-                {...{ pool, czrBal, czrPrice, czusdPrice }}
+                {...{ pool, czrBal, czrPrice, czusdPrice, lrtBal }}
                 rewardAddress={pool?.rewardAddress}
                 accountInfo={tribePoolAccountInfo?.[index]}
                 poolInfo={tribePoolInfo?.[index]}
@@ -662,6 +721,63 @@ function Home() {
           <p className="has-text-right pr-2">
             Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}
           </p>
+        </CollapsibleCard>
+
+        <CollapsibleCard
+          className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
+          title={
+            <div className="columns pb-3 pt-4 mr-2" style={{ width: '100%' }}>
+              <img
+                className="column is-3 m-2 ml-3"
+                src="./static/assets/images/sections/Copper.png"
+                style={{
+                  objectFit: 'contain',
+                  background: '#1b142b',
+                  padding: '0px 0.5em',
+                  borderRadius: '0.5em',
+                }}
+              />
+              <p
+                className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2"
+                style={{ lineHeight: '1em' }}
+              >
+                Copper Pools
+                <br />
+                <span className="is-size-6">
+                  Stake TCu29LP, Get CZ Ecosystem tokens every second.
+                </span>
+              </p>
+            </div>
+          }
+        >
+          <h4 className="is-size-5 has-text-grey-light mt-4 mb-0">
+            Want no tax on unstake? Visit:{' '}
+            <a target="_blank" href="https://bad.rabbitcatch.com">
+              ONE BAD RABBIT
+            </a>{' '}
+            and slot your NFT in the pool.
+          </h4>
+
+          {COPPER_POOLS.map((pool, index) => {
+            const poolInfo = poolsV1Info?.[index];
+            return (
+              <ManageCopperPool
+                key={pool.address}
+                {...{ pool, tcu29LpBal, tcu29LpPrice, czusdPrice, lrtBal }}
+                rewardAddress={pool?.rewardAddress}
+                accountInfo={copperPoolAccountInfo?.[index]}
+                poolInfo={copperPoolInfo?.[index]}
+                lpInfos={lpInfos}
+              />
+            );
+          })}
+          <p className="has-text-right pr-2">
+            Your Copper Pools Staked: $
+            {weiToShortString(copperPoolAccountStakeWei, 2)}
+          </p>
+          {/*<p className="has-text-right pr-2">
+            Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}
+        </p>*/}
         </CollapsibleCard>
 
         <CollapsibleCard

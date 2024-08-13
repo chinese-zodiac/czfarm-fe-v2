@@ -8,6 +8,15 @@ body{
   color:white;
 }
 
+.is-green{
+  color:lime;
+}
+
+.is-red{
+  color:red;
+}
+
+
 .full-width {
   width: 100%;
 }
@@ -106,4 +115,18 @@ button.is-rounded, a.button.is-rounded{
 
 .has-background-transparent{
   background-color:transparent;
+}
+
+.TopBanner {
+  width:100%;
+  background-color: plum;
+  color:black;
+  font-weight: bold;
+  padding: 0.5em;
+  padding-top: 1em;
+  margin-bottom: 0.5em;
+}
+.is-centered{
+  margin-left:auto;
+  margin-right:auto;
 }
