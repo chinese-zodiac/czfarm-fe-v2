@@ -451,14 +451,12 @@ function Home() {
       >
         <div className="TopBanner">
           <p style={{ fontSize: '1.5em' }}>
-            !!ATTENTION! Limited Time Promo for all blockchain community
-            creators!!
+            !!ATTENTION! Limited Time Promo (valued at $28,000)* for all
+            blockchain community creators!!
           </p>
           P.S. because we love you! 🤗 XOXO
           <br />
           <br />
-          Create your community token{' '}
-          <a href="https://tenx.cz.cash">TENX.CZ.CASH</a> in seconds.
           <div
             className="has-text-left is-centered"
             style={{ maxWidth: '380px' }}
@@ -469,13 +467,24 @@ function Home() {
             <br />
             🤑 Free $10,000 Pancakeswap LP grant.
           </div>
+          <br />
+          How? Create your community token{' '}
+          <a href="https://tenx.cz.cash">TENX.CZ.CASH</a> in seconds before this
+          offer expires.
           <a
             className="button is-medium is-rounded is-outlined m-3"
             href="https://tenx.cz.cash"
             target="_blank"
           >
-            Learn More About TenX
+            Claim Your Benefits Now ⤤
           </a>
+          <p style={{ fontSize: '0.5em' }}>
+            * $28,000 Limited Time Promo value includes $10,000 LP grant and
+            estimated value of cz.cash and cz.farm listing. All communities are
+            eligible for both the $10,000 grant and the cz.cash listing. The
+            cz.farm listing requires holding the token price at 2x for at least
+            one week with proof of active and real community.
+          </p>
         </div>
         <WalletStatsBar
           {...{
