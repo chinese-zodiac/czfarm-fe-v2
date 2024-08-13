@@ -450,7 +450,14 @@ function Home() {
         style={{ minHeight: '100vh' }}
       >
         <div className="TopBanner">
-          Create your Blockchain Product with{' '}
+          <p style={{ fontSize: '1.5em' }}>
+            !!ATTENTION! Limited Time Promo for all blockchain community
+            creators!!
+          </p>
+          P.S. because we love you! 🤗 XOXO
+          <br />
+          <br />
+          Create your community token{' '}
           <a href="https://tenx.cz.cash">TENX.CZ.CASH</a> in seconds.
           <div
             className="has-text-left is-centered"
