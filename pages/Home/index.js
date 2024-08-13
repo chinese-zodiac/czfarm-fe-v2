@@ -451,7 +451,7 @@ function Home() {
       >
         <div className="TopBanner">
           <p style={{ fontSize: '1.5em' }}>
-            !!ATTENTION! Limited Time Promo (valued at $28,000)* for all
+            !!ATTENTION! Limited Time Promo (valued at $28,748)* for all
             blockchain community creators!!
           </p>
           P.S. because we love you! 🤗 XOXO
