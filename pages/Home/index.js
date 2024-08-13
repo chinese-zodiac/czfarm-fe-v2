@@ -479,7 +479,7 @@ function Home() {
             Claim Your Benefits Now ⤤
           </a>
           <p style={{ fontSize: '0.5em' }}>
-            * $28,000 Limited Time Promo value includes $10,000 LP grant and
+            * $28,748 Limited Time Promo value includes $10,000 LP grant and
             estimated value of cz.cash and cz.farm listing. All communities are
             eligible for both the $10,000 grant and the cz.cash listing. The
             cz.farm listing requires holding the token price at 2x for at least
