@@ -1,7 +1,7 @@
 import { BSC, DAppProvider, MetamaskConnector } from '@usedapp/core';
 import Head from 'next/head';
 import { withRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { CZFarmProvider } from '../contexts/CZFarmContext';
@@ -10,6 +10,7 @@ import Favicon from '../public/static/assets/logo192.png';
 import OpenGraphImg from '../public/static/assets/opengraph.jpg';
 import { WalletConnectV2Connector } from '@usedapp/wallet-connect-v2-connector';
 import '../styles/styles.scss';
+import ReactGA from 'react-ga4';
 
 const config = {
   readOnlyChainId: BSC.chainId,
@@ -29,6 +30,14 @@ const config = {
 };
 
 function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    ReactGA.initialize('AW-16657419279');
+    ReactGA.send({
+      hitType: 'pageview',
+      page: '/cz-farm',
+      title: 'CZ.Farm Homepage',
+    });
+  }, []);
   return (
     <DAppProvider config={config}>
       <Head>
@@ -42,15 +51,6 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" type="image/png" href={Favicon} />
 
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=AW-16657419279"
-        ></script>
-        <script>
-          {
-            "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'AW-16657419279');"
-          }
-        </script>
         <meta
           property="og:title"
           content="CZ.Farm | Stablecoin Yield And High Yield Farms And Pools"

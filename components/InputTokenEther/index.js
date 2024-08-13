@@ -23,14 +23,10 @@ export default function InputTokenEther({
           value={inputEther}
           onChange={(event) => {
             let inputNum = Number(event.target.value);
-            console.log(inputNum);
-            console.log(Number.isFinite(inputNum));
             if (!Number.isFinite(inputNum)) return;
             let minNum = !!minWadBn ? Number(formatEther(minWadBn)) : 0;
             if (!!minWadBn && inputNum < minNum) inputNum = minNum;
             let maxNum = !!maxWadBn ? Number(formatEther(maxWadBn)) : 100;
-            console.log(minNum);
-            console.log(maxNum);
             if (!!maxWadBn && inputNum > maxNum) inputNum = maxNum;
             if (precision > 1) {
               inputNum = Math.floor((inputNum * precision) / precision);

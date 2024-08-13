@@ -75,6 +75,7 @@ import { COPPER_POOLS } from '../../constants/copperpools';
 import useLpInfo from '../../hooks/useLpInfo';
 import { PRICING_LP } from '../../constants/pricingLp';
 import ManageCopperPool from '../../components/ManageCopperPool';
+import ReactGA from 'react-ga4';
 const { formatEther, parseEther, Interface } = utils;
 
 const CzodiacNftContract = new Contract(
@@ -469,12 +470,31 @@ function Home() {
           </div>
           <br />
           How? Create your community token{' '}
-          <a href="https://tenx.cz.cash">TENX.CZ.CASH</a> in seconds before this
-          offer expires.
+          <a
+            href="https://tenx.cz.cash"
+            target="_blank"
+            onClick={() => {
+              ReactGA.event({
+                category: 'czfarm_action',
+                action: 'click_tenx_btn_2',
+                label: 'Click on button_2 on cz.farm that lead to tenx.cz.cash', // optional
+              });
+            }}
+          >
+            TENX.CZ.CASH
+          </a>{' '}
+          in seconds before this offer expires.
           <a
             className="button is-medium is-rounded is-outlined m-3"
             href="https://tenx.cz.cash"
             target="_blank"
+            onClick={() => {
+              ReactGA.event({
+                category: 'czfarm_action',
+                action: 'click_tenx_btn_2',
+                label: 'Click on button_2 on cz.farm that lead to tenx.cz.cash', // optional
+              });
+            }}
           >
             Claim Your Benefits Now ⤤
           </a>

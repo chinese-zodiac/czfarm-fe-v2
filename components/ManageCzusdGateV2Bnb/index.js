@@ -118,10 +118,6 @@ export default function ManageCzusdGateV2Bnb({
       'approve'
     );
 
-  console.log('inputEtherBnb', inputEtherBnb);
-  console.log('getCzusdOutError', getCzusdOutError);
-  console.log('getCzusdOutResult', getCzusdOutResult);
-
   return (
     <>
       {!account && (
