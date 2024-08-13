@@ -476,8 +476,8 @@ function Home() {
             onClick={() => {
               ReactGA.event({
                 category: 'czfarm_action',
-                action: 'click_tenx_btn_2',
-                label: 'Click on button_2 on cz.farm that lead to tenx.cz.cash', // optional
+                action: 'click_tenx_btn_1',
+                label: 'Click on button_1 on cz.farm that lead to tenx.cz.cash', // optional
               });
             }}
           >
