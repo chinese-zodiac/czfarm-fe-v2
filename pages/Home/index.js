@@ -450,7 +450,7 @@ function Home() {
         className="hero has-text-centered has-background-special p-3 pb-5 is-justify-content-flex-start "
         style={{ minHeight: '100vh' }}
       >
-        <div className="TopBanner">
+        {/*<div className="TopBanner">
           <p style={{ fontSize: '1.5em' }}>
             !!ATTENTION! Limited Time Promo (valued at $28,748)* for all
             blockchain community creators!!
@@ -505,7 +505,7 @@ function Home() {
             cz.farm listing requires holding the token price at 2x for at least
             one week with proof of active and real community.
           </p>
-        </div>
+        </div>*/}
         <WalletStatsBar
           {...{
             czfPrice,
@@ -631,77 +631,7 @@ function Home() {
           </p>
         </CollapsibleCard>
 
-        <CollapsibleCard
-          className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
-          title={
-            <div className="columns pb-3 pt-4 mr-2" style={{ width: '100%' }}>
-              <img
-                className="column is-3 m-2 ml-3"
-                src="./static/assets/images/sections/BanditFarm.png"
-                style={{
-                  objectFit: 'contain',
-                  background: '#1b142b',
-                  padding: '0px 0.5em',
-                  borderRadius: '0.5em',
-                }}
-              />
-              <p
-                className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2"
-                style={{ lineHeight: '1em' }}
-              >
-                🎭🔫💰🏴‍☠️👤 Farms
-                <br />
-                <span className="is-size-6">
-                  Stake LP, Get 🎭🔫💰🏴‍☠️👤 every second.
-                </span>
-              </p>
-            </div>
-          }
-        >
-          {BANDIT_FARMS_SINGLES.map((farm, index) => (
-            <ManageXxxFarmSingle
-              key={farm.pid}
-              {...{ account, library, farm, accountLpBals, czusdPrice }}
-              xxxFarmsSettings={banditFarmsSettings}
-              xxxFarmsPoolInfo={banditFarmsPoolInfo?.[index]}
-              xxxFarmsPendingXxx={banditFarmsPendingBandit?.[index]}
-              xxxFarmsUserInfo={banditFarmsUserInfo?.[index]}
-              xxxPrice={banditPrice}
-              address_xxx_master={ADDRESS_BANDITMASTER}
-              xxx_Symbol="BANDIT"
-              xxxLogo="./static/assets/images/tokens/BANDIT.png"
-            />
-          ))}
-          {BANDIT_FARMS.map((farm, index) => (
-            <ManageXxxFarm
-              key={farm.pid}
-              {...{ account, library, farm, czusdPrice }}
-              xxxFarmsSettings={banditFarmsSettings}
-              xxxFarmsPoolInfo={
-                banditFarmsPoolInfo?.[index + BANDIT_FARMS_SINGLES.length]
-              }
-              xxxFarmsPendingXxx={
-                banditFarmsPendingBandit?.[index + BANDIT_FARMS_SINGLES.length]
-              }
-              xxxFarmsUserInfo={
-                banditFarmsUserInfo?.[index + BANDIT_FARMS_SINGLES.length]
-              }
-              xxxPrice={banditPrice}
-              address_xxx_master={ADDRESS_BANDITMASTER}
-              xxx_Symbol="BANDIT"
-              xxxLogo="./static/assets/images/tokens/BANDIT.png"
-              lpInfo={lpInfos?.[farm?.lp]}
-              accountLpBal={accountLpBals?.[farm?.lp]}
-            />
-          ))}
-          <p className="has-text-right pr-2">
-            Your Bandit Farms Staked: $
-            {weiToShortString(banditFarmsAccountStakeWei, 2)}
-          </p>
-          <p className="has-text-right pr-2">
-            Bandit Farms TVL: ${weiToShortString(banditFarmsTvlWei, 2)}
-          </p>
-        </CollapsibleCard>
+        
 
         <CollapsibleCard
           className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
@@ -759,117 +689,9 @@ function Home() {
           </p>
         </CollapsibleCard>
 
-        <CollapsibleCard
-          className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
-          title={
-            <div className="columns pb-3 pt-4 mr-2" style={{ width: '100%' }}>
-              <img
-                className="column is-3 m-2 ml-3"
-                src="./static/assets/images/sections/Copper.png"
-                style={{
-                  objectFit: 'contain',
-                  background: '#1b142b',
-                  padding: '0px 0.5em',
-                  borderRadius: '0.5em',
-                }}
-              />
-              <p
-                className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2"
-                style={{ lineHeight: '1em' }}
-              >
-                Copper Pools
-                <br />
-                <span className="is-size-6">
-                  Stake TCu29LP, Get CZ Ecosystem tokens every second.
-                </span>
-              </p>
-            </div>
-          }
-        >
-          <h4 className="is-size-5 has-text-grey-light mt-4 mb-0">
-            Want no tax on unstake? Visit:{' '}
-            <a target="_blank" href="https://bad.rabbitcatch.com">
-              ONE BAD RABBIT
-            </a>{' '}
-            and slot your NFT in the pool.
-          </h4>
+        
 
-          {COPPER_POOLS.map((pool, index) => {
-            const poolInfo = poolsV1Info?.[index];
-            return (
-              <ManageCopperPool
-                key={pool.address}
-                {...{ pool, tcu29LpBal, tcu29LpPrice, czusdPrice, lrtBal }}
-                rewardAddress={pool?.rewardAddress}
-                accountInfo={copperPoolAccountInfo?.[index]}
-                poolInfo={copperPoolInfo?.[index]}
-                lpInfos={lpInfos}
-              />
-            );
-          })}
-          <p className="has-text-right pr-2">
-            Your Copper Pools Staked: $
-            {weiToShortString(copperPoolAccountStakeWei, 2)}
-          </p>
-          {/*<p className="has-text-right pr-2">
-            Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}
-        </p>*/}
-        </CollapsibleCard>
-
-        <CollapsibleCard
-          className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
-          title={
-            <div className="columns pb-3 pt-4 mr-2" style={{ width: '100%' }}>
-              <img
-                className="column is-3 m-2 ml-3"
-                src="./static/assets/images/sections/Farm.png"
-                style={{
-                  objectFit: 'contain',
-                  background: '#1b142b',
-                  padding: '0px 0.5em',
-                  borderRadius: '0.5em',
-                }}
-              />
-              <p
-                className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2"
-                style={{ lineHeight: '1em' }}
-              >
-                Green Farms
-                <br />
-                <span className="is-size-6">
-                  Stake LP, Get CZF every second.
-                </span>
-              </p>
-            </div>
-          }
-        >
-          {FARM_V2.map((farm, index) => (
-            <ManageFarmV2
-              key={farm.pid}
-              {...{
-                account,
-                library,
-                farm,
-                accountLpBals,
-                czfPrice,
-                czusdPrice,
-                v2FarmsSettings,
-              }}
-              v2FarmsLpBal={v2FarmsLpBal?.[index]}
-              v2FarmsPoolInfo={v2FarmsPoolInfo?.[index]}
-              v2FarmsPendingCzf={v2FarmsPendingCzf?.[index]}
-              v2FarmsUserInfo={v2FarmsUserInfo?.[index]}
-              lpInfo={lpInfos?.[farm?.lp]}
-              accountLpBal={accountLpBals?.[farm?.lp]}
-            />
-          ))}
-          <p className="has-text-right pr-2">
-            Your Farms V2 Staked: ${weiToShortString(farmsV2AccountStakeWei, 2)}
-          </p>
-          <p className="has-text-right pr-2">
-            Farms V2 TVL: ${weiToShortString(farmsV2TvlWei, 2)}
-          </p>
-        </CollapsibleCard>
+        
 
         <CollapsibleCard
           className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
@@ -1319,6 +1141,187 @@ function Home() {
           </p>
           <p className="has-text-right pr-2">
             Pools V1 TVL: ${weiToShortString(poolsV1TvlWei, 2)}
+          </p>
+        </CollapsibleCard>
+        <CollapsibleCard
+          className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
+          title={
+            <div className="columns pb-3 pt-4 mr-2" style={{ width: '100%' }}>
+              <img
+                className="column is-3 m-2 ml-3"
+                src="./static/assets/images/sections/Farm.png"
+                style={{
+                  objectFit: 'contain',
+                  background: '#1b142b',
+                  padding: '0px 0.5em',
+                  borderRadius: '0.5em',
+                }}
+              />
+              <p
+                className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2"
+                style={{ lineHeight: '1em' }}
+              >
+                Green Farms
+                <br />
+                <span className="is-size-6">
+                  Stake LP, Get CZF every second.
+                </span>
+              </p>
+            </div>
+          }
+        >
+          {FARM_V2.map((farm, index) => (
+            <ManageFarmV2
+              key={farm.pid}
+              {...{
+                account,
+                library,
+                farm,
+                accountLpBals,
+                czfPrice,
+                czusdPrice,
+                v2FarmsSettings,
+              }}
+              v2FarmsLpBal={v2FarmsLpBal?.[index]}
+              v2FarmsPoolInfo={v2FarmsPoolInfo?.[index]}
+              v2FarmsPendingCzf={v2FarmsPendingCzf?.[index]}
+              v2FarmsUserInfo={v2FarmsUserInfo?.[index]}
+              lpInfo={lpInfos?.[farm?.lp]}
+              accountLpBal={accountLpBals?.[farm?.lp]}
+            />
+          ))}
+          <p className="has-text-right pr-2">
+            Your Farms V2 Staked: ${weiToShortString(farmsV2AccountStakeWei, 2)}
+          </p>
+          <p className="has-text-right pr-2">
+            Farms V2 TVL: ${weiToShortString(farmsV2TvlWei, 2)}
+          </p>
+        </CollapsibleCard>
+        <CollapsibleCard
+          className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
+          title={
+            <div className="columns pb-3 pt-4 mr-2" style={{ width: '100%' }}>
+              <img
+                className="column is-3 m-2 ml-3"
+                src="./static/assets/images/sections/Copper.png"
+                style={{
+                  objectFit: 'contain',
+                  background: '#1b142b',
+                  padding: '0px 0.5em',
+                  borderRadius: '0.5em',
+                }}
+              />
+              <p
+                className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2"
+                style={{ lineHeight: '1em' }}
+              >
+                Copper Pools
+                <br />
+                <span className="is-size-6">
+                  Stake TCu29LP, Get CZ Ecosystem tokens every second.
+                </span>
+              </p>
+            </div>
+          }
+        >
+          <h4 className="is-size-5 has-text-grey-light mt-4 mb-0">
+            Want no tax on unstake? Visit:{' '}
+            <a target="_blank" href="https://bad.rabbitcatch.com">
+              ONE BAD RABBIT
+            </a>{' '}
+            and slot your NFT in the pool.
+          </h4>
+
+          {COPPER_POOLS.map((pool, index) => {
+            const poolInfo = poolsV1Info?.[index];
+            return (
+              <ManageCopperPool
+                key={pool.address}
+                {...{ pool, tcu29LpBal, tcu29LpPrice, czusdPrice, lrtBal }}
+                rewardAddress={pool?.rewardAddress}
+                accountInfo={copperPoolAccountInfo?.[index]}
+                poolInfo={copperPoolInfo?.[index]}
+                lpInfos={lpInfos}
+              />
+            );
+          })}
+          <p className="has-text-right pr-2">
+            Your Copper Pools Staked: $
+            {weiToShortString(copperPoolAccountStakeWei, 2)}
+          </p>
+          {/*<p className="has-text-right pr-2">
+            Tribe Pools TVL: ${weiToShortString(tribePoolsTvlWei, 2)}
+        </p>*/}
+        </CollapsibleCard>
+        <CollapsibleCard
+          className={'mt-3 mb-3 has-text-left ' + styles.StakingSection}
+          title={
+            <div className="columns pb-3 pt-4 mr-2" style={{ width: '100%' }}>
+              <img
+                className="column is-3 m-2 ml-3"
+                src="./static/assets/images/sections/BanditFarm.png"
+                style={{
+                  objectFit: 'contain',
+                  background: '#1b142b',
+                  padding: '0px 0.5em',
+                  borderRadius: '0.5em',
+                }}
+              />
+              <p
+                className="column is-9 is-size-4 has-text-white has-text-left has-text-weight-normal pt-2"
+                style={{ lineHeight: '1em' }}
+              >
+                🎭🔫💰🏴‍☠️👤 Farms
+                <br />
+                <span className="is-size-6">
+                  Stake LP, Get 🎭🔫💰🏴‍☠️👤 every second.
+                </span>
+              </p>
+            </div>
+          }
+        >
+          {BANDIT_FARMS_SINGLES.map((farm, index) => (
+            <ManageXxxFarmSingle
+              key={farm.pid}
+              {...{ account, library, farm, accountLpBals, czusdPrice }}
+              xxxFarmsSettings={banditFarmsSettings}
+              xxxFarmsPoolInfo={banditFarmsPoolInfo?.[index]}
+              xxxFarmsPendingXxx={banditFarmsPendingBandit?.[index]}
+              xxxFarmsUserInfo={banditFarmsUserInfo?.[index]}
+              xxxPrice={banditPrice}
+              address_xxx_master={ADDRESS_BANDITMASTER}
+              xxx_Symbol="BANDIT"
+              xxxLogo="./static/assets/images/tokens/BANDIT.png"
+            />
+          ))}
+          {BANDIT_FARMS.map((farm, index) => (
+            <ManageXxxFarm
+              key={farm.pid}
+              {...{ account, library, farm, czusdPrice }}
+              xxxFarmsSettings={banditFarmsSettings}
+              xxxFarmsPoolInfo={
+                banditFarmsPoolInfo?.[index + BANDIT_FARMS_SINGLES.length]
+              }
+              xxxFarmsPendingXxx={
+                banditFarmsPendingBandit?.[index + BANDIT_FARMS_SINGLES.length]
+              }
+              xxxFarmsUserInfo={
+                banditFarmsUserInfo?.[index + BANDIT_FARMS_SINGLES.length]
+              }
+              xxxPrice={banditPrice}
+              address_xxx_master={ADDRESS_BANDITMASTER}
+              xxx_Symbol="BANDIT"
+              xxxLogo="./static/assets/images/tokens/BANDIT.png"
+              lpInfo={lpInfos?.[farm?.lp]}
+              accountLpBal={accountLpBals?.[farm?.lp]}
+            />
+          ))}
+          <p className="has-text-right pr-2">
+            Your Bandit Farms Staked: $
+            {weiToShortString(banditFarmsAccountStakeWei, 2)}
+          </p>
+          <p className="has-text-right pr-2">
+            Bandit Farms TVL: ${weiToShortString(banditFarmsTvlWei, 2)}
           </p>
         </CollapsibleCard>
       </main>

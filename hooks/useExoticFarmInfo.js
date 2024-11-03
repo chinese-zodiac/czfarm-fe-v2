@@ -15,7 +15,7 @@ function useExoticFarmInfo(provider) {
   const results = useCalls(calls) ?? [];
   results.forEach((result,idx)=>{
     if(result && result.error) {
-      console.error(`ERROR calling 'balanceOf' on ${calls[idx]?.contract.address}`);
+      //console.error(`ERROR calling 'balanceOf' on ${calls[idx]?.contract.address}`);
     }
   });
   return EXOTIC_FARMS.flatMap((farmSet,farmSetIndex)=>farmSet.farms.map((farm,farmIndex)=>{

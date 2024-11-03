@@ -56,7 +56,7 @@ export default function QuickInputEther({
                 setInputEther(0);
                 return;
               }
-              setInputEther(Number(formatEther(maxTokenWad)));
+              setInputEther(Number(formatEther(maxTokenWad.sub(1))));
             }}
           >
             <span>100%</span>

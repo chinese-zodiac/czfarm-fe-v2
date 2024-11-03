@@ -21,7 +21,7 @@ function useCzbFarmsUserInfo(provider, account) {
   const results = useCalls(calls) ?? [];
   results.forEach((result, idx) => {
     if (result && result.error) {
-      console.error(`ERROR calling 'poolInfo' on ${calls[idx]?.contract.address}`);
+      //console.error(`ERROR calling 'poolInfo' on ${calls[idx]?.contract.address}`);
     }
   });
   return results.map((result, index) => {

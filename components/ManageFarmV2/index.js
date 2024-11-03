@@ -272,7 +272,7 @@ export default function ManageFarmV2({
                   precision={0.01}
                   label={`${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol}`}
                   minWadBn={BigNumber.from(0)}
-                  maxWadBn={accountLpBal}
+                  maxWadBn={accountLpBal.sub(1)}
                   {...{ setInputEther, inputEther }}
                 />
                 <p className="is-size-7 mt-0 mb-1 ml-2">

@@ -335,7 +335,7 @@ export default function ManageXxxFarm({
                   className="is-inline-block has-background-special has-text-white is-inline-block mt-2 mb-2"
                   style={{ maxWidth: '10em', width: '100%' }}
                   step="any"
-                  precision={0.01}
+                  precision={0.0001}
                   label={`${farm?.tokens?.[0]?.symbol}/${farm?.tokens?.[1]?.symbol}`}
                   minWadBn={BigNumber.from(0)}
                   maxWadBn={xxxFarmsUserInfo?.amount ?? BigNumber.from(0)}

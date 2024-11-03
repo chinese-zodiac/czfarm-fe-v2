@@ -2,7 +2,7 @@ export const DEX = {
   PCS: {
     name: "CZ.Cash",
     shortName: "PCS",
-    baseUrl: "https://cz.cash/#/"
+    baseUrl: "https://cz.cash/"
   },
   CAFE: {
     name: "Cafeswap",

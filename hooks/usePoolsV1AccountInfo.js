@@ -30,7 +30,7 @@ function usePoolsV1AccountInfo(provider,account) {
   const results = useCalls(calls) ?? [];
   results.forEach((result,idx)=>{
     if(result && result.error) {
-      console.error(`ERROR calling 'balanceOf' on ${calls[idx]?.contract.address}`);
+      //console.error(`ERROR calling 'balanceOf' on ${calls[idx]?.contract.address}`);
     }
   });
   let iter = 0;

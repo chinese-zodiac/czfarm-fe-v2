@@ -105,9 +105,9 @@ function useLpInfo(library) {
   const results = useCalls(calls) ?? [];
   results.forEach((result, idx) => {
     if (result && result.error) {
-      console.error(
+      /*console.error(
         `ERROR calling 'poolInfo' on ${calls[idx]?.contract.address}`
-      );
+      );*/
     }
   });
   let lpInfos = {};
