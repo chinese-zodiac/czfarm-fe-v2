@@ -43,8 +43,83 @@ export const CZB_FARMS = [
                 symbol: "CZB"
             },
             {
-                address: "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+                address: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
                 symbol: "BTC"
+            }
+        ]
+    },
+    {
+        lp: "0xD5BaF67F421bf49Aa5D6e568CBCD72D030165F76",
+        dex: DEX.PCS,
+        pid: 14,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+                symbol: "ETH"
+            }
+        ]
+    },
+    {
+        lp: "0xEFF62B6BE318290a9ad28Aff93a8eEa11a390553",
+        dex: DEX.PCS,
+        pid: 15,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0xc748673057861a797275CD8A068AbB95A902e8de",
+                symbol: "BDOGE"
+            }
+        ]
+    },
+    {
+        lp: "0x0F4a22FdB9CE1801bc418373309d7fb633796FBB",
+        dex: DEX.PCS,
+        pid: 16,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0xbA2aE424d960c26247Dd6c32edC70B295c744C43",
+                symbol: "DOGE"
+            }
+        ]
+    },
+    {
+        lp: "0xD572A19E116237880F5d4BFE4D149bcA0Ace8381",
+        dex: DEX.PCS,
+        pid: 17,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x477bc8d23c634c154061869478bce96be6045d12",
+                symbol: "SFUND"
+            }
+        ]
+    },
+    {
+        lp: "0xc6F23Cd0E3C6a8b9be5a704B4FC945a64Cbc8989",
+        dex: DEX.PCS,
+        pid: 18,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00",
+                symbol: "PEPE"
             }
         ]
     },
