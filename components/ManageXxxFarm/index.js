@@ -292,7 +292,7 @@ export default function ManageXxxFarm({
                     getLpTokenValueUsdWad(
                       farm?.tokens?.[0]?.symbol,
                       lpInfo,
-                      (inputEther > 10e-12) ? parseEther(inputEther.toString()) : parseEther("0"),
+                      (inputEther > 10e-10) ? parseEther(inputEther.toString()) : parseEther("0"),
                       xxxPrice,
                       czusdPrice,
                       isSwap

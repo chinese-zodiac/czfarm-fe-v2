@@ -124,6 +124,142 @@ export const CZB_FARMS = [
         ]
     },
     {
+        lp: "0x093652F4BA7A474EaB05cC07206c9e59344Eb21e",
+        dex: DEX.PCS,
+        pid: 19,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0xCE7de646e7208a4Ef112cb6ed5038FA6cC6b12e3",
+                symbol: "TRX",
+                decimals:6
+            }
+        ]
+    },
+    {
+        lp: "0x31b36Ab45cD29e106c320BF5ddeC09ecFe976C9A",
+        dex: DEX.PCS,
+        pid: 20,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x2859e4544C4bB03966803b044A93563Bd2D0DD4D",
+                symbol: "SHIB"
+            }
+        ]
+    },
+    {
+        lp: "0x519104a549D2eEf01760Db2E1798A50A8B4443ec",
+        dex: DEX.PCS,
+        pid: 21,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x4338665CBB7B2485A8855A139b75D5e34AB0DB94",
+                symbol: "LTC"
+            }
+        ]
+    },
+    {
+        lp: "0x817c19F36A8197A019825AF252ADCD8B01CfaC66",
+        dex: DEX.PCS,
+        pid: 22,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf",
+                symbol: "BCH"
+            }
+        ]
+    },
+    {
+        lp: "0xC82026e0E39337298c13364aF92E4DB604ccBb0d",
+        dex: DEX.PCS,
+        pid: 23,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x9678E42ceBEb63F23197D726B29b1CB20d0064E5",
+                symbol: "IOTX"
+            }
+        ]
+    },
+    {
+        lp: "0xB50FB584A8b384689A2bF733805B9febDD78304d",
+        dex: DEX.PCS,
+        pid: 24,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x3d6545b08693daE087E957cb1180ee38B9e3c25E",
+                symbol: "ETC"
+            }
+        ]
+    },
+    {
+        lp: "0x1E2a6cCD8B28C443a077dA5bdD0b89820Fe0E500",
+        dex: DEX.PCS,
+        pid: 25,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x1fC9004eC7E5722891f5f38baE7678efCB11d34D",
+                symbol: "NFT"
+            }
+        ]
+    },
+    {
+        lp: "0xdF2A75390ab36f5EEaB6b87707f56fDfdF36eA5C",
+        dex: DEX.PCS,
+        pid: 26,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0xbF7c81FFF98BbE61B40Ed186e4AfD6DDd01337fe",
+                symbol: "EGLD"
+            }
+        ]
+    },
+    {
+        lp: "0xC13F308BC6a4C3d62d49296061D9dB09A0855b63",
+        dex: DEX.PCS,
+        pid: 27,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x352Cb5E19b12FC216548a2677bD0fce83BaE434B",
+                symbol: "BTT"
+            }
+        ]
+    },
+    {
         lp: "0xfc3B69f95F7A55C444f630f92a15d74a57579a09",
         dex: DEX.PCS,
         pid: 4,
