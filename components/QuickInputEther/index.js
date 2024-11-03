@@ -52,7 +52,7 @@ export default function QuickInputEther({
           <button
             className="button is-dark has-background-special"
             onClick={() => {
-              if (!maxTokenWad) {
+              if (!maxTokenWad || maxTokenWad?.eq(0)) {
                 setInputEther(0);
                 return;
               }
