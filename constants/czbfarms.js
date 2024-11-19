@@ -260,6 +260,36 @@ export const CZB_FARMS = [
         ]
     },
     {
+        lp: "0xb6e128dfF0e4DE5C0c5FCD2397fe0127e26179AF",
+        dex: DEX.PCS,
+        pid: 28,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x8263CD1601FE73C066bf49cc09841f35348e3be0",
+                symbol: "ALU"
+            }
+        ]
+    },
+    {
+        lp: "0xEDFa0eEbA252033c2a52B135C268c42a98c240b3",
+        dex: DEX.PCS,
+        pid: 29,
+        tokens: [
+            {
+                address: "0xD963b2236D227a0302E19F2f9595F424950dc186",
+                symbol: "CZB"
+            },
+            {
+                address: "0x59f4f336bf3d0c49dbfba4a74ebd2a6ace40539a",
+                symbol: "CAT"
+            }
+        ]
+    },
+    {
         lp: "0xfc3B69f95F7A55C444f630f92a15d74a57579a09",
         dex: DEX.PCS,
         pid: 4,
