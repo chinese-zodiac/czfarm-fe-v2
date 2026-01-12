@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: czfarm-fe-v2
+    runtime: static
+    buildCommand: yarn install && yarn build && yarn export
+    staticPublishPath: ./out
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /static/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /_next/static/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
