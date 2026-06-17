@@ -2,7 +2,7 @@
 nixPkgs = ["nodejs_18", "python311", "python311Packages.setuptools", "gcc", "gnumake"]
 
 [phases.install]
-cmds = ["npm install"]
+cmds = ["yarn install"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["yarn build && yarn export"]
